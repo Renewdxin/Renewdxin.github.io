@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+
+<head>
+  <meta name="generator" content="Hexo 7.0.0">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.21.0">
+  <meta charset="utf-8">
+  
+
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://gcore.jsdelivr.net'>
+  <link rel="preconnect" href="https://gcore.jsdelivr.net" crossorigin>
+  <link rel='dns-prefetch' href='//unpkg.com'>
+
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" content="#f8f8f8">
+  
+  <title>git日常操作个人总结 - RenXin's Website</title>
+
+  
+    <meta name="description" content="Git项目简单克隆git在本人日常中最重要的功能还是下载，所以先从下载开始讲起 首先，创建一个文件，用来存放等会clone下来的项目，然后点击GitBash进行命令行操作   之后 在git上找到你中意的项目，如图操作，复制链接   1git clone https:&#x2F;&#x2F;github.com&#x2F;newbee-ltd&#x2F;newbee-mall.git  之后就会看到他在clone你的项目到本地文件夹，当">
+<meta property="og:type" content="article">
+<meta property="og:title" content="git日常操作个人总结">
+<meta property="og:url" content="http://renewdxin.github.io/tools/Git/index.html">
+<meta property="og:site_name" content="RenXin&#39;s Website">
+<meta property="og:description" content="Git项目简单克隆git在本人日常中最重要的功能还是下载，所以先从下载开始讲起 首先，创建一个文件，用来存放等会clone下来的项目，然后点击GitBash进行命令行操作   之后 在git上找到你中意的项目，如图操作，复制链接   1git clone https:&#x2F;&#x2F;github.com&#x2F;newbee-ltd&#x2F;newbee-mall.git  之后就会看到他在clone你的项目到本地文件夹，当">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142010473.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142014351.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142019940.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142024999.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142023289.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142025542.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142025828.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142030231.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142030423.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142032482.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142032980.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142033523.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142034113.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142040685.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142056116.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142103654.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142102651.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142122309.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142125003.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142129470.png">
+<meta property="article:published_time" content="2023-08-12T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-12-24T08:02:27.491Z">
+<meta property="article:author" content="RenXin">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="经验总结">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142010473.png">
+  
+  
+  
+  <meta name="keywords" content="git,经验总结">
+
+  <!-- feed -->
+  
+
+  
+    
+<link rel="stylesheet" href="../../css/main.css">
+
+  
+
+  
+
+  
+
+  
+
+
+  
+</head>
+
+<body>
+  
+
+
+
+
+  <div class='l_body' id='start'>
+    <aside class='l_left' layout='post'>
+    
+
+  
+
+<header class="header"><div class="logo-wrap"><a class="title" href="../../index.html"><div class="main" ff="title">RenXin's Website</div></a></div>
+
+<nav class="menu dis-select"></nav>
+</header>
+
+
+<div class="widgets">
+<widget class="widget-wrapper search"><div class="widget-body"><div class="search-wrapper" id="search"><form class="search-form"><input type="text" class="search-input" id="search-input" data-filter="/blog/" placeholder="文章搜索"><svg t="1670596976048" class="icon search-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2676" width="200" height="200"><path d="M938.2 832.6L723.8 618.1c-2.5-2.5-5.3-4.4-7.9-6.4 36.2-55.6 57.3-121.8 57.3-193.1C773.3 222.8 614.6 64 418.7 64S64 222.8 64 418.6c0 195.9 158.8 354.6 354.6 354.6 71.3 0 137.5-21.2 193.2-57.4 2 2.7 3.9 5.4 6.3 7.8L832.5 938c14.6 14.6 33.7 21.9 52.8 21.9 19.1 0 38.2-7.3 52.8-21.8 29.2-29.1 29.2-76.4 0.1-105.5M418.7 661.3C284.9 661.3 176 552.4 176 418.6 176 284.9 284.9 176 418.7 176c133.8 0 242.6 108.9 242.6 242.7 0 133.7-108.9 242.6-242.6 242.6" p-id="2677"></path></svg></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div></div></widget>
+
+
+<widget class="widget-wrapper toc single" id="data-toc"><div class="widget-header cap dis-select"><span class="name">git日常操作个人总结</span></div><div class="widget-body fs14"><div class="doc-tree active"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E7%AE%80%E5%8D%95%E5%85%8B%E9%9A%86"><span class="toc-text">项目简单克隆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E6%93%8D%E4%BD%9C"><span class="toc-text">通用操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E5%92%8C%E6%8F%90%E4%BA%A4"><span class="toc-text">添加和提交</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9E%E6%BB%9A"><span class="toc-text">回滚</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%94%AF"><span class="toc-text">分支</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E9%80%89"><span class="toc-text">优选</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E9%A1%B9%E7%9B%AE%E6%8E%A8%E9%80%81"><span class="toc-text">远程项目推送</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IEDA%E7%B1%BB%E8%BD%AF%E4%BB%B6%E8%BF%9E%E6%8E%A5"><span class="toc-text">IEDA类软件连接</span></a></li></ol></div></div></widget>
+
+
+
+
+</div>
+
+
+    </aside>
+    <div class='l_main'>
+      
+
+      
+
+
+
+<div class="bread-nav fs12"><div class="left"><div id="breadcrumb"><a class="cap breadcrumb" href="../../index.html">主页</a><span class="sep"></span><a class="cap breadcrumb" href="../../">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="../../categories/tools/">tools</a></div><div id="post-meta">
+    <span>发布于&nbsp;<time datetime="2023-08-12T16:00:00.000Z">2023-08-13</time></span>
+    
+    <span>更新于&nbsp;<time datetime="2023-12-24T08:02:27.491Z">2023-12-24</time></span>
+    </div></div></div>
+
+<article class='md-text content post'>
+<h1 class="article-title"><span>git日常操作个人总结</span></h1>
+<h1 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h1><h2 id="项目简单克隆"><a href="#项目简单克隆" class="headerlink" title="项目简单克隆"></a>项目简单克隆</h2><p>git在本人日常中最重要的功能还是下载，所以先从下载开始讲起</p>
+<p>首先，创建一个文件，用来存放等会clone下来的项目，然后点击GitBash进行命令行操作</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142010473.png"/></div></div>
+
+<p>之后 在git上找到你中意的项目，如图操作，复制链接</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142014351.png"/></div></div>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/newbee-ltd/newbee-mall.git</span><br></pre></td></tr></table></figure>
+
+<p>之后就会看到他在clone你的项目到本地文件夹，当然你也可以直接Download zip然后解压：</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142019940.png"/></div></div>
+
+<h2 id="通用操作"><a href="#通用操作" class="headerlink" title="通用操作"></a>通用操作</h2><p>之后讲通用的，先配置用户名</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name “ ”</span><br><span class="line">git config --global user.email “ ”</span><br></pre></td></tr></table></figure>
+
+<p>然后创建本地仓库</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br></pre></td></tr></table></figure>
+
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142024999.png"/></div></div>
+
+<p>打开此选项，查看隐藏的文件夹：</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142023289.png"/></div></div>
+
+<p>发现</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142025542.png"/></div></div>
+
+<p>这个目录是一个隐藏目录，而当前目录就是我们的工作目录。</p>
+<p>创建成功后，我们可以查看一下当前的一个状态，输入：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git status</span><br></pre></td></tr></table></figure>
+
+<p>如果已经成功配置为Git本地仓库，那么输入后可以看到：</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142025828.png"/></div></div>
+
+<h3 id="添加和提交"><a href="#添加和提交" class="headerlink" title="添加和提交"></a>添加和提交</h3><p>接着我们来看看，如何使用git来管理我们文档的版本，我们创建一个文本文档，随便写入一点内容，接着查看状态：</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142030231.png"/></div></div>
+
+<p>Untracked files是未追踪文件的意思，也就是说，如果一个文件处于未追踪状态，那么git不会记录它的变化，始终将其当做一个新创建的文件，这里我们将其添加到暂存区，那么它会自动变为被追踪状态：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git add hello.txt #也可以 add . 一次性添加目录下所有的</span><br><span class="line">再次查看当前状态：</span><br></pre></td></tr></table></figure>
+
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142030423.png"/></div></div>
+
+<p>现在文件名称的颜色变成了绿色，并且是处于Changes to be committed下面，因此，我们的hello.txt现在已经被添加到暂存区了。</p>
+<p>接着我们来尝试将其提交到Git本地仓库中，注意需要输入提交的描述以便后续查看，比如你这次提交修改了或是新增了哪些内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit -m &#x27;Hello World&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>接着我们可以查看我们的提交记录：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git log</span><br><span class="line">git log --graph</span><br></pre></td></tr></table></figure>
+
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142032482.png"/></div></div>
+
+<p>我们还可以查看最近一次变更的详细内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git show [也可以加上commit ID查看指定的提交记录]</span><br></pre></td></tr></table></figure>
+
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142032980.png"/></div></div>
+
+<p>接着我们可以尝试修改一下我们的文本文档，由于当前文件已经是被追踪状态，那么git会去跟踪它的变化，如果说文件发生了修改，那么我们再次查看状态会得到下面的结果：</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142033523.png"/></div></div>
+
+<p>也就是说现在此文件是处于已修改状态，我们如果修改好了，就可以提交我们的新版本到本地仓库中：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m &#x27;Modify Text&#x27;</span><br></pre></td></tr></table></figure>
+
+
+<p>接着我们来查询一下提交记录，可以看到一共有两次提交记录。</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142034113.png"/></div></div>
+
+<p>我们可以创建一个.gitignore文件来确定一个文件忽略列表，如果忽略列表中的文件存在且不是被追踪状态，那么git不会对其进行任何检查</p>
+<h3 id="回滚"><a href="#回滚" class="headerlink" title="回滚"></a>回滚</h3><p>当我们想要回退到过去的版本时，就可以执行回滚操作，执行后，可以将工作空间的内容恢复到指定提交的状态：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git reset --hard commitID</span><br></pre></td></tr></table></figure>
+
+<p>执行后，会直接重置为那个时候的状态。再次查看提交日志，我们发现之后的日志全部消失了。</p>
+<p>那么要是现在我又想回去呢？我们可以通过查看所有分支的所有操作记录：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git reflog</span><br></pre></td></tr></table></figure>
+
+<p>这样就能找到之前的commitID，再次重置即可。</p>
+<h3 id="分支"><a href="#分支" class="headerlink" title="分支"></a>分支</h3><p>分支就像我们树上的一个树枝一样，它们可能一开始的时候是同一根树枝，但是长着长着就开始分道扬镳了，这就是分支。我们的代码也是这样，可能一开始写基础功能的时候使用的是单个分支，但是某一天我们希望基于这些基础的功能，把我们的项目做成两个不同方向的项目，比如一个方向做Web网站，另一个方向做游戏服务端。</p>
+<p>因此，我们可以在一个主干上分出N个分支，分别对多个分支的代码进行维护。</p>
+<p>创建分支<br>我们可以通过以下命令来查看当前仓库中存在的分支：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch</span><br></pre></td></tr></table></figure>
+
+
+<p>我们发现，默认情况下是有一个master分支的，并且我们使用的也是master分支，一般情况下master分支都是正式版本的更新，而其他分支一般是开发中才频繁更新的。我们接着来基于当前分支创建一个新的分支：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch test</span><br></pre></td></tr></table></figure>
+
+<p>删除分支</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -d test1</span><br></pre></td></tr></table></figure>
+
+
+<p>现在我们修改一下文件，提交，再查看一下提交日志：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit -a -m &#x27;branch master commit&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>通过添加-a来自动将未放入暂存区的已修改文件放入暂存区并执行提交操作。查看日志，我们发现现在我们的提交只生效于master分支，而新创建的分支并没有发生修改。</p>
+<p>将分支切换到另一个分支：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout test</span><br></pre></td></tr></table></figure>
+
+<p>我们会发现，文件变成了此分支创建的时的状态，也就是说，在不同分支下我们的文件内容是相互隔离的。</p>
+<p>我们现在再来提交一次变更，会发现它只生效在yyds分支上。我们可以看看当前的分支状态：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git log --all --graph</span><br></pre></td></tr></table></figure>
+
+<p>合并分支<br>我们也可以将两个分支更新的内容最终合并到同一个分支上，我们先切换回主分支：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout test1</span><br></pre></td></tr></table></figure>
+
+<p>接着使用分支合并命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git merge test</span><br></pre></td></tr></table></figure>
+
+<p>会得到如下提示：</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142040685.png"/></div></div>
+
+<p>在合并过程中产生了冲突，因为两个分支都对hello.txt文件进行了修改，那么现在要合并在一起，到底保留谁的hello文件呢？</p>
+<p>我们可以查看一下是哪里发生了冲突：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git diff</span><br></pre></td></tr></table></figure>
+
+
+<p>因此，现在我们将master分支的版本回退到修改hello.txt之前或是直接修改为最新版本的内容，这样就不会有冲突了，接着再执行一次合并操作，现在两个分支成功合并为同一个分支。</p>
+<p>变基分支<br>除了直接合并分支以外，我们还可以进行变基操作，它跟合并不同，合并是分支回到主干的过程，而变基是直接修改分支开始的位置，比如我们希望将yyds变基到master上，那么yyds会将分支起点移动到master最后一次提交位置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git rebase master</span><br></pre></td></tr></table></figure>
+
+
+<p>变基后，yyds分支相当于同步了此前master分支的全部提交。</p>
+<h3 id="优选"><a href="#优选" class="headerlink" title="优选"></a>优选</h3><p>我们还可以选择其将他分支上的提交作用于当前分支上，这种操作称为cherrypick：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git cherry-pick &lt;commit id&gt;:单独合并一个提交</span><br></pre></td></tr></table></figure>
+
+<p>这里我们在master分支上创建一个新的文件，提交此次更新，接着通过cherry-pick的方式将此次更新作用于test分支上。</p>
+<h2 id="远程项目推送"><a href="#远程项目推送" class="headerlink" title="远程项目推送"></a>远程项目推送</h2><p>首先我们需要一个认证</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa</span><br><span class="line">cat ~/.ssh/github.pub</span><br></pre></td></tr></table></figure>
+
+<p>打开所在目录，复制 .pub文件中的所有内容，之后添加ssh key</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142056116.png"/></div></div>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git commit -a -m &#x27;Modify files&#x27;</span><br><span class="line">git log --all --oneline --graph</span><br><span class="line">git push origin master </span><br><span class="line">git log --all --oneline --graph</span><br></pre></td></tr></table></figure>
+
+
+
+<p>推送成功</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142103654.png"/></div></div>
+
+<p>主页也看到了</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142102651.png"/></div></div>
+
+<p>也可以远端绑定分支</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git push --set-upstream origin master:master</span><br><span class="line">git push origin</span><br></pre></td></tr></table></figure>
+
+<p>抓取、拉取和冲突解决<br>我们接着来看，如果这个时候，出现多个本地仓库对应一个远程仓库的情况下，比如一个团队里面，N个人都在使用同一个远程仓库，但是他们各自只负责编写和推送自己业务部分的代码，也就是我们常说的协同工作，那么这个时候，我们就需要协调。</p>
+<p>比如程序员A完成了他的模块，那么他就可以提交代码并推送到远程仓库，这时程序员B也要开始写代码了，由于远程仓库有其他程序员的提交记录，因此程序员B的本地仓库和远程仓库不一致，这时就需要有先进行pull操作，获取远程仓库中最新的提交：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git fetch 远程仓库 #抓取：只获取但不合并远端分支，后面需要我们手动合并才能提交</span><br><span class="line">git pull 远程仓库 #拉取：获取+合并</span><br></pre></td></tr></table></figure>
+
+<p>之后可能会出现冲突，例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">To https://github.com/xx/xxx.git</span><br><span class="line"> ! [rejected]        master -&gt; master (fetch first)</span><br><span class="line">error: failed to push some refs to &#x27;https://github.com/xx/xxx.git&#x27;</span><br><span class="line">hint: Updates were rejected because the remote contains work that you do</span><br><span class="line">hint: not have locally. This is usually caused by another repository pushing</span><br><span class="line">hint: to the same ref. You may want to first integrate the remote changes</span><br><span class="line">hint: (e.g., &#x27;git pull ...&#x27;) before pushing again.</span><br><span class="line">hint: See the &#x27;Note about fast-forwards&#x27; in &#x27;git push --help&#x27; for details.</span><br></pre></td></tr></table></figure>
+
+<p>一旦一个本地仓库推送了代码，那么另一个本地仓库的推送会被拒绝，原因是当前文件已经被其他的推送给修改了，我们这边相当于是另一个版本，和之前两个分支合并一样，产生了冲突，因此我们只能去解决冲突问题。</p>
+<p>如果远程仓库中的提交和本地仓库中的提交没有去编写同一个文件，那么就可以直接拉取：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull 远程仓库</span><br></pre></td></tr></table></figure>
+
+<p>拉取后会自动进行合并，合并完成之后我们再提交即可。</p>
+<p>但是如果两次提交都修改了同一个文件，那么就会遇到和多分支合并一样的情况，在合并时会产生冲突，这时就需要我们自己去解决冲突了。</p>
+<h2 id="IEDA类软件连接"><a href="#IEDA类软件连接" class="headerlink" title="IEDA类软件连接"></a>IEDA类软件连接</h2><p>以下使用GoLand作为范例，IDEA也大差不差</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142122309.png"/></div></div>
+
+<p>之后登陆账户</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142125003.png"/></div></div>
+
+<p>之后就可以提交了，命令都大差不差</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310142129470.png"/></div></div>
+
+
+<div class="article-footer reveal fs14">
+    <section id="license">
+      <div class="header"><span>许可协议</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    </div>
+
+</article>
+
+<div class="related-wrap reveal" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="../../Java/SpringBoot/springboot-email/">SpringBoot邮件发送</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="../../Java/SpringSecurity/SpringSecurity/">SpringSecurity总结</a></div></section></div>
+
+
+
+
+
+
+
+
+      
+<footer class="page-footer reveal fs12"><hr><div class="text"><p>本站由 <a href="/">@anonymity</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar">Stellar</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+
+      <div class='float-panel mobile-only blur' style='display:none'>
+  <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
+    <svg class="icon" style="width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15301"><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 2.3 26.8 24.6 47.5 51.6 47.6h416.5v4z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15302"></path><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 1.9 27.7 23.9 49.7 51.6 51.6h416.5z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15303"></path></svg>
+  </button>
+</div>
+
+    </div>
+  </div>
+  <div class='scripts'>
+    <script type="text/javascript">
+  const stellar = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    loadCSS: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    // 从 butterfly 和 volantis 获得灵感
+    loadScript: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = stellar.config.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    // https://github.com/jerryc127/hexo-theme-butterfly
+    jQuery: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        stellar.loadScript(stellar.plugins.jQuery).then(fn)
+      } else {
+        fn()
+      }
+    }
+  };
+  stellar.version = '1.21.0';
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.21.0';
+  stellar.config = {
+    date_suffix: {
+      just: '刚刚',
+      min: '分钟前',
+      hour: '小时前',
+      day: '天前',
+      month: '个月前',
+    },
+    root : '/',
+  };
+
+  // required plugins (only load if needs)
+  stellar.plugins = {
+    jQuery: 'https://gcore.jsdelivr.net/npm/jquery@3.6.2/dist/jquery.min.js'
+  };
+
+  if ('local_search') {
+    stellar.search = {};
+    stellar.search.service = 'local_search';
+    if (stellar.search.service == 'local_search') {
+      let service_obj = Object.assign({}, {"field":"all","path":"/search.json","content":true,"sort":"-date"});
+      stellar.search[stellar.search.service] = service_obj;
+    }
+  }
+
+  // stellar js
+  stellar.plugins.stellar = Object.assign({"sites":"/js/plugins/sites.js","friends":"/js/plugins/friends.js","ghinfo":"/js/plugins/ghinfo.js","timeline":"/js/plugins/timeline.js","linkcard":"/js/plugins/linkcard.js","fcircle":"/js/plugins/fcircle.js","weibo":"/js/plugins/weibo.js","memos":"/js/plugins/memos.js"});
+
+  stellar.plugins.marked = Object.assign("https://cdn.bootcdn.net/ajax/libs/marked/4.0.18/marked.min.js");
+  // optional plugins
+  if ('true' == 'true') {
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://gcore.jsdelivr.net/npm/vanilla-lazyload@17.8.3/dist/lazyload.min.js","transition":"blur"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper@10.3/swiper-bundle.min.css","js":"https://unpkg.com/swiper@10.3/swiper-bundle.min.js"});
+  }
+  if ('' == 'true') {
+    stellar.plugins.scrollreveal = Object.assign({"enable":null,"js":"https://gcore.jsdelivr.net/npm/scrollreveal@4.0.9/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":100,"scale":1});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://gcore.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://gcore.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.fancybox = Object.assign({"enable":true,"js":"https://gcore.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js","css":"https://gcore.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css","selector":".swiper-slide img, .gallery img"});
+  }
+  if ('false' == 'true') {
+    stellar.plugins.heti = Object.assign({"enable":false,"css":"https://unpkg.com/heti@0.9.2/umd/heti.min.css","js":"https://unpkg.com/heti@0.9.2/umd/heti-addon.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.copycode = Object.assign({"enable":true,"js":"/js/plugins/copycode.js","default_text":"Copy","success_text":"Copied"});
+  }
+</script>
+
+<!-- required -->
+
+  
+<script src="../../js/main.js" async></script>
+
+
+
+<!-- optional -->
+
+
+
+<!-- inject -->
+
+
+  </div>
+</body>
+</html>
