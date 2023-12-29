@@ -1,46 +1,847 @@
-.l_body {
-  display: flex;
-  margin: auto;
-  padding: 0 var(--gap-l);
-  justify-content: center;
-}
-.l_body .l_left {
-  z-index: 8;
-  width: var(--width-left);
-  flex-shrink: 0;
-  position: sticky;
-  position: -webkit-sticky;
-  top: 0;
-}
-.l_body .l_main {
-  flex-shrink: 1;
-  flex-grow: 1;
-  width: 320px;
-  max-width: var(--width-main);
-}
-@media screen and (max-width: $device-mobile-max) {
-  .mobile-only {
-    display: block !important;
+<!DOCTYPE html>
+<html lang='zh-CN'>
+
+<head>
+  <meta name="generator" content="Hexo 7.0.0">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.21.0">
+  <meta charset="utf-8">
+  
+
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://gcore.jsdelivr.net'>
+  <link rel="preconnect" href="https://gcore.jsdelivr.net" crossorigin>
+  <link rel='dns-prefetch' href='//unpkg.com'>
+
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" content="#f8f8f8">
+  
+  <title>SpringBoot数据交互 - RenXin's Website</title>
+
+  
+    <meta name="description" content="深入SpringBoot数据交互前面我们了解了SpringBoot以及一些常用的框架整合，相信各位小伙伴已经体验到SpringBoot带来的超便捷开发体验了。本章我们将深入讲解SpringBoot的数据交互，使用更多方便好用的持久层框架。 JDBC交互框架除了我们前面一直认识的Mybatis之外，实际上Spring官方也提供了一个非常方便的JDBC操作工具，它同样可以快速进行增删改查。首先我们">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot数据交互">
+<meta property="og:url" content="http://renewdxin.github.io/Java/SpringBoot/SpringBoot2/index.html">
+<meta property="og:site_name" content="RenXin&#39;s Website">
+<meta property="og:description" content="深入SpringBoot数据交互前面我们了解了SpringBoot以及一些常用的框架整合，相信各位小伙伴已经体验到SpringBoot带来的超便捷开发体验了。本章我们将深入讲解SpringBoot的数据交互，使用更多方便好用的持久层框架。 JDBC交互框架除了我们前面一直认识的Mybatis之外，实际上Spring官方也提供了一个非常方便的JDBC操作工具，它同样可以快速进行增删改查。首先我们">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2023/07/22/yM9WDH5TS4a6I7e.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/16/ygRp98mDKafXkw1.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/20/ijczpNxh4fXoQKv.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/20/xMeBEY3sdKVGmly.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/20/mq4Ut7BMI5XTDoN.png">
+<meta property="og:image" content="https://s2.loli.net/2023/03/06/XaoLIPrjDKzO9Tx.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/20/kABZVhJ8vjKSqzT.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/20/ksI3J5eidzTrvyL.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/20/TRHOWbop267Al4Q.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/21/uIBciLqFsH5tdDR.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/21/mioZaUk7Yj3QDxb.png">
+<meta property="og:image" content="https://s2.loli.net/2023/03/06/WnPEmdR2sDLuwGN.jpg">
+<meta property="og:image" content="https://s2.loli.net/2023/07/21/dUAkeOP9FfVarRL.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309061702945.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309061508786.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309061525589.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309061527770.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309061530017.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309061702879.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309061559416.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309061624585.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/21/lGT4g5Y6Heqavsw.png">
+<meta property="og:image" content="https://s2.loli.net/2023/07/21/bIZ9D2cA7XsgSoU.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309061702300.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309061637361.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309061702125.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309061648925.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309061706801.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309061706187.png">
+<meta property="article:published_time" content="2023-08-06T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-12-29T11:31:04.874Z">
+<meta property="article:author" content="RenXin">
+<meta property="article:tag" content="SpringBoot">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2023/07/22/yM9WDH5TS4a6I7e.png">
+  
+  
+  
+  <meta name="keywords" content="SpringBoot">
+
+  <!-- feed -->
+  
+
+  
+    
+<link rel="stylesheet" href="../../../css/main.css">
+
+  
+
+  
+
+  
+
+  
+
+
+  
+</head>
+
+<body>
+  
+
+
+
+
+  <div class='l_body' id='start'>
+    <aside class='l_left' layout='post'>
+    
+
+  
+
+<header class="header"><div class="logo-wrap"><a class="title" href="../../../index.html"><div class="main" ff="title">RenXin's Website</div></a></div>
+
+<nav class="menu dis-select"></nav>
+</header>
+
+
+<div class="widgets">
+<widget class="widget-wrapper search"><div class="widget-body"><div class="search-wrapper" id="search"><form class="search-form"><input type="text" class="search-input" id="search-input" data-filter="/blog/" placeholder="文章搜索"><svg t="1670596976048" class="icon search-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2676" width="200" height="200"><path d="M938.2 832.6L723.8 618.1c-2.5-2.5-5.3-4.4-7.9-6.4 36.2-55.6 57.3-121.8 57.3-193.1C773.3 222.8 614.6 64 418.7 64S64 222.8 64 418.6c0 195.9 158.8 354.6 354.6 354.6 71.3 0 137.5-21.2 193.2-57.4 2 2.7 3.9 5.4 6.3 7.8L832.5 938c14.6 14.6 33.7 21.9 52.8 21.9 19.1 0 38.2-7.3 52.8-21.8 29.2-29.1 29.2-76.4 0.1-105.5M418.7 661.3C284.9 661.3 176 552.4 176 418.6 176 284.9 284.9 176 418.7 176c133.8 0 242.6 108.9 242.6 242.7 0 133.7-108.9 242.6-242.6 242.6" p-id="2677"></path></svg></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div></div></widget>
+
+
+<widget class="widget-wrapper toc single" id="data-toc"><div class="widget-header cap dis-select"><span class="name">SpringBoot数据交互</span></div><div class="widget-body fs14"><div class="doc-tree active"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#JDBC%E4%BA%A4%E4%BA%92%E6%A1%86%E6%9E%B6"><span class="toc-text">JDBC交互框架</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JDBC%E6%A8%A1%E7%89%88%E7%B1%BB"><span class="toc-text">JDBC模版类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JDBC%E7%AE%80%E5%8D%95%E5%B0%81%E8%A3%85"><span class="toc-text">JDBC简单封装</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JPA%E6%A1%86%E6%9E%B6"><span class="toc-text">JPA框架</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A4%E8%AF%86SpringData-JPA"><span class="toc-text">认识SpringData JPA</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8JPA%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B"><span class="toc-text">使用JPA快速上手</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E5%90%8D%E7%A7%B0%E6%8B%BC%E6%8E%A5%E8%87%AA%E5%AE%9A%E4%B9%89SQL"><span class="toc-text">方法名称拼接自定义SQL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E8%81%94%E6%9F%A5%E8%AF%A2"><span class="toc-text">关联查询</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JPQL%E8%87%AA%E5%AE%9A%E4%B9%89SQL%E8%AF%AD%E5%8F%A5"><span class="toc-text">JPQL自定义SQL语句</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MybatisPlus%E6%A1%86%E6%9E%B6"><span class="toc-text">MybatisPlus框架</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B"><span class="toc-text">快速上手</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6%E6%9E%84%E9%80%A0%E5%99%A8"><span class="toc-text">条件构造器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A5%E5%8F%A3%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-text">接口基本操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B0%E7%89%88%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90%E5%99%A8"><span class="toc-text">新版代码生成器</span></a></li></ol></li></ol></div></div></widget>
+
+
+
+
+</div>
+
+
+    </aside>
+    <div class='l_main'>
+      
+
+      
+
+
+
+<div class="bread-nav fs12"><div class="left"><div id="breadcrumb"><a class="cap breadcrumb" href="../../../index.html">主页</a><span class="sep"></span><a class="cap breadcrumb" href="../../../">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="../../../categories/Java/">Java</a> <span class="sep"></span> <a class="cap breadcrumb-link" href="../../../categories/Java/SpringBoot/">SpringBoot</a></div><div id="post-meta">
+    <span>发布于&nbsp;<time datetime="2023-08-06T16:00:00.000Z">2023-08-07</time></span>
+    
+    <span>更新于&nbsp;<time datetime="2023-12-29T11:31:04.874Z">2023-12-29</time></span>
+    </div></div></div>
+
+<article class='md-text content post'>
+<h1 class="article-title"><span>SpringBoot数据交互</span></h1>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://s2.loli.net/2023/07/22/yM9WDH5TS4a6I7e.png"/></div></div>
+
+<h1 id="深入SpringBoot数据交互"><a href="#深入SpringBoot数据交互" class="headerlink" title="深入SpringBoot数据交互"></a>深入SpringBoot数据交互</h1><p>前面我们了解了SpringBoot以及一些常用的框架整合，相信各位小伙伴已经体验到SpringBoot带来的超便捷开发体验了。本章我们将深入讲解SpringBoot的数据交互，使用更多方便好用的持久层框架。</p>
+<h2 id="JDBC交互框架"><a href="#JDBC交互框架" class="headerlink" title="JDBC交互框架"></a>JDBC交互框架</h2><p>除了我们前面一直认识的Mybatis之外，实际上Spring官方也提供了一个非常方便的JDBC操作工具，它同样可以快速进行增删改查。首先我们还是通过starter将依赖导入：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-jdbc<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>导入完成之后就可以轻松使用了。</p>
+<h3 id="JDBC模版类"><a href="#JDBC模版类" class="headerlink" title="JDBC模版类"></a>JDBC模版类</h3><p>Spring JDBC为我们提供了一个非常方便的<code>JdbcTemplate</code>类，它封装了常用的JDBC操作，我们可以快速使用这些方法来实现增删改查，这里我们还是配置一下MySQL数据源信息：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-j<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">datasource:</span></span><br><span class="line">    <span class="attr">url:</span> <span class="string">jdbc:mysql://localhost:3306/test</span></span><br><span class="line">    <span class="attr">username:</span> <span class="string">root</span></span><br><span class="line">    <span class="attr">password:</span> <span class="number">123456</span></span><br><span class="line">    <span class="attr">driver-class-name:</span> <span class="string">com.mysql.cj.jdbc.Driver</span></span><br></pre></td></tr></table></figure>
+
+<p>我们要操作数据库，最简单直接的方法就是使用JdbcTemplate来完成：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Resource</span></span><br><span class="line">JdbcTemplate template;</span><br></pre></td></tr></table></figure>
+
+<p>它给我们封装了很多方法使用，比如我们要查询数据库中的一条记录：</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://s2.loli.net/2023/07/16/ygRp98mDKafXkw1.png"/></div></div>
+
+<p>我们可以使用<code>queryForMap</code>快速以Map为结果的形式查询一行数据：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">contextLoads</span><span class="params">()</span> &#123;</span><br><span class="line">    Map&lt;String, Object&gt; map = template.queryForMap(<span class="string">&quot;select * from user where id = ?&quot;</span>, <span class="number">1</span>);</span><br><span class="line">    System.out.println(map);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>非常方便：</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://s2.loli.net/2023/07/20/ijczpNxh4fXoQKv.png"/></div></div>
+
+<p>我们也可以编写自定义的Mapper用于直接得到查询结果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">User</span> &#123;</span><br><span class="line">    <span class="type">int</span> id;</span><br><span class="line">    String name;</span><br><span class="line">    String email;</span><br><span class="line">    String password;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">contextLoads</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> template.queryForObject(<span class="string">&quot;select * from user where id = ?&quot;</span>,</span><br><span class="line">        (r, i) -&gt; <span class="keyword">new</span> <span class="title class_">User</span>(r.getInt(<span class="number">1</span>), r.getString(<span class="number">2</span>), r.getString(<span class="number">3</span>), r.getString(<span class="number">4</span>)), <span class="number">1</span>);</span><br><span class="line">    System.out.println(user);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当然除了这些之外，它还提供了<code>update</code>方法适用于各种情况的查询、更新、删除操作：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">contextLoads</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">update</span> <span class="operator">=</span> template.update(<span class="string">&quot;insert into user values(2, &#x27;admin&#x27;, &#x27;654321@qq.com&#x27;, &#x27;123456&#x27;)&quot;</span>);</span><br><span class="line">    System.out.println(<span class="string">&quot;更新了 &quot;</span>+update+<span class="string">&quot; 行&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样，如果是那种非常小型的项目，甚至是测试用例的话，都可以快速使用JdbcTemplate快速进行各种操作。</p>
+<h3 id="JDBC简单封装"><a href="#JDBC简单封装" class="headerlink" title="JDBC简单封装"></a>JDBC简单封装</h3><p>对于一些插入操作，Spring JDBC为我们提供了更方便的SimpleJdbcInsert工具，它可以实现更多高级的插入功能，比如我们的表主键采用的是自增ID，那么它支持插入后返回自动生成的ID，这就非常方便了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">WebConfiguration</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    DataSource source;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">contextLoads</span><span class="params">()</span> &#123;</span><br><span class="line">      	<span class="comment">//这个类需要自己创建对象</span></span><br><span class="line">        <span class="type">SimpleJdbcInsert</span> <span class="variable">simple</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SimpleJdbcInsert</span>(source)</span><br><span class="line">                .withTableName(<span class="string">&quot;user&quot;</span>)   <span class="comment">//设置要操作的表名称</span></span><br><span class="line">                .usingGeneratedKeyColumns(<span class="string">&quot;id&quot;</span>);    <span class="comment">//设置自增主键列</span></span><br><span class="line">        Map&lt;String, Object&gt; user = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;(<span class="number">2</span>);  <span class="comment">//插入操作需要传入一个Map作为数据</span></span><br><span class="line">        user.put(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;bob&quot;</span>);</span><br><span class="line">        user.put(<span class="string">&quot;email&quot;</span>, <span class="string">&quot;112233@qq.com&quot;</span>);</span><br><span class="line">        user.put(<span class="string">&quot;password&quot;</span>, <span class="string">&quot;123456&quot;</span>);</span><br><span class="line">        <span class="type">Number</span> <span class="variable">number</span> <span class="operator">=</span> simple.executeAndReturnKey(user);   <span class="comment">//最后得到的Numver就是得到的自增主键</span></span><br><span class="line">        System.out.println(number);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样就可以快速进行插入操作并且返回自增主键了，还是挺方便的。</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://s2.loli.net/2023/07/20/xMeBEY3sdKVGmly.png"/></div></div>
+
+<p>当然，虽然SpringJDBC给我们提供了这些小工具，但是其实只适用于简单小项目，稍微复杂一点就不太适合了，下一部分我们将介绍JPA框架。</p>
+<hr>
+<h2 id="JPA框架"><a href="#JPA框架" class="headerlink" title="JPA框架"></a>JPA框架</h2><div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://s2.loli.net/2023/07/20/mq4Ut7BMI5XTDoN.png"/></div></div>
+
+<ul>
+<li>用了Mybatis之后，你看那个JDBC，真是太逊了。</li>
+<li>这么说，你的项目很勇哦？</li>
+<li>开玩笑，我的写代码超勇的好不好。</li>
+<li>阿伟，你可曾幻想过有一天你的项目里不再有SQL语句？</li>
+<li>不再有SQL语句？那我怎么和数据库交互啊？</li>
+<li>我看你是完全不懂哦</li>
+<li>懂，懂什么啊？</li>
+<li>你想懂？来，到我项目里来，我给你看点好康的。</li>
+<li>好康？是什么新框架哦？</li>
+<li>什么新框架，比新框架还刺激，还可以让你的项目登duang郎哦。</li>
+<li>哇，杰哥，你项目里面都没SQL语句诶，这是用的什么框架啊？</li>
+</ul>
+<p>​		在我们之前编写的项目中，我们不难发现，实际上大部分的数据库交互操作，到最后都只会做一个事情，那就是把数据库中的数据映射为Java中的对象。比如我们要通过用户名去查找对应的用户，或是通过ID查找对应的学生信息，在使用Mybatis时，我们只需要编写正确的SQL语句就可以直接将获取的数据映射为对应的Java对象，通过调用Mapper中的方法就能直接获得实体类，这样就方便我们在Java中数据库表中的相关信息了。</p>
+<p>​		但是以上这些操作都有一个共性，那就是它们都是通过某种条件去进行查询，而最后的查询结果，都是一个实体类，所以你会发现你写的很多SQL语句都是一个套路<code>select * from xxx where xxx=xxx</code>，实际上对于这种简单SQL语句，我们完全可以弄成一个模版来使用，那么能否有一种框架，帮我们把这些相同的套路给封装起来，直接把这类相似的SQL语句给屏蔽掉，不再由我们编写，而是让框架自己去组合拼接。</p>
+<h3 id="认识SpringData-JPA"><a href="#认识SpringData-JPA" class="headerlink" title="认识SpringData JPA"></a>认识SpringData JPA</h3><p>首先我们来看一个国外的统计：</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://s2.loli.net/2023/03/06/XaoLIPrjDKzO9Tx.png"/></div></div>
+
+<p>不对吧，为什么Mybatis这么好用，这么强大，却只有10%的人喜欢呢？然而事实就是，在国外JPA几乎占据了主导地位，而Mybatis并不像国内那样受待见，所以你会发现，JPA都有SpringBoot的官方直接提供的starter，而Mybatis没有，直到SpringBoot 3才开始加入到官方模版中。</p>
+<p>那么，什么是JPA？</p>
+<blockquote>
+<p>JPA（Java Persistence API）和JDBC类似，也是官方定义的一组接口，但是它相比传统的JDBC，它是为了实现ORM而生的，即Object-Relationl Mapping，它的作用是在关系型数据库和对象之间形成一个映射，这样，我们在具体的操作数据库的时候，就不需要再去和复杂的SQL语句打交道，只要像平时操作对象一样操作它就可以了。</p>
+<p>其中比较常见的JPA实现有：</p>
+<ol>
+<li>Hibernate：Hibernate是JPA规范的一个具体实现，也是目前使用最广泛的JPA实现框架之一。它提供了强大的对象关系映射功能，可以将Java对象映射到数据库表中，并提供了丰富的查询语言和缓存机制。</li>
+<li>EclipseLink：EclipseLink是另一个流行的JPA实现框架，由Eclipse基金会开发和维护。它提供了丰富的特性，如对象关系映射、缓存、查询语言和连接池管理等，并具有较高的性能和可扩展性。</li>
+<li>OpenJPA：OpenJPA是Apache基金会的一个开源项目，也是JPA规范的一个实现。它提供了高性能的JPA实现和丰富的特性，如延迟加载、缓存和分布式事务等。</li>
+<li>TopLink：TopLink是Oracle公司开发的一个对象关系映射框架，也是JPA规范的一个实现。虽然EclipseLink已经取代了TopLink成为Oracle推荐的JPA实现，但TopLink仍然得到广泛使用。</li>
+</ol>
+</blockquote>
+<p>在之前，我们使用JDBC或是Mybatis来操作数据，通过直接编写对应的SQL语句来实现数据访问，但是我们发现实际上我们在Java中大部分操作数据库的情况都是读取数据并封装为一个实体类，因此，为什么不直接将实体类直接对应到一个数据库表呢？也就是说，一张表里面有什么属性，那么我们的对象就有什么属性，所有属性跟数据库里面的字段一一对应，而读取数据时，只需要读取一行的数据并封装为我们定义好的实体类既可以，而具体的SQL语句执行，完全可以交给框架根据我们定义的映射关系去生成，不再由我们去编写，因为这些SQL实际上都是千篇一律的。</p>
+<p>而实现JPA规范的框架一般最常用的就是<code>Hibernate</code>，它是一个重量级框架，学习难度相比Mybatis也更高一些，而SpringDataJPA也是采用Hibernate框架作为底层实现，并对其加以封装。</p>
+<p>官网：<a target="_blank" rel="noopener" href="https://spring.io/projects/spring-data-jpa">https://spring.io/projects/spring-data-jpa</a></p>
+<h3 id="使用JPA快速上手"><a href="#使用JPA快速上手" class="headerlink" title="使用JPA快速上手"></a>使用JPA快速上手</h3><p>同样的，我们只需要导入stater依赖即可：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-data-jpa<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>接着我们可以直接创建一个类，比如用户类，我们只需要把一个账号对应的属性全部定义好即可：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Account</span> &#123;</span><br><span class="line">    <span class="type">int</span> id;</span><br><span class="line">    String username;</span><br><span class="line">    String password;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接着，我们可以通过注解形式，在属性上添加数据库映射关系，这样就能够让JPA知道我们的实体类对应的数据库表长啥样，这里用到了很多注解：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@Entity</span>   <span class="comment">//表示这个类是一个实体类</span></span><br><span class="line"><span class="meta">@Table(name = &quot;account&quot;)</span>    <span class="comment">//对应的数据库中表名称</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Account</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GeneratedValue(strategy = GenerationType.IDENTITY)</span>   <span class="comment">//生成策略，这里配置为自增</span></span><br><span class="line">    <span class="meta">@Column(name = &quot;id&quot;)</span>    <span class="comment">//对应表中id这一列</span></span><br><span class="line">    <span class="meta">@Id</span>     <span class="comment">//此属性为主键</span></span><br><span class="line">    <span class="type">int</span> id;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(name = &quot;username&quot;)</span>   <span class="comment">//对应表中username这一列</span></span><br><span class="line">    String username;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(name = &quot;password&quot;)</span>   <span class="comment">//对应表中password这一列</span></span><br><span class="line">    String password;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接着我们来修改一下配置文件，把日志打印给打开：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">jpa:</span></span><br><span class="line">    <span class="comment">#开启SQL语句执行日志信息</span></span><br><span class="line">    <span class="attr">show-sql:</span> <span class="literal">true</span></span><br><span class="line">    <span class="attr">hibernate:</span></span><br><span class="line">      <span class="comment">#配置为检查数据库表结构，没有时会自动创建</span></span><br><span class="line">      <span class="attr">ddl-auto:</span> <span class="string">update</span></span><br></pre></td></tr></table></figure>
+
+<p><code>ddl-auto</code>属性用于设置自动表定义，可以实现自动在数据库中为我们创建一个表，表的结构会根据我们定义的实体类决定，它有以下几种：</p>
+<ul>
+<li><code>none</code>: 不执行任何操作，数据库表结构需要手动创建。</li>
+<li><code>create</code>: 框架在每次运行时都会删除所有表，并重新创建。</li>
+<li><code>create-drop</code>: 框架在每次运行时都会删除所有表，然后再创建，但在程序结束时会再次删除所有表。</li>
+<li><code>update</code>: 框架会检查数据库表结构，如果与实体类定义不匹配，则会做相应的修改，以保持它们的一致性。</li>
+<li><code>validate</code>: 框架会检查数据库表结构与实体类定义是否匹配，如果不匹配，则会抛出异常。</li>
+</ul>
+<p>这个配置项的作用是为了避免手动管理数据库表结构，使开发者可以更方便地进行开发和测试，但在生产环境中，更推荐使用数据库迁移工具来管理表结构的变更。</p>
+<p>我们可以在日志中发现，在启动时执行了如下SQL语句：</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://s2.loli.net/2023/07/20/kABZVhJ8vjKSqzT.png"/></div></div>
+
+<p>我们的数据库中对应的表已经自动创建好了。</p>
+<p>我们接着来看如何访问我们的表，我们需要创建一个Repository实现类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">AccountRepository</span> <span class="keyword">extends</span> <span class="title class_">JpaRepository</span>&lt;Account, Integer&gt; &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意JpaRepository有两个泛型，前者是具体操作的对象实体，也就是对应的表，后者是ID的类型，接口中已经定义了比较常用的数据库操作。编写接口继承即可，我们可以直接注入此接口获得实现类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Resource</span></span><br><span class="line">AccountRepository repository;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">contextLoads</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">Account</span> <span class="variable">account</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Account</span>();</span><br><span class="line">    account.setUsername(<span class="string">&quot;小红&quot;</span>);</span><br><span class="line">    account.setPassword(<span class="string">&quot;1234567&quot;</span>);</span><br><span class="line">    System.out.println(repository.save(account).getId());   <span class="comment">//使用save来快速插入数据，并且会返回插入的对象，如果存在自增ID，对象的自增id属性会自动被赋值，这就很方便了</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果如下：</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://s2.loli.net/2023/07/20/ksI3J5eidzTrvyL.png"/></div></div>
+
+<p>同时，查询操作也很方便：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">contextLoads</span><span class="params">()</span> &#123;</span><br><span class="line">  	<span class="comment">//默认通过通过ID查找的方法，并且返回的结果是Optional包装的对象，非常人性化</span></span><br><span class="line">    repository.findById(<span class="number">1</span>).ifPresent(System.out::println);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>得到结果为：</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://s2.loli.net/2023/07/20/TRHOWbop267Al4Q.png"/></div></div>
+
+<p>包括常见的一些计数、删除操作等都包含在里面，仅仅配置应该接口就能完美实现增删改查：</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://s2.loli.net/2023/07/21/uIBciLqFsH5tdDR.png"/></div></div>
+
+<p>我们发现，使用了JPA之后，整个项目的代码中没有出现任何的SQL语句，可以说是非常方便了，JPA依靠我们提供的注解信息自动完成了所有信息的映射和关联。</p>
+<p>相比Mybatis，JPA几乎就是一个全自动的ORM框架，而Mybatis则顶多算是半自动ORM框架。</p>
+<h3 id="方法名称拼接自定义SQL"><a href="#方法名称拼接自定义SQL" class="headerlink" title="方法名称拼接自定义SQL"></a>方法名称拼接自定义SQL</h3><p>虽然接口预置的方法使用起来非常方便，但是如果我们需要进行条件查询等操作或是一些判断，就需要自定义一些方法来实现，同样的，我们不需要编写SQL语句，而是通过方法名称的拼接来实现条件判断，这里列出了所有支持的条件判断名称：</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>拼接方法名称示例</th>
+<th>执行的语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Distinct</td>
+<td>findDistinctByLastnameAndFirstname</td>
+<td>select distinct … where x.lastname &#x3D; ?1 and x.firstname &#x3D; ?2</td>
+</tr>
+<tr>
+<td>And</td>
+<td>findByLastnameAndFirstname</td>
+<td>… where x.lastname &#x3D; ?1 and x.firstname &#x3D; ?2</td>
+</tr>
+<tr>
+<td>Or</td>
+<td>findByLastnameOrFirstname</td>
+<td>… where x.lastname &#x3D; ?1 or x.firstname &#x3D; ?2</td>
+</tr>
+<tr>
+<td>Is，Equals</td>
+<td>findByFirstname<code>,</code>findByFirstnameIs<code>,</code>findByFirstnameEquals</td>
+<td>… where x.firstname &#x3D; ?1</td>
+</tr>
+<tr>
+<td>Between</td>
+<td>findByStartDateBetween</td>
+<td>… where x.startDate between ?1 and ?2</td>
+</tr>
+<tr>
+<td>LessThan</td>
+<td>findByAgeLessThan</td>
+<td>… where x.age &lt; ?1</td>
+</tr>
+<tr>
+<td>LessThanEqual</td>
+<td>findByAgeLessThanEqual</td>
+<td>… where x.age &lt;&#x3D; ?1</td>
+</tr>
+<tr>
+<td>GreaterThan</td>
+<td>findByAgeGreaterThan</td>
+<td>… where x.age &gt; ?1</td>
+</tr>
+<tr>
+<td>GreaterThanEqual</td>
+<td>findByAgeGreaterThanEqual</td>
+<td>… where x.age &gt;&#x3D; ?1</td>
+</tr>
+<tr>
+<td>After</td>
+<td>findByStartDateAfter</td>
+<td>… where x.startDate &gt; ?1</td>
+</tr>
+<tr>
+<td>Before</td>
+<td>findByStartDateBefore</td>
+<td>… where x.startDate &lt; ?1</td>
+</tr>
+<tr>
+<td>IsNull，Null</td>
+<td>findByAge(Is)Null</td>
+<td>… where x.age is null</td>
+</tr>
+<tr>
+<td>IsNotNull，NotNull</td>
+<td>findByAge(Is)NotNull</td>
+<td>… where x.age not null</td>
+</tr>
+<tr>
+<td>Like</td>
+<td>findByFirstnameLike</td>
+<td>… where x.firstname like ?1</td>
+</tr>
+<tr>
+<td>NotLike</td>
+<td>findByFirstnameNotLike</td>
+<td>… where x.firstname not like ?1</td>
+</tr>
+<tr>
+<td>StartingWith</td>
+<td>findByFirstnameStartingWith</td>
+<td>… where x.firstname like ?1（参数与附加<code>%</code>绑定）</td>
+</tr>
+<tr>
+<td>EndingWith</td>
+<td>findByFirstnameEndingWith</td>
+<td>… where x.firstname like ?1（参数与前缀<code>%</code>绑定）</td>
+</tr>
+<tr>
+<td>Containing</td>
+<td>findByFirstnameContaining</td>
+<td>… where x.firstname like ?1（参数绑定以<code>%</code>包装）</td>
+</tr>
+<tr>
+<td>OrderBy</td>
+<td>findByAgeOrderByLastnameDesc</td>
+<td>… where x.age &#x3D; ?1 order by x.lastname desc</td>
+</tr>
+<tr>
+<td>Not</td>
+<td>findByLastnameNot</td>
+<td>… where x.lastname &lt;&gt; ?1</td>
+</tr>
+<tr>
+<td>In</td>
+<td>findByAgeIn(Collection<Age> ages)</td>
+<td>… where x.age in ?1</td>
+</tr>
+<tr>
+<td>NotIn</td>
+<td>findByAgeNotIn(Collection<Age> ages)</td>
+<td>… where x.age not in ?1</td>
+</tr>
+<tr>
+<td>True</td>
+<td>findByActiveTrue</td>
+<td>… where x.active &#x3D; true</td>
+</tr>
+<tr>
+<td>False</td>
+<td>findByActiveFalse</td>
+<td>… where x.active &#x3D; false</td>
+</tr>
+<tr>
+<td>IgnoreCase</td>
+<td>findByFirstnameIgnoreCase</td>
+<td>… where UPPER(x.firstname) &#x3D; UPPER(?1)</td>
+</tr>
+</tbody></table>
+<p>比如我们想要实现根据用户名模糊匹配查找用户：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">AccountRepository</span> <span class="keyword">extends</span> <span class="title class_">JpaRepository</span>&lt;Account, Integer&gt; &#123;</span><br><span class="line">    <span class="comment">//按照表中的规则进行名称拼接，不用刻意去记，IDEA会有提示</span></span><br><span class="line">    List&lt;Account&gt; <span class="title function_">findAllByUsernameLike</span><span class="params">(String str)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们来测试一下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">contextLoads</span><span class="params">()</span> &#123;</span><br><span class="line">    repository.findAllByUsernameLike(<span class="string">&quot;%明%&quot;</span>).forEach(System.out::println);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://s2.loli.net/2023/07/21/mioZaUk7Yj3QDxb.png"/></div></div>
+
+<p>又比如我们想同时根据用户名和ID一起查询：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">AccountRepository</span> <span class="keyword">extends</span> <span class="title class_">JpaRepository</span>&lt;Account, Integer&gt; &#123;</span><br><span class="line">    List&lt;Account&gt; <span class="title function_">findAllByUsernameLike</span><span class="params">(String str)</span>;</span><br><span class="line"></span><br><span class="line">    Account <span class="title function_">findByIdAndUsername</span><span class="params">(<span class="type">int</span> id, String username)</span>;</span><br><span class="line">    <span class="comment">//也可以使用Optional类进行包装，Optional&lt;Account&gt; findByIdAndUsername(int id, String username);</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">contextLoads</span><span class="params">()</span> &#123;</span><br><span class="line">    System.out.println(repository.findByIdAndUsername(<span class="number">1</span>, <span class="string">&quot;小明&quot;</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>比如我们想判断数据库中是否存在某个ID的用户：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">AccountRepository</span> <span class="keyword">extends</span> <span class="title class_">JpaRepository</span>&lt;Account, Integer&gt; &#123;</span><br><span class="line">    List&lt;Account&gt; <span class="title function_">findAllByUsernameLike</span><span class="params">(String str)</span>;</span><br><span class="line">    Account <span class="title function_">findByIdAndUsername</span><span class="params">(<span class="type">int</span> id, String username)</span>;</span><br><span class="line">    <span class="comment">//使用exists判断是否存在</span></span><br><span class="line">    <span class="type">boolean</span> <span class="title function_">existsAccountById</span><span class="params">(<span class="type">int</span> id)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意自定义条件操作的方法名称一定要遵循规则，不然会出现异常：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Caused by: org.springframework.data.repository.query.QueryCreationException: Could not create query <span class="keyword">for</span> public abstract  ...</span><br></pre></td></tr></table></figure>
+
+<p>有了这些操作，我们在编写一些简单SQL的时候就很方便了，用久了甚至直接忘记SQL怎么写。</p>
+<h3 id="关联查询"><a href="#关联查询" class="headerlink" title="关联查询"></a>关联查询</h3><p>在实际开发中，比较常见的场景还有关联查询，也就是我们会在表中添加一个外键字段，而此外键字段又指向了另一个表中的数据，当我们查询数据时，可能会需要将关联数据也一并获取，比如我们想要查询某个用户的详细信息，一般用户简略信息会单独存放一个表，而用户详细信息会单独存放在另一个表中。当然，除了用户详细信息之外，可能在某些电商平台还会有用户的购买记录、用户的购物车，交流社区中的用户帖子、用户评论等，这些都是需要根据用户信息进行关联查询的内容。</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://s2.loli.net/2023/03/06/WnPEmdR2sDLuwGN.jpg"/></div></div>
+
+<p>我们知道，在JPA中，每张表实际上就是一个实体类的映射，而表之间的关联关系，也可以看作对象之间的依赖关系，比如用户表中包含了用户详细信息的ID字段作为外键，那么实际上就是用户表实体中包括了用户详细信息实体对象：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table(name = &quot;users_detail&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AccountDetail</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(name = &quot;id&quot;)</span></span><br><span class="line">    <span class="meta">@GeneratedValue(strategy = GenerationType.IDENTITY)</span></span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="type">int</span> id;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(name = &quot;address&quot;)</span></span><br><span class="line">    String address;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(name = &quot;email&quot;)</span></span><br><span class="line">    String email;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(name = &quot;phone&quot;)</span></span><br><span class="line">    String phone;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(name = &quot;real_name&quot;)</span></span><br><span class="line">    String realName;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>而用户信息和用户详细信息之间形成了一对一的关系，那么这时我们就可以直接在类中指定这种关系：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table(name = &quot;users&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Account</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GeneratedValue(strategy = GenerationType.IDENTITY)</span></span><br><span class="line">    <span class="meta">@Column(name = &quot;id&quot;)</span></span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="type">int</span> id;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(name = &quot;username&quot;)</span></span><br><span class="line">    String username;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(name = &quot;password&quot;)</span></span><br><span class="line">    String password;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@JoinColumn(name = &quot;detail_id&quot;)</span>   <span class="comment">//指定存储外键的字段名称</span></span><br><span class="line">    <span class="meta">@OneToOne</span>    <span class="comment">//声明为一对一关系</span></span><br><span class="line">    AccountDetail detail;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在修改实体类信息后，我们发现在启动时也进行了更新，日志如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Hibernate: alter table users add column detail_id integer</span><br><span class="line">Hibernate: create table users_detail (id integer not null auto_increment, address varchar(255), email varchar(255), phone varchar(255), real_name varchar(255), primary key (id)) engine=InnoDB</span><br><span class="line">Hibernate: alter table users add constraint FK7gb021edkxf3mdv5bs75ni6jd foreign key (detail_id) references users_detail (id)</span><br></pre></td></tr></table></figure>
+
+<p>是不是感觉非常方便！都懒得去手动改表结构了。</p>
+<p>接着我们往用户详细信息中添加一些数据，一会我们可以直接进行查询：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">pageAccount</span><span class="params">()</span> &#123;</span><br><span class="line">    repository.findById(<span class="number">1</span>).ifPresent(System.out::println);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>查询后，可以发现，得到如下结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Hibernate: select account0_.id as id1_0_0_, account0_.detail_id as detail_i4_0_0_, account0_.password as password2_0_0_, account0_.username as username3_0_0_, accountdet1_.id as id1_1_1_, accountdet1_.address as address2_1_1_, accountdet1_.email as email3_1_1_, accountdet1_.phone as phone4_1_1_, accountdet1_.real_name as real_nam5_1_1_ from users account0_ left outer join users_detail accountdet1_ on account0_.detail_id=accountdet1_.id where account0_.id=?</span><br><span class="line">Account(id=1, username=Test, password=123456, detail=AccountDetail(id=1, address=四川省成都市青羊区, email=8371289@qq.com, phone=1234567890, realName=本伟))</span><br></pre></td></tr></table></figure>
+
+<p>也就是，在建立关系之后，我们查询Account对象时，会自动将关联数据的结果也一并进行查询。</p>
+<p>那要是我们只想要Account的数据，不想要用户详细信息数据怎么办呢？我希望在我要用的时候再获取详细信息，这样可以节省一些网络开销，我们可以设置懒加载，这样只有在需要时才会向数据库获取：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@JoinColumn(name = &quot;detail_id&quot;)</span></span><br><span class="line"><span class="meta">@OneToOne(fetch = FetchType.LAZY)</span>    <span class="comment">//将获取类型改为LAZY</span></span><br><span class="line">AccountDetail detail;</span><br></pre></td></tr></table></figure>
+
+<p>接着我们测试一下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Transactional</span>   <span class="comment">//懒加载属性需要在事务环境下获取，因为repository方法调用完后Session会立即关闭</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">pageAccount</span><span class="params">()</span> &#123;</span><br><span class="line">    repository.findById(<span class="number">1</span>).ifPresent(account -&gt; &#123;</span><br><span class="line">        System.out.println(account.getUsername());   <span class="comment">//获取用户名</span></span><br><span class="line">        System.out.println(account.getDetail());  <span class="comment">//获取详细信息（懒加载）</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接着我们来看看控制台输出了什么：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Hibernate: select account0_.id as id1_0_0_, account0_.detail_id as detail_i4_0_0_, account0_.password as password2_0_0_, account0_.username as username3_0_0_ from users account0_ where account0_.id=?</span><br><span class="line">Test</span><br><span class="line">Hibernate: select accountdet0_.id as id1_1_0_, accountdet0_.address as address2_1_0_, accountdet0_.email as email3_1_0_, accountdet0_.phone as phone4_1_0_, accountdet0_.real_name as real_nam5_1_0_ from users_detail accountdet0_ where accountdet0_.id=?</span><br><span class="line">AccountDetail(id=1, address=四川省成都市青羊区, email=8371289@qq.com, phone=1234567890, realName=卢本)</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，获取用户名之前，并没有去查询用户的详细信息，而是当我们获取详细信息时才进行查询并返回AccountDetail对象。</p>
+<p>那么我们是否也可以在添加数据时，利用实体类之间的关联信息，一次性添加两张表的数据呢？可以，但是我们需要稍微修改一下级联关联操作设定：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@JoinColumn(name = &quot;detail_id&quot;)</span></span><br><span class="line"><span class="meta">@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)</span> <span class="comment">//设置关联操作为ALL</span></span><br><span class="line">AccountDetail detail;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>ALL：所有操作都进行关联操作</li>
+<li>PERSIST：插入操作时才进行关联操作</li>
+<li>REMOVE：删除操作时才进行关联操作</li>
+<li>MERGE：修改操作时才进行关联操作</li>
+</ul>
+<p>可以多个并存，接着我们来进行一下测试：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">addAccount</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">Account</span> <span class="variable">account</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Account</span>();</span><br><span class="line">    account.setUsername(<span class="string">&quot;Nike&quot;</span>);</span><br><span class="line">    account.setPassword(<span class="string">&quot;123456&quot;</span>);</span><br><span class="line">    <span class="type">AccountDetail</span> <span class="variable">detail</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AccountDetail</span>();</span><br><span class="line">    detail.setAddress(<span class="string">&quot;重庆市渝中区解放碑&quot;</span>);</span><br><span class="line">    detail.setPhone(<span class="string">&quot;1234567890&quot;</span>);</span><br><span class="line">    detail.setEmail(<span class="string">&quot;73281937@qq.com&quot;</span>);</span><br><span class="line">    detail.setRealName(<span class="string">&quot;张三&quot;</span>);</span><br><span class="line">  	account.setDetail(detail);</span><br><span class="line">    account = repository.save(account);</span><br><span class="line">    System.out.println(<span class="string">&quot;插入时，自动生成的主键ID为：&quot;</span>+account.getId()+<span class="string">&quot;，外键ID为：&quot;</span>+account.getDetail().getId());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到日志结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Hibernate: insert into users_detail (address, email, phone, real_name) values (?, ?, ?, ?)</span><br><span class="line">Hibernate: insert into users (detail_id, password, username) values (?, ?, ?)</span><br><span class="line">插入时，自动生成的主键ID为：6，外键ID为：3</span><br></pre></td></tr></table></figure>
+
+<p>结束后会发现数据库中两张表都同时存在数据。</p>
+<p>接着我们来看一对多关联，比如每个用户的成绩信息：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@JoinColumn(name = &quot;uid&quot;)</span>  <span class="comment">//注意这里的name指的是Score表中的uid字段对应的就是当前的主键，会将uid外键设置为当前的主键</span></span><br><span class="line"><span class="meta">@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)</span>   <span class="comment">//在移除Account时，一并移除所有的成绩信息，依然使用懒加载</span></span><br><span class="line">List&lt;Score&gt; scoreList;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table(name = &quot;users_score&quot;)</span>   <span class="comment">//成绩表，注意只存成绩，不存学科信息，学科信息id做外键</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Score</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GeneratedValue(strategy = GenerationType.IDENTITY)</span></span><br><span class="line">    <span class="meta">@Column(name = &quot;id&quot;)</span></span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="type">int</span> id;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@OneToOne</span>   <span class="comment">//一对一对应到学科上</span></span><br><span class="line">    <span class="meta">@JoinColumn(name = &quot;cid&quot;)</span></span><br><span class="line">    Subject subject;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(name = &quot;socre&quot;)</span></span><br><span class="line">    <span class="type">double</span> score;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(name = &quot;uid&quot;)</span></span><br><span class="line">    <span class="type">int</span> uid;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table(name = &quot;subjects&quot;)</span>   <span class="comment">//学科信息表</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Subject</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GeneratedValue(strategy = GenerationType.IDENTITY)</span></span><br><span class="line">    <span class="meta">@Column(name = &quot;cid&quot;)</span></span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="type">int</span> cid;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(name = &quot;name&quot;)</span></span><br><span class="line">    String name;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(name = &quot;teacher&quot;)</span></span><br><span class="line">    String teacher;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(name = &quot;time&quot;)</span></span><br><span class="line">    <span class="type">int</span> time;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在数据库中填写相应数据，接着我们就可以查询用户的成绩信息了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">test</span><span class="params">()</span> &#123;</span><br><span class="line">    repository.findById(<span class="number">1</span>).ifPresent(account -&gt; &#123;</span><br><span class="line">        account.getScoreList().forEach(System.out::println);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>成功得到用户所有的成绩信息，包括得分和学科信息。</p>
+<p>同样的，我们还可以将对应成绩中的教师信息单独分出一张表存储，并建立多对一的关系，因为多门课程可能由同一个老师教授（千万别搞晕了，一定要理清楚关联关系，同时也是考验你的基础扎不扎实）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ManyToOne(fetch = FetchType.LAZY)</span></span><br><span class="line"><span class="meta">@JoinColumn(name = &quot;tid&quot;)</span>   <span class="comment">//存储教师ID的字段，和一对一是一样的，也会当前表中创个外键</span></span><br><span class="line">Teacher teacher;</span><br></pre></td></tr></table></figure>
+
+<p>接着就是教师实体类了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table(name = &quot;teachers&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Teacher</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(name = &quot;id&quot;)</span></span><br><span class="line">    <span class="meta">@GeneratedValue(strategy = GenerationType.IDENTITY)</span></span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="type">int</span> id;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(name = &quot;name&quot;)</span></span><br><span class="line">    String name;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Column(name = &quot;sex&quot;)</span></span><br><span class="line">    String sex;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后我们再进行一下测试：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">test</span><span class="params">()</span> &#123;</span><br><span class="line">    repository.findById(<span class="number">3</span>).ifPresent(account -&gt; &#123;</span><br><span class="line">        account.getScoreList().forEach(score -&gt; &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;课程名称：&quot;</span>+score.getSubject().getName());</span><br><span class="line">            System.out.println(<span class="string">&quot;得分：&quot;</span>+score.getScore());</span><br><span class="line">            System.out.println(<span class="string">&quot;任课教师：&quot;</span>+score.getSubject().getTeacher().getName());</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>成功得到多对一的教师信息。</p>
+<p>最后我们再来看最复杂的情况，现在我们一门课程可以由多个老师教授，而一个老师也可以教授多个课程，那么这种情况就是很明显的多对多场景，现在又该如何定义呢？我们可以像之前一样，插入一张中间表表示教授关系，这个表中专门存储哪个老师教哪个科目：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ManyToMany(fetch = FetchType.LAZY)</span>   <span class="comment">//多对多场景</span></span><br><span class="line"><span class="meta">@JoinTable(name = &quot;teach_relation&quot;,     //多对多中间关联表</span></span><br><span class="line"><span class="meta">        joinColumns = @JoinColumn(name = &quot;cid&quot;),    //当前实体主键在关联表中的字段名称</span></span><br><span class="line"><span class="meta">        inverseJoinColumns = @JoinColumn(name = &quot;tid&quot;)   //教师实体主键在关联表中的字段名称</span></span><br><span class="line"><span class="meta">)</span></span><br><span class="line">List&lt;Teacher&gt; teacher;</span><br></pre></td></tr></table></figure>
+
+<p>接着，JPA会自动创建一张中间表，并自动设置外键，我们就可以将多对多关联信息编写在其中了。</p>
+<h3 id="JPQL自定义SQL语句"><a href="#JPQL自定义SQL语句" class="headerlink" title="JPQL自定义SQL语句"></a>JPQL自定义SQL语句</h3><p>虽然SpringDataJPA能够简化大部分数据获取场景，但是难免会有一些特殊的场景，需要使用复杂查询才能够去完成，这时你又会发现，如果要实现，只能用回Mybatis了，因为我们需要自己手动编写SQL语句，过度依赖SpringDataJPA会使得SQL语句不可控。</p>
+<p>使用JPA，我们也可以像Mybatis那样，直接编写SQL语句，不过它是JPQL语言，与原生SQL语句很类似，但是它是面向对象的，当然我们也可以编写原生SQL语句。</p>
+<p>比如我们要更新用户表中指定ID用户的密码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">AccountRepository</span> <span class="keyword">extends</span> <span class="title class_">JpaRepository</span>&lt;Account, Integer&gt; &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Transactional</span>    <span class="comment">//DML操作需要事务环境，可以不在这里声明，但是调用时一定要处于事务环境下</span></span><br><span class="line">    <span class="meta">@Modifying</span>     <span class="comment">//表示这是一个DML操作</span></span><br><span class="line">    <span class="meta">@Query(&quot;update Account set password = ?2 where id = ?1&quot;)</span> <span class="comment">//这里操作的是一个实体类对应的表，参数使用?代表，后面接第n个参数</span></span><br><span class="line">    <span class="type">int</span> <span class="title function_">updatePasswordById</span><span class="params">(<span class="type">int</span> id, String newPassword)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">updateAccount</span><span class="params">()</span>&#123;</span><br><span class="line">    repository.updatePasswordById(<span class="number">1</span>, <span class="string">&quot;654321&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在我想使用原生SQL来实现根据用户名称修改密码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="meta">@Modifying</span></span><br><span class="line"><span class="meta">@Query(value = &quot;update users set password = :pwd where username = :name&quot;, nativeQuery = true)</span> <span class="comment">//使用原生SQL，和Mybatis一样，这里使用 :名称 表示参数，当然也可以继续用上面那种方式。</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">updatePasswordByUsername</span><span class="params">(<span class="meta">@Param(&quot;name&quot;)</span> String username,   //我们可以使用<span class="meta">@Param</span>指定名称</span></span><br><span class="line"><span class="params">                             <span class="meta">@Param(&quot;pwd&quot;)</span> String newPassword)</span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">updateAccount</span><span class="params">()</span>&#123;</span><br><span class="line">    repository.updatePasswordByUsername(<span class="string">&quot;Admin&quot;</span>, <span class="string">&quot;654321&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过编写原生SQL，在一定程度上弥补了SQL不可控的问题。</p>
+<p>虽然JPA能够为我们带来非常便捷的开发体验，但是正是因为太便捷了，保姆级的体验有时也会适得其反，尤其是一些国内用到复杂查询业务的项目，可能开发到后期特别庞大时，就只能从底层SQL语句开始进行优化，而由于JPA尽可能地在屏蔽我们对SQL语句的编写，所以后期优化是个大问题，并且Hibernate相对于Mybatis来说，更加重量级。不过，在微服务的时代，单体项目一般不会太大，JPA的劣势并没有太明显地体现出来。</p>
+<hr>
+<h2 id="MybatisPlus框架"><a href="#MybatisPlus框架" class="headerlink" title="MybatisPlus框架"></a>MybatisPlus框架</h2><p>前面我们体验了JPA带来的快速开发体验，但是我们发现，面对一些复杂查询时，JPA似乎有点力不从心，反观稍微麻烦一点的Mybatis却能够手动编写SQL，使用起来更加灵活，那么有没有一种既能灵活掌控逻辑又能快速完成开发的持久层框架呢？</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/baomidou/mybatis-plus">MyBatis-Plus</a>（简称 MP）是一个 <a target="_blank" rel="noopener" href="https://www.mybatis.org/mybatis-3/">MyBatis</a>的增强工具，在 MyBatis 的基础上只做增强不做改变，为简化开发、提高效率而生。</p>
+<p>MybatisPlus的愿景是成为 MyBatis 最好的搭档，就像 <a target="_blank" rel="noopener" href="https://baomidou.com/img/contra.jpg">魂斗罗</a> 中的 1P、2P，基友搭配，效率翻倍。</p>
+</blockquote>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://s2.loli.net/2023/07/21/dUAkeOP9FfVarRL.png"/></div></div>
+
+<p><a target="_blank" rel="noopener" href="https://baomidou.com/">官方网站地址</a></p>
+<p>MybatisPlus具有以下特性：</p>
+<ul>
+<li><strong>无侵入</strong>：只做增强不做改变，引入它不会对现有工程产生影响，如丝般顺滑</li>
+<li><strong>损耗小</strong>：启动即会自动注入基本 CURD，性能基本无损耗，直接面向对象操作</li>
+<li><strong>强大的 CRUD 操作</strong>：内置通用 Mapper、通用 Service，仅仅通过少量配置即可实现单表大部分 CRUD 操作，更有强大的条件构造器，满足各类使用需求</li>
+<li><strong>支持 Lambda 形式调用</strong>：通过 Lambda 表达式，方便的编写各类查询条件，无需再担心字段写错</li>
+<li><strong>支持主键自动生成</strong>：支持多达 4 种主键策略（内含分布式唯一 ID 生成器 - Sequence），可自由配置，完美解决主键问题</li>
+<li><strong>支持 ActiveRecord 模式</strong>：支持 ActiveRecord 形式调用，实体类只需继承 Model 类即可进行强大的 CRUD 操作</li>
+<li><strong>支持自定义全局通用操作</strong>：支持全局通用方法注入（ Write once, use anywhere ）</li>
+<li><strong>内置代码生成器</strong>：采用代码或者 Maven 插件可快速生成 Mapper 、 Model 、 Service 、 Controller 层代码，支持模板引擎，更有超多自定义配置等您来使用</li>
+<li><strong>内置分页插件</strong>：基于 MyBatis 物理分页，开发者无需关心具体操作，配置好插件之后，写分页等同于普通 List 查询</li>
+<li><strong>分页插件支持多种数据库</strong>：支持 MySQL、MariaDB、Oracle、DB2、H2、HSQL、SQLite、Postgre、SQLServer 等多种数据库</li>
+<li><strong>内置性能分析插件</strong>：可输出 SQL 语句以及其执行时间，建议开发测试时启用该功能，能快速揪出慢查询</li>
+<li><strong>内置全局拦截插件</strong>：提供全表 delete 、 update 操作智能分析阻断，也可自定义拦截规则，预防误操作</li>
+</ul>
+<p>框架整体结构如下：</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309061702945.png"/></div></div>
+
+<p>不过，光说还是不能体会到它带来的便捷性，我们接着就来上手体验一下。</p>
+<h3 id="快速上手"><a href="#快速上手" class="headerlink" title="快速上手"></a>快速上手</h3><p>跟之前一样，还是添加依赖：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.baomidou<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-plus-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.5.3.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-j<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>配置文件依然只需要配置数据源即可：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">datasource:</span></span><br><span class="line">    <span class="attr">url:</span> <span class="string">jdbc:mysql://localhost:3306/test</span></span><br><span class="line">    <span class="attr">username:</span> <span class="string">root</span></span><br><span class="line">    <span class="attr">password:</span> <span class="number">123456</span></span><br><span class="line">    <span class="attr">driver-class-name:</span> <span class="string">com.mysql.cj.jdbc.Driver</span></span><br></pre></td></tr></table></figure>
+
+<p>然后依然是实体类，可以直接映射到数据库中的表：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@TableName(&quot;user&quot;)</span>  <span class="comment">//对应的表名</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">User</span> &#123;</span><br><span class="line">    <span class="meta">@TableId(type = IdType.AUTO)</span>   <span class="comment">//对应的主键</span></span><br><span class="line">    <span class="type">int</span> id;</span><br><span class="line">    <span class="meta">@TableField(&quot;name&quot;)</span>   <span class="comment">//对应的字段</span></span><br><span class="line">    String name;</span><br><span class="line">    <span class="meta">@TableField(&quot;email&quot;)</span></span><br><span class="line">    String email;</span><br><span class="line">    <span class="meta">@TableField(&quot;password&quot;)</span></span><br><span class="line">    String password;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接着，我们就可以编写一个Mapper来操作了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Mapper</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">UserMapper</span> <span class="keyword">extends</span> <span class="title class_">BaseMapper</span>&lt;User&gt; &#123;</span><br><span class="line">  	<span class="comment">//使用方式与JPA极其相似，同样是继承一个基础的模版Mapper</span></span><br><span class="line">  	<span class="comment">//这个模版里面提供了预设的大量方法直接使用，跟JPA如出一辙</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里我们就来写一个简单测试用例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootTest</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DemoApplicationTests</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    UserMapper mapper;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">contextLoads</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(mapper.selectById(<span class="number">1</span>));  <span class="comment">//同样可以直接selectById，非常快速方便</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到这个Mapper提供的方法还是很丰富的：</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309061508786.png"/></div></div>
+
+<p>最后查到的结果</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309061525589.png"/></div></div>
+
+<h3 id="条件构造器"><a href="#条件构造器" class="headerlink" title="条件构造器"></a>条件构造器</h3><p>对于一些复杂查询的情况，MybatisPlus支持我们自己构造QueryWrapper用于复杂条件查询：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">contextLoads</span><span class="params">()</span> &#123;</span><br><span class="line">    QueryWrapper&lt;User&gt; wrapper = <span class="keyword">new</span> <span class="title class_">QueryWrapper</span>&lt;&gt;();    <span class="comment">//复杂查询可以使用QueryWrapper来完成</span></span><br><span class="line">  	wrapper</span><br><span class="line">            .select(<span class="string">&quot;id&quot;</span>, <span class="string">&quot;name&quot;</span>, <span class="string">&quot;email&quot;</span>, <span class="string">&quot;password&quot;</span>)    <span class="comment">//可以自定义选择哪些字段</span></span><br><span class="line">            .ge(<span class="string">&quot;id&quot;</span>, <span class="number">2</span>)     			<span class="comment">//选择判断id大于等于1的所有数据</span></span><br><span class="line">            .orderByDesc(<span class="string">&quot;id&quot;</span>);   <span class="comment">//根据id字段进行降序排序</span></span><br><span class="line">    System.out.println(mapper.selectList(wrapper));   <span class="comment">//Mapper同样支持使用QueryWrapper进行查询</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过使用上面的QueryWrapper对象进行查询，也就等价于下面的SQL语句：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> id,name,email,password <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> id <span class="operator">&gt;=</span> <span class="number">2</span> <span class="keyword">order</span> <span class="keyword">by</span> id <span class="keyword">desc</span></span><br></pre></td></tr></table></figure>
+
+<p>我们可以在配置中开启SQL日志打印：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">mybatis-plus:</span></span><br><span class="line">  <span class="attr">configuration:</span></span><br><span class="line">    <span class="attr">log-impl:</span> <span class="string">org.apache.ibatis.logging.stdout.StdOutImpl</span></span><br></pre></td></tr></table></figure>
+
+<p>最后得到的结果如下：</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309061527770.png"/></div></div>
+
+<p>有些时候我们遇到需要批处理的情况，也可以直接使用批处理操作：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">contextLoads</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">//支持批处理操作，我们可以一次性删除多个指定ID的用户</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> mapper.deleteBatchIds(List.of(<span class="number">1</span>, <span class="number">3</span>));</span><br><span class="line">    System.out.println(count);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309061530017.png"/></div></div>
+
+<p>我们也可以快速进行分页查询操作，不过在执行前我们需要先配置一下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MybatisConfiguration</span> &#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> MybatisPlusInterceptor <span class="title function_">paginationInterceptor</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">MybatisPlusInterceptor</span> <span class="variable">interceptor</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MybatisPlusInterceptor</span>();</span><br><span class="line">      	<span class="comment">//添加分页拦截器到MybatisPlusInterceptor中</span></span><br><span class="line">        interceptor.addInnerInterceptor(<span class="keyword">new</span> <span class="title class_">PaginationInnerInterceptor</span>(DbType.MYSQL));</span><br><span class="line">        <span class="keyword">return</span> interceptor;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样我们就可以愉快地使用分页功能了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">contextLoads</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">//这里我们将用户表分2页，并获取第一页的数据</span></span><br><span class="line">    Page&lt;User&gt; page = mapper.selectPage(Page.of(<span class="number">1</span>, <span class="number">2</span>), Wrappers.emptyWrapper());</span><br><span class="line">    System.out.println(page.getRecords());   <span class="comment">//获取分页之后的数据</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309061702879.png"/></div></div>
+
+<p>对于数据更新操作，我们也可以使用UpdateWrapper非常方便的来完成：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">contextLoads</span><span class="params">()</span> &#123;</span><br><span class="line">    UpdateWrapper&lt;User&gt; wrapper = <span class="keyword">new</span> <span class="title class_">UpdateWrapper</span>&lt;&gt;();</span><br><span class="line">    wrapper</span><br><span class="line">            .set(<span class="string">&quot;username&quot;</span>, <span class="string">&quot;hHHH&quot;</span>)</span><br><span class="line">            .eq(<span class="string">&quot;id&quot;</span>,<span class="number">4</span>);</span><br><span class="line">    System.out.println(mapper.update(<span class="literal">null</span>, wrapper));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样就可以快速完成更新操作了：</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309061559416.png"/></div></div>
+
+<p>QueryWrapper和UpdateWrapper还有专门支持Java 8新增的Lambda表达式的特殊实现，可以直接以函数式的形式进行编写，使用方法是一样的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">contextLoads</span><span class="params">()</span> &#123;</span><br><span class="line">        LambdaQueryWrapper&lt;User&gt; wrapper = Wrappers</span><br><span class="line">                .&lt;User&gt;lambdaQuery()</span><br><span class="line">                .eq(User::getId, <span class="number">2</span>)   <span class="comment">//比如我们需要选择id为2的用户，前面传入方法引用，后面比的值</span></span><br><span class="line">                .select(User::getName, User::getId);   <span class="comment">//比如我们只需要选择name和id，那就传入对应的get方法引用</span></span><br><span class="line">        System.out.println(mapper.selectOne(wrapper));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="接口基本操作"><a href="#接口基本操作" class="headerlink" title="接口基本操作"></a>接口基本操作</h3><p>虽然使用MybatisPlus提供的BaseMapper已经很方便了，但是我们的业务中，实际上很多时候也是一样的工作，都是去简单调用底层的Mapper做一个很简单的事情，MybatisPlus为我们提供了很方便的CRUD接口，直接实现了各种业务中会用到的增删改查操作。</p>
+<p>我们只需要继承即可：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">UserService</span> <span class="keyword">extends</span> <span class="title class_">IService</span>&lt;User&gt; &#123;</span><br><span class="line">  	<span class="comment">//除了继承模版，我们也可以把它当成普通Service添加自己需要的方法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接着需要编写一个实现类，这个实现类就是UserService的实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span>   <span class="comment">//需要继承ServiceImpl才能实现那些默认的CRUD方法</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserServiceImpl</span> <span class="keyword">extends</span> <span class="title class_">ServiceImpl</span>&lt;UserMapper, User&gt; <span class="keyword">implements</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用起来也很方便，整合了超多方法：</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309061624585.png"/></div></div>
+
+<p>比如想批量插入一组用户数据到数据库中：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">contextLoads</span><span class="params">()</span> &#123;</span><br><span class="line">    List&lt;User&gt; users = List.of(<span class="keyword">new</span> <span class="title class_">User</span>(<span class="string">&quot;xxx&quot;</span>), <span class="keyword">new</span> <span class="title class_">User</span>(<span class="string">&quot;yyy&quot;</span>));</span><br><span class="line">  	<span class="comment">//预设方法中已经支持批量保存了，这相比我们直接用for效率高不少</span></span><br><span class="line">    service.saveBatch(users);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>还有更加方便快捷的保存或更新操作，当数据不存在时（通过主键ID判断）则插入新数据，否则就更新数据：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">contextLoads</span><span class="params">()</span> &#123;</span><br><span class="line">    service.saveOrUpdate(<span class="keyword">new</span> <span class="title class_">User</span>(<span class="string">&quot;aaa&quot;</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>也可以直接使用Service来进行链式查询，写法非常舒服：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">contextLoads</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">User</span> <span class="variable">one</span> <span class="operator">=</span> service.query().eq(<span class="string">&quot;id&quot;</span>, <span class="number">1</span>).one();</span><br><span class="line">    System.out.println(one);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="新版代码生成器"><a href="#新版代码生成器" class="headerlink" title="新版代码生成器"></a>新版代码生成器</h3><p>它能够根据数据库做到代码的一键生成，能做到什么程度呢？</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://s2.loli.net/2023/07/21/lGT4g5Y6Heqavsw.png"/></div></div>
+
+<p>首先我们需要先把整个项目的数据库给创建好，创建好之后，我们继续下一步，这里我们从头开始创建一个项目，感受一下它的强大，首先创建一个普通的SpringBoot项目：</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://s2.loli.net/2023/07/21/bIZ9D2cA7XsgSoU.png"/></div></div>
+
+<p>接着导入一会需要用到的依赖：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.baomidou<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-plus-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.5.3.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.baomidou<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-plus-generator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.5.3.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.velocity<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>velocity-engine-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后再配置一下数据源：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">datasource:</span></span><br><span class="line">    <span class="attr">url:</span> <span class="string">jdbc:mysql://localhost:3306/test</span></span><br><span class="line">    <span class="attr">username:</span> <span class="string">root</span></span><br><span class="line">    <span class="attr">password:</span> <span class="number">123456</span></span><br><span class="line">    <span class="attr">driver-class-name:</span> <span class="string">com.mysql.cj.jdbc.Driver</span></span><br></pre></td></tr></table></figure>
+
+<p>接着我们就可以开始编写自动生成脚本了，这里依然选择测试类，用到<code>FastAutoGenerator</code>作为生成器：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Resource</span></span><br><span class="line">   DataSource dataSource;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line">   <span class="keyword">void</span> <span class="title function_">contextLoads</span><span class="params">()</span> &#123;</span><br><span class="line">       FastAutoGenerator</span><br><span class="line">         			<span class="comment">//首先使用create来配置数据库链接信息</span></span><br><span class="line">               .create(<span class="keyword">new</span> <span class="title class_">DataSourceConfig</span>.Builder(dataSource))</span><br><span class="line">               .execute();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>接着我们配置一下全局设置，这些会影响一会生成的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">contextLoads</span><span class="params">()</span> &#123;</span><br><span class="line">    FastAutoGenerator</span><br><span class="line">            .create(<span class="keyword">new</span> <span class="title class_">DataSourceConfig</span>.Builder(dataSource))</span><br><span class="line">            .globalConfig(builder -&gt; &#123;</span><br><span class="line">                builder.author(<span class="string">&quot;rx&quot;</span>);              <span class="comment">//作者信息，一会会变成注释</span></span><br><span class="line">                builder.commentDate(<span class="string">&quot;2023-09-06&quot;</span>);  <span class="comment">//日期信息，一会会变成注释</span></span><br><span class="line">                builder.outputDir(<span class="string">&quot;src/main/java&quot;</span>); <span class="comment">//输出目录设置为当前项目的目录</span></span><br><span class="line">            &#125;)</span><br><span class="line">            .execute();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后是打包设置，也就是项目的生成的包等等，这里简单配置一下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">contextLoads</span><span class="params">()</span> &#123;</span><br><span class="line">    FastAutoGenerator</span><br><span class="line">            ...</span><br><span class="line">      			<span class="comment">//打包设置，这里设置一下包名就行，注意跟我们项目包名设置为一致的</span></span><br><span class="line">      			.packageConfig(builder -&gt; builder.parent(<span class="string">&quot;com.example&quot;</span>))</span><br><span class="line">      			.strategyConfig(builder -&gt; &#123;</span><br><span class="line">                    <span class="comment">//设置为所有Mapper添加@Mapper注解</span></span><br><span class="line">                    builder</span><br><span class="line">                            .mapperBuilder()</span><br><span class="line">                            .mapperAnnotation(Mapper.class)</span><br><span class="line">                            .build();</span><br><span class="line">            &#125;)</span><br><span class="line">            .execute();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接着我们就可以直接执行了这个脚本了：</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309061702300.png"/></div></div>
+
+<p>现在，可以看到我们的项目中已经出现自动生成代码了：</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309061637361.png"/></div></div>
+
+<p>我们也可以直接运行这个项目：</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309061702125.png"/></div></div>
+
+<p>速度可以说是非常之快，一个项目模版就搭建完成了，我们只需要接着写业务就可以了，当然如果各位小伙伴需要更多定制化的话，可以在官网查看其他的配置：<a target="_blank" rel="noopener" href="https://baomidou.com/pages/981406/">配置</a></p>
+<p>对于一些有特殊要求的用户来说，我们希望能够以自己的模版来进行生产，怎么才能修改它自动生成的代码模版呢，我们可以直接找到<code>mybatis-plus-generator</code>的源码：</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309061648925.png"/></div></div>
+
+<p>生成模版都在在这个里面有写，我们要做的就是去修改这些模版，变成我们自己希望的样子，由于默认的模版解析引擎为Velocity，我们需要复制以<code>.vm</code>结尾的文件到<code>resource</code>随便一个目录中，然后随便改：</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309061706801.png"/></div></div>
+
+<p>接着我们配置一下模版：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">contextLoads</span><span class="params">()</span> &#123;</span><br><span class="line">    FastAutoGenerator</span><br><span class="line">            ...</span><br><span class="line">      			.strategyConfig(builder -&gt; &#123;</span><br><span class="line">                builder</span><br><span class="line">                        .mapperBuilder()</span><br><span class="line">                        .enableFileOverride()   <span class="comment">//开启文件重写，自动覆盖新的</span></span><br><span class="line">                        .mapperAnnotation(Mapper.class)</span><br><span class="line">                        .build();</span><br><span class="line">            &#125;)</span><br><span class="line">            .templateConfig(builder -&gt; &#123;</span><br><span class="line">                builder.mapper(<span class="string">&quot;/templates/mapper.java.vm&quot;</span>);</span><br><span class="line">            &#125;)</span><br><span class="line">            .execute();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样，新生成的代码中就是按照我们自己的模版来定义了:</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309061706187.png"/></div></div>
+
+
+
+
+
+
+<div class="article-footer reveal fs14">
+    <section id="license">
+      <div class="header"><span>许可协议</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    </div>
+
+</article>
+
+<div class="related-wrap reveal" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="../../SpringSecurity/SpringSecurity/">SpringSecurity总结</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="../../Spring/SpringMVC/">SpringMVC总结</a></div></section></div>
+
+
+
+
+
+
+
+
+      
+<footer class="page-footer reveal fs12"><hr><div class="text"><p>本站由 <a href="/">@anonymity</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar">Stellar</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+
+      <div class='float-panel mobile-only blur' style='display:none'>
+  <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
+    <svg class="icon" style="width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15301"><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 2.3 26.8 24.6 47.5 51.6 47.6h416.5v4z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15302"></path><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 1.9 27.7 23.9 49.7 51.6 51.6h416.5z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15303"></path></svg>
+  </button>
+</div>
+
+    </div>
+  </div>
+  <div class='scripts'>
+    <script type="text/javascript">
+  const stellar = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    loadCSS: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    // 从 butterfly 和 volantis 获得灵感
+    loadScript: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = stellar.config.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    // https://github.com/jerryc127/hexo-theme-butterfly
+    jQuery: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        stellar.loadScript(stellar.plugins.jQuery).then(fn)
+      } else {
+        fn()
+      }
+    }
+  };
+  stellar.version = '1.21.0';
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.21.0';
+  stellar.config = {
+    date_suffix: {
+      just: '刚刚',
+      min: '分钟前',
+      hour: '小时前',
+      day: '天前',
+      month: '个月前',
+    },
+    root : '/',
+  };
+
+  // required plugins (only load if needs)
+  stellar.plugins = {
+    jQuery: 'https://gcore.jsdelivr.net/npm/jquery@3.6.2/dist/jquery.min.js'
+  };
+
+  if ('local_search') {
+    stellar.search = {};
+    stellar.search.service = 'local_search';
+    if (stellar.search.service == 'local_search') {
+      let service_obj = Object.assign({}, {"field":"all","path":"/search.json","content":true,"sort":"-date"});
+      stellar.search[stellar.search.service] = service_obj;
+    }
   }
-  .l_body {
-    padding: 0;
+
+  // stellar js
+  stellar.plugins.stellar = Object.assign({"sites":"/js/plugins/sites.js","friends":"/js/plugins/friends.js","ghinfo":"/js/plugins/ghinfo.js","timeline":"/js/plugins/timeline.js","linkcard":"/js/plugins/linkcard.js","fcircle":"/js/plugins/fcircle.js","weibo":"/js/plugins/weibo.js","memos":"/js/plugins/memos.js"});
+
+  stellar.plugins.marked = Object.assign("https://cdn.bootcdn.net/ajax/libs/marked/4.0.18/marked.min.js");
+  // optional plugins
+  if ('true' == 'true') {
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://gcore.jsdelivr.net/npm/vanilla-lazyload@17.8.3/dist/lazyload.min.js","transition":"blur"});
   }
-  .l_body .l_left {
-    position: fixed;
-    transform: translateX(-320px);
-    margin: 0;
-    left: 0;
-    background: var(--site-bg);
-    box-shadow: $boxshadow-card-float;
-    z-index: 9;
+  if ('true' == 'true') {
+    stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper@10.3/swiper-bundle.min.css","js":"https://unpkg.com/swiper@10.3/swiper-bundle.min.js"});
   }
-  .l_body .l_main {
-    max-width: 100%;
+  if ('' == 'true') {
+    stellar.plugins.scrollreveal = Object.assign({"enable":null,"js":"https://gcore.jsdelivr.net/npm/scrollreveal@4.0.9/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":100,"scale":1});
   }
-  .l_body.mobile .l_left {
-    transition: transform 0.3s ease-out;
+  if ('true' == 'true') {
+    stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://gcore.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://gcore.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});
   }
-  .l_body.mobile.sidebar .l_left {
-    transform: translateX(0px);
+  if ('true' == 'true') {
+    stellar.plugins.fancybox = Object.assign({"enable":true,"js":"https://gcore.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js","css":"https://gcore.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css","selector":".swiper-slide img, .gallery img"});
   }
-}
+  if ('false' == 'true') {
+    stellar.plugins.heti = Object.assign({"enable":false,"css":"https://unpkg.com/heti@0.9.2/umd/heti.min.css","js":"https://unpkg.com/heti@0.9.2/umd/heti-addon.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.copycode = Object.assign({"enable":true,"js":"/js/plugins/copycode.js","default_text":"Copy","success_text":"Copied"});
+  }
+</script>
+
+<!-- required -->
+
+  
+<script src="../../../js/main.js" async></script>
+
+
+
+<!-- optional -->
+
+
+
+<!-- inject -->
+
+
+  </div>
+</body>
+</html>
