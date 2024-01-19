@@ -20,13 +20,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" content="#f8f8f8">
   
-  <title>标签：golang - RenXin's Website</title>
+  <title>标签：database - RenXin's Website</title>
 
   
     <meta name="description" content="Welcome to wonderland">
 <meta property="og:type" content="website">
 <meta property="og:title" content="RenXin&#39;s Website">
-<meta property="og:url" content="http://renewdxin.github.io/tags/golang/index.html">
+<meta property="og:url" content="http://renewdxin.github.io/tags/database/index.html">
 <meta property="og:site_name" content="RenXin&#39;s Website">
 <meta property="og:description" content="Welcome to wonderland">
 <meta property="og:locale">
@@ -97,18 +97,14 @@
 
   
 
-<div class="nav-wrap"><nav class="sub post cap"><a href="../../">近期发布</a><a href="../../categories">分类</a><a class="active" href="..">标签：golang</a><a href="../../archives">归档</a></nav></div>
-  <div class="post-list post"><a class="post-card post " href="../../golang/basis/interface/">
-<article class="md-text"><h2 class="post-title">golang中的interface</h2><div class="excerpt"><p>Interface整理
-接口是一种契约，实现类型必须满足它，它描述了类型的行为，规定类型可以做什么。接口彻底将类型能做什么，以及如何做分离开来，使得相同接口的变量在不同的时刻表现出不同的行为，这就是多态的本质。
+<div class="nav-wrap"><nav class="sub post cap"><a href="../../">近期发布</a><a href="../../categories">分类</a><a class="active" href="..">标签：database</a><a href="../../archives">归档</a></nav></div>
+  <div class="post-list post"><a class="post-card post " href="../../middleware/database/mysql_structure/">
+<article class="md-text"><h2 class="post-title">MySQL架构</h2><div class="excerpt"><p>Last edited time: January 19, 2024 5:47 PM
+MySQL的逻辑架构
 
-
-编写参数是接口变量的函数，这使得它们更具有一般性。
-
-
-使用接口使代码更具有普适性。
-
-最近在学Go当中的接口，学的有点云里雾里 ，这个interface和Java的也太不像了，...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2023-10-30T16:00:00.000Z">2023-10-31</time></span><span class="cap breadcrumb">golang</span></div></article>
+第一层：客户端主要为连接处理、身份验证、确保安全性等
+第二层：MySQL的大多数核心功能以及一些跨存储引擎的功能
+第三层：存储引擎层，负责数据的存储和提取。存储引擎层还包含几十个底层函数，用于执行诸如“开始一个事务”或者“根据主键提取一行记录”等操作。但存储引擎不会去解析SQL[1]...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2024-01-19T09:54:24.497Z">2024-01-19</time></span><span class="cap breadcrumb">middleware</span></div></article>
 </a></div>
   
 
