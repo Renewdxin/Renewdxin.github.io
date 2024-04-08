@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang='English'>
+
+<head>
+  <meta name="generator" content="Hexo 7.0.0">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.21.0">
+  <meta charset="utf-8">
+  
+
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://gcore.jsdelivr.net'>
+  <link rel="preconnect" href="https://gcore.jsdelivr.net" crossorigin>
+  <link rel='dns-prefetch' href='//unpkg.com'>
+
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" content="#f8f8f8">
+  
+  <title>Golang中的context包简介 - RenXin's Website</title>
+
+  
+    <meta name="description" content="简介Go语言中的context包定义了一个名为Context的类型，它定义并传递截止日期、取消信号和其他请求范围的值，形成一个链式模型。如果我们查看官方文档，它是这样说的： context包定义了Context类型，它在API边界和进程之间传递截止日期、取消信号和其他请求范围的值。 包中的主要实体是Context本身，它是一个接口。它只有四个方法： 123456type Context inter">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Golang中的context包简介">
+<meta property="og:url" content="http://renewdxin.github.io/Go/go_context/index.html">
+<meta property="og:site_name" content="RenXin&#39;s Website">
+<meta property="og:description" content="简介Go语言中的context包定义了一个名为Context的类型，它定义并传递截止日期、取消信号和其他请求范围的值，形成一个链式模型。如果我们查看官方文档，它是这样说的： context包定义了Context类型，它在API边界和进程之间传递截止日期、取消信号和其他请求范围的值。 包中的主要实体是Context本身，它是一个接口。它只有四个方法： 123456type Context inter">
+<meta property="og:locale">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240408213409.png">
+<meta property="article:published_time" content="2024-04-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-04-08T13:36:15.419Z">
+<meta property="article:author" content="RenXin">
+<meta property="article:tag" content="Go">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240408213409.png">
+  
+  
+  
+  <meta name="keywords" content="Go">
+
+  <!-- feed -->
+  
+
+  
+    
+<link rel="stylesheet" href="../../css/main.css">
+
+  
+
+  
+
+  
+
+  
+
+
+  
+</head>
+
+<body>
+  
+
+
+
+
+  <div class='l_body' id='start'>
+    <aside class='l_left' layout='post'>
+    
+
+  
+
+<header class="header"><div class="logo-wrap"><a class="title" href="../../index.html"><div class="main" ff="title">RenXin's Website</div></a></div>
+
+<nav class="menu dis-select"></nav>
+</header>
+
+
+<div class="widgets">
+<widget class="widget-wrapper search"><div class="widget-body"><div class="search-wrapper" id="search"><form class="search-form"><input type="text" class="search-input" id="search-input" data-filter="/blog/" placeholder="文章搜索"><svg t="1670596976048" class="icon search-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2676" width="200" height="200"><path d="M938.2 832.6L723.8 618.1c-2.5-2.5-5.3-4.4-7.9-6.4 36.2-55.6 57.3-121.8 57.3-193.1C773.3 222.8 614.6 64 418.7 64S64 222.8 64 418.6c0 195.9 158.8 354.6 354.6 354.6 71.3 0 137.5-21.2 193.2-57.4 2 2.7 3.9 5.4 6.3 7.8L832.5 938c14.6 14.6 33.7 21.9 52.8 21.9 19.1 0 38.2-7.3 52.8-21.8 29.2-29.1 29.2-76.4 0.1-105.5M418.7 661.3C284.9 661.3 176 552.4 176 418.6 176 284.9 284.9 176 418.7 176c133.8 0 242.6 108.9 242.6 242.7 0 133.7-108.9 242.6-242.6 242.6" p-id="2677"></path></svg></form><div id="search-result"></div><div class="search-no-result">No Results!</div></div></div></widget>
+
+
+<widget class="widget-wrapper toc single" id="data-toc"><div class="widget-header cap dis-select"><span class="name">Golang中的context包简介</span></div><div class="widget-body fs14"><div class="doc-tree active"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#context-Background"><span class="toc-text">context.Background()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E5%8F%96%E6%B6%88%E5%87%BD%E6%95%B0"><span class="toc-text">上下文取消函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E5%80%BC%E4%BC%A0%E9%80%92"><span class="toc-text">上下文值传递</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E8%AE%AE"><span class="toc-text">建议</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text"></span></a></li></ol></div></div></widget>
+
+
+
+
+</div>
+
+
+    </aside>
+    <div class='l_main'>
+      
+
+      
+
+
+
+<div class="bread-nav fs12"><div class="left"><div id="breadcrumb"><a class="cap breadcrumb" href="../../index.html">Home</a><span class="sep"></span><a class="cap breadcrumb" href="../../">Blog</a><span class="sep"></span><a class="cap breadcrumb-link" href="../../categories/Go/">Go</a></div><div id="post-meta">
+    <span>Posted on&nbsp;<time datetime="2024-04-02T16:00:00.000Z">2024-04-03</time></span>
+    
+    <span>Updated on&nbsp;<time datetime="2024-04-08T13:36:15.419Z">2024-04-08</time></span>
+    </div></div></div>
+
+<article class='md-text content post'>
+<h1 class="article-title"><span>Golang中的context包简介</span></h1>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Go语言中的<code>context</code>包定义了一个名为<code>Context</code>的类型，它定义并传递截止日期、取消信号和其他请求范围的值，形成一个链式模型。如果我们查看官方文档，它是这样说的：</p>
+<p><code>context</code>包定义了<code>Context</code>类型，它在API边界和进程之间传递截止日期、取消信号和其他请求范围的值。</p>
+<p>包中的主要实体是<code>Context</code>本身，它是一个接口。它只有四个方法：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Context <span class="keyword">interface</span> &#123;</span><br><span class="line">    Deadline() (deadline time.Time, ok <span class="type">bool</span>)</span><br><span class="line">    Done() &lt;-<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line">    Err() <span class="type">error</span></span><br><span class="line">    Value(key <span class="keyword">interface</span>&#123;&#125;) <span class="keyword">interface</span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里，</p>
+<ul>
+<li><code>Deadline</code>：返回应该取消上下文的时间，以及一个布尔值，当没有截止日期时为false</li>
+<li><code>Done</code>：返回一个只接收的空结构体通道，它发出上下文应该被取消的信号</li>
+<li><code>Err</code>：在完成通道打开时返回nil；否则它返回上下文取消的原因</li>
+<li><code>Value</code>：返回与当前上下文的某个键关联的值，如果没有该键的值，则返回nil</li>
+</ul>
+<p>与标准库的其他接口相比，<code>Context</code>有许多方法，这些接口通常只有一两个方法。其中三个密切相关：</p>
+<ul>
+<li><code>Deadline</code>是取消的时间</li>
+<li><code>Done</code>信号上下文完成时</li>
+<li><code>Err</code>返回取消的原因</li>
+</ul>
+<p>最后一个方法，<code>Value</code>，返回与某个键关联的值。包的其余部分是一系列函数，允许你创建不同类型的上下文。</p>
+<p>为什么使用<code>Context</code>？</p>
+<ul>
+<li>它简化了跨进程或API的截止日期和取消的实现。</li>
+<li>它为你的代码扩展做好准备，例如，使用<code>Context</code>会使你的代码清晰易操纵，通过将所有进程以子父关系链式连接，你可以将任何进程绑定&#x2F;连接在一起。</li>
+<li>它易于使用。</li>
+<li>它是Goroutine安全的，即你可以在不同的Goroutine上运行相同的上下文而不会泄露。</li>
+</ul>
+<h2 id="context-Background"><a href="#context-Background" class="headerlink" title="context.Background()"></a>context.Background()</h2><p><code>Background</code>是一个空的上下文，它不会被取消，没有截止日期，也不持有任何值。它主要由主函数用作根上下文或用于测试目的：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;context&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	ctx := context.Background()</span><br><span class="line">	fmt.Println(ctx)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ go run main.go</span><br><span class="line">context.Background</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>输出是“context.Background”，它告诉我们这是一个空的<code>Context</code>，它是一个接口，在这个<code>Context</code>接口上，</p>
+<p>所有这些数据目前都是nil或空的，因为我们有一个空的<code>Context</code>，即背景上下文，它永远不会被取消，没有截止日期，也没有值。<code>Background</code>通常用于main、init和测试中，以及作为传入请求的顶级上下文。</p>
+<p>让我们对所有这些进行<code>fmt.Println</code>检查：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;context&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	ctx := context.Background()</span><br><span class="line">	fmt.Println(<span class="string">&quot;ctx.Err() : &quot;</span>, ctx.Err())</span><br><span class="line">	fmt.Println(<span class="string">&quot;ctx.Done() : &quot;</span>, ctx.Done())</span><br><span class="line">	fmt.Println(<span class="string">&quot;ctx.Value(\&quot;key\&quot;) : &quot;</span>, ctx.Value(<span class="string">&quot;key&quot;</span>))</span><br><span class="line">	fmt.Print(<span class="string">&quot;ctx.Deadline() : &quot;</span>)</span><br><span class="line">	fmt.Print(ctx.Deadline())</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ go run main.go</span><br><span class="line">ctx.Err() :  &lt;nil&gt;</span><br><span class="line">ctx.Done() :  &lt;nil&gt;</span><br><span class="line">ctx.Value(<span class="string">&quot;key&quot;</span>) :  &lt;nil&gt;</span><br><span class="line">ctx.Deadline() : 0001-01-01 00:00:00 +0000 UTC <span class="literal">false</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="上下文取消函数"><a href="#上下文取消函数" class="headerlink" title="上下文取消函数"></a>上下文取消函数</h2><p>Go语言的<code>Context</code>包被用来处理我们的进程或API中的请求流，通过将子上下文与父上下文链接起来，我们可以使用<code>context.WithDeadline</code>或<code>context.WithTimeout</code>方法在链中控制截止日期和取消信号。</p>
+<p>Context的底层是无法改变的，他在main函数创建，之后传递给其他子函数，比如goroutine，子函数无法改变context，也无法被子进程取消</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240408213409.png"/></div></div>
+
+<p>与done channel不同的是，done是以关闭让其他关闭，而context中的cancel函数则是被调用的</p>
+<p>父函数可以取消子函数</p>
+<p>如果子函数创建了自己的子函数，也可以把这个context传递下去</p>
+<p>那如果子函数想取消自己的子函数呢？</p>
+<p>我们可以创建新的context，基于旧的context</p>
+<p>我们来举个例子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line"><span class="comment">// 初始化context</span></span><br><span class="line">	<span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">	ctx, cancel := context.WithTimeout(context.Background(), <span class="number">5</span>*time.Second)</span><br><span class="line">	<span class="keyword">defer</span> cancel()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加数据</span></span><br><span class="line">	generator := <span class="function"><span class="keyword">func</span><span class="params">(data <span class="type">string</span>, stream <span class="keyword">chan</span> any)</span></span> &#123;</span><br><span class="line">		<span class="keyword">for</span> &#123;</span><br><span class="line">			<span class="keyword">select</span> &#123;</span><br><span class="line">			<span class="keyword">case</span> &lt;-ctx.Done():</span><br><span class="line">				<span class="keyword">return</span></span><br><span class="line">			<span class="keyword">case</span> stream &lt;- data:</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	infiniteApples := <span class="built_in">make</span>(<span class="keyword">chan</span> any)</span><br><span class="line">	<span class="keyword">go</span> generator(<span class="string">&quot;apple&quot;</span>, infiniteApples)</span><br><span class="line"></span><br><span class="line">	infiniteBananas := <span class="built_in">make</span>(<span class="keyword">chan</span> any)</span><br><span class="line">	<span class="keyword">go</span> generator(<span class="string">&quot;banana&quot;</span>, infiniteBananas)</span><br><span class="line"></span><br><span class="line">	infiniteOranges := <span class="built_in">make</span>(<span class="keyword">chan</span> any)</span><br><span class="line">	<span class="keyword">go</span> generator(<span class="string">&quot;orange&quot;</span>, infiniteOranges)</span><br><span class="line"></span><br><span class="line">	wg.Add(<span class="number">1</span>)</span><br><span class="line">	<span class="keyword">go</span> func1(ctx, &amp;wg, infiniteApples)</span><br><span class="line">	func2 := genericFunc</span><br><span class="line">	func3 := genericFunc</span><br><span class="line">	wg.Add(<span class="number">1</span>)</span><br><span class="line">	<span class="keyword">go</span> func2(ctx, &amp;wg, infiniteBananas)</span><br><span class="line">	wg.Add(<span class="number">1</span>)</span><br><span class="line">	<span class="keyword">go</span> func3(ctx, &amp;wg, infiniteOranges)</span><br><span class="line"></span><br><span class="line">	wg.Wait()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">func1</span><span class="params">(ctx context.Context, s *sync.WaitGroup, streams &lt;-<span class="keyword">chan</span> any)</span></span> &#123;</span><br><span class="line">	<span class="keyword">defer</span> s.Done()</span><br><span class="line">	<span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line"></span><br><span class="line">	doWOrks := <span class="function"><span class="keyword">func</span><span class="params">(CTX context.Context)</span></span> &#123;</span><br><span class="line">		<span class="keyword">defer</span> wg.Done()</span><br><span class="line">		<span class="keyword">for</span> &#123;</span><br><span class="line">			<span class="keyword">select</span> &#123;</span><br><span class="line">			<span class="keyword">case</span> &lt;-CTX.Done():</span><br><span class="line">				<span class="keyword">return</span></span><br><span class="line">			<span class="keyword">case</span> d, ok := &lt;-streams:</span><br><span class="line">				<span class="keyword">if</span> !ok &#123;</span><br><span class="line">					fmt.Println(<span class="string">&quot;stream closed&quot;</span>)</span><br><span class="line">					<span class="keyword">return</span></span><br><span class="line">				&#125;</span><br><span class="line">				fmt.Println(d)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 基于父上下文设置自己的上下文</span></span><br><span class="line">	newCtx, cancel := context.WithTimeout(ctx, <span class="number">3</span>*time.Second)</span><br><span class="line">	<span class="keyword">defer</span> cancel()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 启动自己的子函数</span></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">3</span>; i++ &#123;</span><br><span class="line">		wg.Add(<span class="number">1</span>)</span><br><span class="line">		<span class="keyword">go</span> doWOrks(newCtx)</span><br><span class="line">	&#125;</span><br><span class="line">	wg.Wait()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 沿用父函数的context</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">genericFunc</span><span class="params">(ctx context.Context, s *sync.WaitGroup, apples <span class="keyword">chan</span> any)</span></span> &#123;</span><br><span class="line">	<span class="keyword">defer</span> s.Done()</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		<span class="keyword">select</span> &#123;</span><br><span class="line">		<span class="keyword">case</span> &lt;-ctx.Done():</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		<span class="keyword">case</span> d, ok := &lt;-apples:</span><br><span class="line">			<span class="keyword">if</span> !ok &#123;</span><br><span class="line">				fmt.Println(<span class="string">&quot;stream closed&quot;</span>)</span><br><span class="line">				<span class="keyword">return</span></span><br><span class="line">			&#125;</span><br><span class="line">			fmt.Println(d)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在输出过程中，我们会发现apple先停止输出，最后5秒到了，另外两个goroutine也停止运行 。</p>
+<h2 id="上下文值传递"><a href="#上下文值传递" class="headerlink" title="上下文值传递"></a>上下文值传递</h2><p>在Go语言中，<code>context</code>上下文可以通过<code>WithValue</code>函数来传递值。这个函数接受一个父上下文（parent Context）、一个键（key）和一个值（value），返回一个新的上下文（Context），这个新上下文与父上下文相同，但是增加了一个键值对。这个键值对可以在上下文的整个传递链中被检索。</p>
+<p>以下是一个使用<code>WithValue</code>传递值的例子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;context&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 创建一个带有值的上下文</span></span><br><span class="line">	ctx := context.WithValue(context.Background(), <span class="string">&quot;language&quot;</span>, <span class="string">&quot;Go&quot;</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 传递ctx到函数中</span></span><br><span class="line">	process(ctx)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">process</span><span class="params">(ctx context.Context)</span></span> &#123;</span><br><span class="line">	<span class="comment">// 从ctx中检索值</span></span><br><span class="line">	<span class="keyword">if</span> language, ok := ctx.Value(<span class="string">&quot;language&quot;</span>).(<span class="type">string</span>); ok &#123;</span><br><span class="line">		fmt.Println(<span class="string">&quot;Language:&quot;</span>, language)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>在这个例子中，我们创建了一个带有键<code>&quot;language&quot;</code>和值<code>&quot;Go&quot;</code>的上下文。然后，我们将这个上下文传递给了<code>process</code>函数，在这个函数中，我们检索并打印出了这个值。</p>
+<p>需要注意的是，<code>context</code>的值应该是请求范围的数据，而不是全局的。它通常用于传递请求相关的元数据，如请求ID、用户身份信息等。此外，由于<code>context</code>是并发安全的，所以它可以在多个goroutine之间安全地传递和使用。</p>
+<h2 id="建议"><a href="#建议" class="headerlink" title="建议"></a>建议</h2><ul>
+<li>每当你需要使用<code>context.Context</code>时，确保它总是作为第一个参数。</li>
+<li>始终使用“ctx”作为变量名，虽然使用其他变量名也可以正常工作，但遵循大多数人的做法是好的，像这样的事情你不需要与众不同。</li>
+<li>确保调用取消函数。</li>
+<li>不要在方法中使用结构体来添加上下文，始终将其作为参数添加，即<code>context.Context</code>。</li>
+<li>不要过度使用<code>context.WithValue</code>。</li>
+</ul>
+<h2 id=""><a href="#" class="headerlink" title=""></a></h2>
+
+
+<div class="article-footer reveal fs14">
+    <section id="license">
+      <div class="header"><span>License</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    </div>
+
+</article>
+
+<div class="related-wrap reveal" id="read-next"><section class="body"><div class="item" id="prev"></div><div class="item" id="next"><div class="note">Older</div><a href="../../middleware/MongoDB_crud/">MongoDBCRUD操作（含GO中的库操作）</a></div></section></div>
+
+
+
+
+
+
+
+
+      
+<footer class="page-footer reveal fs12"><hr><div class="text"><p>本站由 <a href="/">@anonymity</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar">Stellar</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+
+      <div class='float-panel mobile-only blur' style='display:none'>
+  <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
+    <svg class="icon" style="width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15301"><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 2.3 26.8 24.6 47.5 51.6 47.6h416.5v4z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15302"></path><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 1.9 27.7 23.9 49.7 51.6 51.6h416.5z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15303"></path></svg>
+  </button>
+</div>
+
+    </div>
+  </div>
+  <div class='scripts'>
+    <script type="text/javascript">
+  const stellar = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    loadCSS: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    // 从 butterfly 和 volantis 获得灵感
+    loadScript: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = stellar.config.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    // https://github.com/jerryc127/hexo-theme-butterfly
+    jQuery: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        stellar.loadScript(stellar.plugins.jQuery).then(fn)
+      } else {
+        fn()
+      }
+    }
+  };
+  stellar.version = '1.21.0';
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.21.0';
+  stellar.config = {
+    date_suffix: {
+      just: 'Just',
+      min: 'minutes ago',
+      hour: 'hours ago',
+      day: 'days ago',
+      month: 'months ago',
+    },
+    root : '/',
+  };
+
+  // required plugins (only load if needs)
+  stellar.plugins = {
+    jQuery: 'https://gcore.jsdelivr.net/npm/jquery@3.6.2/dist/jquery.min.js'
+  };
+
+  if ('local_search') {
+    stellar.search = {};
+    stellar.search.service = 'local_search';
+    if (stellar.search.service == 'local_search') {
+      let service_obj = Object.assign({}, {"field":"all","path":"/search.json","content":true,"sort":"-date"});
+      stellar.search[stellar.search.service] = service_obj;
+    }
+  }
+
+  // stellar js
+  stellar.plugins.stellar = Object.assign({"sites":"/js/plugins/sites.js","friends":"/js/plugins/friends.js","ghinfo":"/js/plugins/ghinfo.js","timeline":"/js/plugins/timeline.js","linkcard":"/js/plugins/linkcard.js","fcircle":"/js/plugins/fcircle.js","weibo":"/js/plugins/weibo.js","memos":"/js/plugins/memos.js"});
+
+  stellar.plugins.marked = Object.assign("https://cdn.bootcdn.net/ajax/libs/marked/4.0.18/marked.min.js");
+  // optional plugins
+  if ('true' == 'true') {
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://gcore.jsdelivr.net/npm/vanilla-lazyload@17.8.3/dist/lazyload.min.js","transition":"blur"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper@10.3/swiper-bundle.min.css","js":"https://unpkg.com/swiper@10.3/swiper-bundle.min.js"});
+  }
+  if ('' == 'true') {
+    stellar.plugins.scrollreveal = Object.assign({"enable":null,"js":"https://gcore.jsdelivr.net/npm/scrollreveal@4.0.9/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":100,"scale":1});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://gcore.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://gcore.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.fancybox = Object.assign({"enable":true,"js":"https://gcore.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js","css":"https://gcore.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css","selector":".swiper-slide img, .gallery img"});
+  }
+  if ('false' == 'true') {
+    stellar.plugins.heti = Object.assign({"enable":false,"css":"https://unpkg.com/heti@0.9.2/umd/heti.min.css","js":"https://unpkg.com/heti@0.9.2/umd/heti-addon.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.copycode = Object.assign({"enable":true,"js":"/js/plugins/copycode.js","default_text":"Copy","success_text":"Copied"});
+  }
+</script>
+
+<!-- required -->
+
+  
+<script src="../../js/main.js" async></script>
+
+
+
+<!-- optional -->
+
+
+
+<!-- inject -->
+
+
+  </div>
+</body>
+</html>
