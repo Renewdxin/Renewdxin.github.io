@@ -23,19 +23,19 @@
   <title>MySQL架构 - RenXin's Website</title>
 
   
-    <meta name="description" content="Last edited time: January 19, 2024 5:47 PM MySQL的逻辑架构  第一层：客户端主要为连接处理、身份验证、确保安全性等 第二层：MySQL的大多数核心功能以及一些跨存储引擎的功能 第三层：存储引擎层，负责数据的存储和提取。存储引擎层还包含几十个底层函数，用于执行诸如“开始一个事务”或者“根据主键提取一行记录”等操作。但存储引擎不会去解析SQL[1]，不同">
+    <meta name="description" content="第一层：客户端主要为连接处理、身份验证、确保安全性等 第二层：MySQL的大多数核心功能以及一些跨存储引擎的功能 第三层：存储引擎层，负责数据的存储和提取。存储引擎层还包含几十个底层函数，用于执行诸如“开始一个事务”或者“根据主键提取一行记录”等操作。但存储引擎不会去解析SQL[1]，不同存储引擎之间也不会相互通信，而只是简单地响应服务器的请求。 优化与执行解析查询以创建内部数据结构（解析树）">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL架构">
 <meta property="og:url" content="http://renewdxin.github.io/middleware/database/mysql_structure/index.html">
 <meta property="og:site_name" content="RenXin&#39;s Website">
-<meta property="og:description" content="Last edited time: January 19, 2024 5:47 PM MySQL的逻辑架构  第一层：客户端主要为连接处理、身份验证、确保安全性等 第二层：MySQL的大多数核心功能以及一些跨存储引擎的功能 第三层：存储引擎层，负责数据的存储和提取。存储引擎层还包含几十个底层函数，用于执行诸如“开始一个事务”或者“根据主键提取一行记录”等操作。但存储引擎不会去解析SQL[1]，不同">
+<meta property="og:description" content="第一层：客户端主要为连接处理、身份验证、确保安全性等 第二层：MySQL的大多数核心功能以及一些跨存储引擎的功能 第三层：存储引擎层，负责数据的存储和提取。存储引擎层还包含几十个底层函数，用于执行诸如“开始一个事务”或者“根据主键提取一行记录”等操作。但存储引擎不会去解析SQL[1]，不同存储引擎之间也不会相互通信，而只是简单地响应服务器的请求。 优化与执行解析查询以创建内部数据结构（解析树）">
 <meta property="og:locale">
 <meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240116175435.png">
 <meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240116221802.png">
 <meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240117183056.png">
 <meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240119174656.png">
 <meta property="article:published_time" content="2024-01-19T09:54:24.497Z">
-<meta property="article:modified_time" content="2024-01-19T09:54:24.513Z">
+<meta property="article:modified_time" content="2024-05-27T09:12:18.048Z">
 <meta property="article:author" content="RenXin">
 <meta property="article:tag" content="middleware">
 <meta property="article:tag" content="database">
@@ -106,13 +106,12 @@
 <div class="bread-nav fs12"><div class="left"><div id="breadcrumb"><a class="cap breadcrumb" href="../../../index.html">Home</a><span class="sep"></span><a class="cap breadcrumb" href="../../../">Blog</a><span class="sep"></span><a class="cap breadcrumb-link" href="../../../categories/middleware/">middleware</a> <span class="sep"></span> <a class="cap breadcrumb-link" href="../../../categories/middleware/database/">database</a></div><div id="post-meta">
     <span>Posted on&nbsp;<time datetime="2024-01-19T09:54:24.497Z">2024-01-19</time></span>
     
-    <span>Updated on&nbsp;<time datetime="2024-01-19T09:54:24.513Z">2024-01-19</time></span>
+    <span>Updated on&nbsp;<time datetime="2024-05-27T09:12:18.048Z">2024-05-27</time></span>
     </div></div></div>
 
 <article class='md-text content post'>
 <h1 class="article-title"><span>MySQL架构</span></h1>
-<p>Last edited time: January 19, 2024 5:47 PM</p>
-<h1 id="MySQL的逻辑架构"><a href="#MySQL的逻辑架构" class="headerlink" title="MySQL的逻辑架构"></a>MySQL的逻辑架构</h1><div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240116175435.png"/></div></div>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240116175435.png"/></div></div>
 
 <p>第一层：客户端主要为连接处理、身份验证、确保安全性等</p>
 <p>第二层：MySQL的大多数核心功能以及一些跨存储引擎的功能</p>
