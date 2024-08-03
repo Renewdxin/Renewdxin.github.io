@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="English">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="The Redefine Team">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://Renewdxin.github.io/middleware/mongodb_crud/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="MongoDBCRUD操作（含GO中的库操作）这周开始尝试做新项目，涉及到了文章的存储，查了查MongoDB在这方面用的比较多，因此对MongoDB和他在Golang中的用法进行了学习，以下是我的整理 简介MongoDB官网：入口 MongoDB是一种文档数据库，它以其可扩展性和灵活性而闻名，能够满足各种查询和索引的需求。 它将数据存储在类似JSON的灵活文档中，这意味着字段可能因文档而异，并且数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MongoDBCRUD操作（含GO中的库操作）">
+<meta property="og:url" content="http://renewdxin.github.io/middleware/MongoDB_crud/index.html">
+<meta property="og:site_name" content="RenXin&#39;s Website">
+<meta property="og:description" content="MongoDBCRUD操作（含GO中的库操作）这周开始尝试做新项目，涉及到了文章的存储，查了查MongoDB在这方面用的比较多，因此对MongoDB和他在Golang中的用法进行了学习，以下是我的整理 简介MongoDB官网：入口 MongoDB是一种文档数据库，它以其可扩展性和灵活性而闻名，能够满足各种查询和索引的需求。 它将数据存储在类似JSON的灵活文档中，这意味着字段可能因文档而异，并且数">
+<meta property="og:locale">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/Untitled.png">
+<meta property="article:published_time" content="2024-03-15T15:38:24.568Z">
+<meta property="article:modified_time" content="2024-03-15T15:38:24.572Z">
+<meta property="article:author" content="RenXin">
+<meta property="article:tag" content="note">
+<meta property="article:tag" content="middleware">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/Untitled.png">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="../../images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="../../images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="../../images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            MongoDBCRUD操作（含GO中的库操作） -
+        
+        Theme Redefine
+    </title>
+
+    
+<link rel="stylesheet" href="fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="../../css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="assets/build/styles.css">
+
+    
+
+    
+<link rel="stylesheet" href="fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    
+        
+<script src="js/libs/anime.min.js"></script>
+
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"renewdxin.github.io","root":"/","language":"English"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Theme Redefine","subtitle":{"text":[],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.6.4","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2022/8/17 11:45:14"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+<!--        <span class="swup-progress-icon">-->
+<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+<!--        </span>-->
+    
+</div>
+
+
+
+    <style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 500;
+        font-family: 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    <h2 class="ml13">
+        Theme Redefine
+    </h2>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
+
+        var animation = anime.timeline({loop: true})
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [40,0],
+                translateZ: 0,
+                opacity: [0,1],
+                filter: ['blur(5px)', 'blur(0px)'], // Starting from blurred to unblurred
+                easing: "easeOutExpo",
+                duration: 1400,
+                delay: (el, i) => 300 + 30 * i,
+            }).add({
+                targets: '.ml13 .letter',
+                translateY: [0,-40],
+                opacity: [1,0],
+                filter: ['blur(0px)', 'blur(5px)'], // Ending from unblurred to blurred
+                easing: "easeInExpo",
+                duration: 1200,
+                delay: (el, i) => 100 + 30 * i,
+                complete: function() {
+                    hidePreloader(); // Call hidePreloader after the animation completes
+                }
+            });
+
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
+
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
+
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
+
+        window.addEventListener('load', function () {
+            setTimeout(hidePreloader, 5000); // Call hidePreloader after 5000 milliseconds if not already called by animation
+        });
+
+        function hidePreloader() {
+            var preloader = document.querySelector('.preloader');
+            preloader.style.opacity = '0';
+            setTimeout(function () {
+                preloader.style.display = 'none';
+            }, 200);
+        }
+    </script>
+</div>
+
+<main class="page-container" id="swup">
+
+    
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container px-6 md:px-12">
+
+    <div class="navbar-content ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Theme Redefine
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="../../index.html"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-screen w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="../../index.html"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="../../tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">14</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="../../categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">12</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="../../archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">19</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container flex relative justify-between box-border w-full h-full">
+    <div class="article-content-container">
+
+        <div class="article-title relative w-full">
+            
+                <div class="w-full flex items-center pt-6 justify-start">
+                    <h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">MongoDBCRUD操作（含GO中的库操作）</h1>
+                </div>
+            
+            </div>
+
+        
+            <div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+                <div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+                    <img src="../../images/redefine-avatar.svg">
+                </div>
+                <div class="info flex flex-col justify-between">
+                    <div class="author flex items-center">
+                        <span class="name text-default-text-color text-lg font-semibold">The Redefine Team</span>
+                        
+                            <span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv3</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2024-03-15 23:38:24</span>
+        <span class="mobile">2024-03-15 23:38:24</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2024-03-15 23:38:24</span>
+            <span class="mobile">2024-03-15 23:38:24</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="../../categories/middleware/">middleware</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="../../tags/note/">note</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="../../tags/middleware/">middleware</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+            <h1 id="MongoDBCRUD操作（含GO中的库操作）"><a href="#MongoDBCRUD操作（含GO中的库操作）" class="headerlink" title="MongoDBCRUD操作（含GO中的库操作）"></a>MongoDBCRUD操作（含GO中的库操作）</h1><p>这周开始尝试做新项目，涉及到了文章的存储，查了查MongoDB在这方面用的比较多，因此对MongoDB和他在Golang中的用法进行了学习，以下是我的整理</p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>MongoDB官网：<a target="_blank" rel="noopener" href="https://www.mongodb.com/zh-cn/what-is-mongodb">入口</a></p>
+<p>MongoDB是一种文档数据库，它以其可扩展性和灵活性而闻名，能够满足各种查询和索引的需求。</p>
+<p>它将数据存储在类似JSON的灵活文档中，这意味着字段可能因文档而异，并且数据结构可以随时间变化。</p>
+<p>MongoDB的文档模型易于开发者学习和使用，同时具备处理任何规模复杂要求的能力。它是分布式的，因此高可用性、横向扩展和地理分布都是内置且易于使用的特性</p>
+<p>MongoDB的特点包括：</p>
+<ul>
+<li><strong>面向集合存储</strong>，易于存储对象类型的数据。</li>
+<li><strong>模式自由</strong>，不需要预定义模式。</li>
+<li><strong>支持动态查询</strong>，可以在任意属性上建立索引。</li>
+<li><strong>支持复制和故障恢复</strong>，确保数据的安全性和可靠性。</li>
+<li><strong>高效的二进制数据存储</strong>，包括大型对象（如视频）。</li>
+<li><strong>自动处理碎片</strong>，支持云计算层次的扩展性。</li>
+</ul>
+<p>MongoDB适用于需要高性能、易部署、易使用和存储数据方便的场景，如网站实时数据处理、缓存层、高伸缩性场景等。不适用于要求高度事务性的系统、传统的商业智能应用或复杂的跨文档级联查询。</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>可参考这篇文章，不过多赘述：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_41466575/article/details/105326230">入口</a></p>
+<h2 id="NoSQL文档数据库"><a href="#NoSQL文档数据库" class="headerlink" title="NoSQL文档数据库"></a>NoSQL文档数据库</h2><p>MongoDB中的结构是：db-collection-document</p>
+<p>MongoDB将数据记录存储为BSON文档。BSON是JSON的二进制表现形式。文档由键值对构成</p>
+<p>对字段名称有以下限制：</p>
+<ol>
+<li>字段名称<code>_id</code>保留用作主键；它的值在集合中必须是唯一的，不可变的，并且可以是数组以外的任何类型。</li>
+<li>字段名称<strong>不能</strong>包含<code>null</code>字符。</li>
+<li>顶级字段名称<strong>不能</strong>以美元符号（<code>$</code>）字符开头。否则，从MongoDB 3.6开始，服务器允许存储包含点（即<code>.</code>）和美元符号（即 <code>$</code>）的字段名称。</li>
+</ol>
+<div class="tag-plugin image"><div class="image-bg"><img src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/Untitled.png"/></div></div>
+
+<p>使用文档的优点是：</p>
+<p>文档（即对象）对应于许多编程语言中的内置数据类型。</p>
+<p>嵌入式文档和数组减少了对昂贵连接的需求。</p>
+<p>动态模式支持流畅的多态性。</p>
+<h2 id="主要操作"><a href="#主要操作" class="headerlink" title="主要操作"></a>主要操作</h2><p><strong>索引</strong></p>
+<p>即使从集合中删除所有文档，删除操作也不会删除索引。</p>
+<p><strong>原子性</strong></p>
+<p>MongoDB中的所有写操作都是单个文档级别的原子操作。</p>
+<p><strong>高性能</strong></p>
+<p>MongoDB提供高性能的数据持久化。特别是，</p>
+<p>对嵌入式数据模型的支持减少了数据库系统上的I &#x2F; O操作。</p>
+<p>索引支持更快的查询，并且可以包含来自嵌入式文档和数组的键。</p>
+<p><strong>切换数据库</strong></p>
+<p>在shell中，<code>db</code>是指当前的数据库。键入<code>db</code>以显示当前数据库。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db</span><br></pre></td></tr></table></figure>
+
+<p>要切换数据库，请键入 <code>use &lt;db&gt;</code>。例如，要切换到 <code>examples</code> 数据库：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use examples</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建数据库"><a href="#创建数据库" class="headerlink" title="创建数据库"></a>创建数据库</h3><p>切换之前您无需创建数据库。当您第一次在数据库中存储数据时（例如在数据库中创建第一个集合），MongoDB会创建数据库。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">mongosh<span class="operator">&gt;</span> <span class="keyword">show</span> dbs</span><br><span class="line">admin   <span class="number">40.00</span> KiB</span><br><span class="line">config  <span class="number">72.00</span> KiB</span><br><span class="line"><span class="keyword">local</span>   <span class="number">72.00</span> KiB</span><br><span class="line">mongosh<span class="operator">&gt;</span> use test</span><br><span class="line">switched <span class="keyword">to</span> db test</span><br><span class="line">test<span class="operator">&gt;</span> db.createCollection(&quot;test1&quot;)</span><br><span class="line">&#123; ok: <span class="number">1</span> &#125;</span><br><span class="line">test<span class="operator">&gt;</span> <span class="keyword">show</span> dbs</span><br><span class="line">admin   <span class="number">40.00</span> KiB</span><br><span class="line">config  <span class="number">72.00</span> KiB</span><br><span class="line"><span class="keyword">local</span>   <span class="number">72.00</span> KiB</span><br><span class="line">test     <span class="number">8.00</span> KiB</span><br><span class="line">test<span class="operator">&gt;</span> db.dropDatabase()</span><br><span class="line">&#123; ok: <span class="number">1</span>, dropped: <span class="string">&#x27;test&#x27;</span> &#125;</span><br><span class="line">test<span class="operator">&gt;</span> <span class="keyword">show</span> dbs</span><br><span class="line">admin   <span class="number">40.00</span> KiB</span><br><span class="line">config  <span class="number">72.00</span> KiB</span><br><span class="line"><span class="keyword">local</span>   <span class="number">72.00</span> KiB</span><br><span class="line">test<span class="operator">&gt;</span> use <span class="keyword">local</span></span><br><span class="line">switched <span class="keyword">to</span> db <span class="keyword">local</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="查找数据"><a href="#查找数据" class="headerlink" title="查找数据"></a>查找数据</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">test<span class="operator">&gt;</span> db.test1.find()</span><br><span class="line">[</span><br><span class="line">  &#123;</span><br><span class="line">    _id: ObjectId(<span class="string">&#x27;65f049c8c43bf33edd779a6c&#x27;</span>),</span><br><span class="line">    name: <span class="string">&#x27;rx&#x27;</span>,</span><br><span class="line">    age: <span class="number">30</span>,</span><br><span class="line">    gpa: <span class="number">3.2</span></span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h3 id="插入数据"><a href="#插入数据" class="headerlink" title="插入数据"></a>插入数据</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">test<span class="operator">&gt;</span> db.test1.insertMany([&#123;name:&quot;rx2&quot;, age:<span class="number">30</span>, gpa:<span class="number">3.2</span>&#125;, &#123;name:&quot;patrick&quot;, age:<span class="number">12</span>, gpa:<span class="number">4.0</span>&#125;])</span><br><span class="line">&#123;</span><br><span class="line">  acknowledged: <span class="literal">true</span>,</span><br><span class="line">  insertedIds: &#123;</span><br><span class="line">    <span class="string">&#x27;0&#x27;</span>: ObjectId(<span class="string">&#x27;65f04afec43bf33edd779a6d&#x27;</span>),</span><br><span class="line">    <span class="string">&#x27;1&#x27;</span>: ObjectId(<span class="string">&#x27;65f04afec43bf33edd779a6e&#x27;</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">test<span class="operator">&gt;</span> db.test1.find()</span><br><span class="line">[</span><br><span class="line">  &#123;</span><br><span class="line">    _id: ObjectId(<span class="string">&#x27;65f049c8c43bf33edd779a6c&#x27;</span>),</span><br><span class="line">    name: <span class="string">&#x27;rx&#x27;</span>,</span><br><span class="line">    age: <span class="number">30</span>,</span><br><span class="line">    gpa: <span class="number">3.2</span></span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    _id: ObjectId(<span class="string">&#x27;65f04afec43bf33edd779a6d&#x27;</span>),</span><br><span class="line">    name: <span class="string">&#x27;rx2&#x27;</span>,</span><br><span class="line">    age: <span class="number">30</span>,</span><br><span class="line">    gpa: <span class="number">3.2</span></span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    _id: ObjectId(<span class="string">&#x27;65f04afec43bf33edd779a6e&#x27;</span>),</span><br><span class="line">    name: <span class="string">&#x27;patrick&#x27;</span>,</span><br><span class="line">    age: <span class="number">12</span>,</span><br><span class="line">    gpa: <span class="number">4</span></span><br><span class="line">  &#125;</span><br><span class="line">]</span><br><span class="line">test<span class="operator">&gt;</span> db.test1.insertOne(&#123;name:&quot;Larry&quot;, age:&quot;12&quot;, gpa:<span class="number">1.0</span>, fullTime: <span class="literal">false</span>, registerDate: <span class="keyword">new</span> <span class="type">Date</span>()&#125;)</span><br><span class="line">&#123;</span><br><span class="line">  acknowledged: <span class="literal">true</span>,</span><br><span class="line">  insertedId: ObjectId(<span class="string">&#x27;65f04cb0c43bf33edd779a6f&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line">test<span class="operator">&gt;</span> db.test1.insertOne(&#123;name:&quot;Larry&quot;, age:&quot;12&quot;, gpa:<span class="number">1.0</span>, fullTime: <span class="literal">false</span>, registerDate: <span class="keyword">new</span> <span class="type">Date</span>(), gradutionData:<span class="keyword">null</span>, courses:[&quot;Bio&quot;, &quot;Chem&quot;, &quot;Math&quot;], address:&#123;street:&quot;123 Fake st.&quot;, city:&quot;Ontario&quot;, zip :&quot;123&quot;&#125;&#125;)</span><br><span class="line">&#123;</span><br><span class="line">  acknowledged: <span class="literal">true</span>,</span><br><span class="line">  insertedId: ObjectId(<span class="string">&#x27;65f04e02c43bf33edd779a70&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line">test<span class="operator">&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">test<span class="operator">&gt;</span> db.test1.insertOne(&#123;name:&quot;Larry&quot;, age:&quot;12&quot;, gpa:<span class="number">1.0</span>, fullTime: <span class="literal">false</span>, registerDate: <span class="keyword">new</span> <span class="type">Date</span>(), gradutionData:<span class="keyword">null</span>, courses:[&quot;Bio&quot;, &quot;Chem&quot;, &quot;Math&quot;], address:&#123;street:&quot;123 Fake st.&quot;, city:&quot;Ontario&quot;, zip :&quot;123&quot;&#125;&#125;)</span><br><span class="line">&#123;</span><br><span class="line">  acknowledged: <span class="literal">true</span>,</span><br><span class="line">  insertedId: ObjectId(<span class="string">&#x27;65f04e02c43bf33edd779a70&#x27;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="查找数据-1"><a href="#查找数据-1" class="headerlink" title="查找数据"></a>查找数据</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">test<span class="operator">&gt;</span> db.test1.find()</span><br><span class="line">[</span><br><span class="line">  &#123;</span><br><span class="line">    _id: ObjectId(<span class="string">&#x27;65f049c8c43bf33edd779a6c&#x27;</span>),</span><br><span class="line">    name: <span class="string">&#x27;rx&#x27;</span>,</span><br><span class="line">    age: <span class="number">30</span>,</span><br><span class="line">    gpa: <span class="number">3.2</span></span><br><span class="line">  &#125;</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">test<span class="operator">&gt;</span> db.students.find(&#123;name:&quot;rx&quot;&#125;)</span><br><span class="line"></span><br><span class="line">test<span class="operator">&gt;</span> db.test1.find(&#123;name:&quot;rx&quot;&#125;)</span><br><span class="line">[</span><br><span class="line">  &#123;</span><br><span class="line">    _id: ObjectId(<span class="string">&#x27;65f049c8c43bf33edd779a6c&#x27;</span>),</span><br><span class="line">    name: <span class="string">&#x27;rx&#x27;</span>,</span><br><span class="line">    age: <span class="number">30</span>,</span><br><span class="line">    gpa: <span class="number">3.2</span></span><br><span class="line">  &#125;</span><br><span class="line">]</span><br><span class="line">test<span class="operator">&gt;</span> db.test1.find(&#123;&#125;, &#123;_id: <span class="literal">false</span>, name:<span class="literal">true</span>&#125;)</span><br><span class="line">[</span><br><span class="line">  &#123; name: <span class="string">&#x27;rx&#x27;</span> &#125;,</span><br><span class="line">  &#123; name: <span class="string">&#x27;rx2&#x27;</span> &#125;,</span><br><span class="line">  &#123; name: <span class="string">&#x27;patrick&#x27;</span> &#125;,</span><br><span class="line">  &#123; name: <span class="string">&#x27;Larry&#x27;</span> &#125;,</span><br><span class="line">  &#123; name: <span class="string">&#x27;Larry&#x27;</span> &#125;</span><br><span class="line">]</span><br><span class="line">test<span class="operator">&gt;</span> db.test1.find(&#123;&#125;, &#123;name:<span class="literal">true</span>&#125;)</span><br><span class="line">[</span><br><span class="line">  &#123; _id: ObjectId(<span class="string">&#x27;65f049c8c43bf33edd779a6c&#x27;</span>), name: <span class="string">&#x27;rx&#x27;</span> &#125;,</span><br><span class="line">  &#123; _id: ObjectId(<span class="string">&#x27;65f04afec43bf33edd779a6d&#x27;</span>), name: <span class="string">&#x27;rx2&#x27;</span> &#125;,</span><br><span class="line">  &#123; _id: ObjectId(<span class="string">&#x27;65f04afec43bf33edd779a6e&#x27;</span>), name: <span class="string">&#x27;patrick&#x27;</span> &#125;,</span><br><span class="line">  &#123; _id: ObjectId(<span class="string">&#x27;65f04cb0c43bf33edd779a6f&#x27;</span>), name: <span class="string">&#x27;Larry&#x27;</span> &#125;,</span><br><span class="line">  &#123; _id: ObjectId(<span class="string">&#x27;65f04e02c43bf33edd779a70&#x27;</span>), name: <span class="string">&#x27;Larry&#x27;</span> &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h3 id="更新-替换数据"><a href="#更新-替换数据" class="headerlink" title="更新&#x2F;替换数据"></a>更新&#x2F;替换数据</h3><p>删除数据时，第一个参数是条件，第二个是更改字段，用$set，还可以自行添加其他选项</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">db.test.update(</span><br><span class="line">   &#123; name: &quot;John&quot; &#125;,</span><br><span class="line">   &#123; $<span class="keyword">set</span>: &#123; age: <span class="number">31</span> &#125; &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>替换数据时，id不可替换，但是可以添加其他字段</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">db.inventory.replaceOne(</span><br><span class="line">   &#123; item: &quot;paper&quot; &#125;,</span><br><span class="line">   &#123; item: &quot;paper&quot;, instock: [ &#123; warehouse: &quot;A&quot;, qty: <span class="number">60</span> &#125;, &#123; warehouse: &quot;B&quot;, qty: <span class="number">40</span> &#125; ] &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h3><p>删除所有数据</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.inventory.deleteMany(&#123;&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>删除对应状态的所有数据</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.inventory.deleteMany(&#123; status : &quot;A&quot; &#125;)</span><br></pre></td></tr></table></figure>
+
+<p>删除对应状态下的第一个数据：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.inventory.deleteOne( &#123; status: &quot;D&quot; &#125; )</span><br></pre></td></tr></table></figure>
+
+<h2 id="在Golang当中的操作"><a href="#在Golang当中的操作" class="headerlink" title="在Golang当中的操作"></a>在Golang当中的操作</h2><p>我们以文章的CRUD为例</p>
+<h3 id="安装-1"><a href="#安装-1" class="headerlink" title="安装"></a>安装</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">go</span> get <span class="keyword">go</span>.mongodb.org/mongo-driver/mongo</span><br></pre></td></tr></table></figure>
+
+<h3 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// Initialize MongoDB client</span></span><br><span class="line">	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(<span class="string">&quot;mongodb://localhost:27017&quot;</span>))</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Ping the primary</span></span><br><span class="line">	<span class="keyword">if</span> err := client.Ping(context.TODO(), <span class="literal">nil</span>); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Get a handle for your collection</span></span><br><span class="line">	collection = client.Database(<span class="string">&quot;article&quot;</span>).Collection(<span class="string">&quot;article&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h3><ul>
+<li>**<code>bson.A</code>**：表示一个有序的BSON数组，类似于Go中的切片（slice）。</li>
+<li>**<code>bson.E</code><strong>：表示</strong><code>bson.D</code><strong>类型中的单个元素，通常用于构建</strong><code>bson.D</code>**类型的文档。</li>
+<li>**<code>bson.D</code>**：是一个有序的文档表示，它是一个切片，其中的元素按照定义的顺序排列。这在需要保持字段顺序的情况下非常有用，比如在创建索引或执行排序操作时。</li>
+<li>**<code>bson.M</code>**：是一个无序的文档表示，它是一个映射（map），其中的元素顺序是不确定的。这在顺序不重要的情况下使用起来更简洁。</li>
+</ul>
+<h3 id="CRUD"><a href="#CRUD" class="headerlink" title="CRUD"></a>CRUD</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Article <span class="keyword">struct</span> &#123;</span><br><span class="line">	ID      primitive.ObjectID <span class="string">`bson:&quot;_id,omitempty&quot;`</span></span><br><span class="line">	Title   <span class="type">string</span>             <span class="string">`bson:&quot;title&quot;`</span></span><br><span class="line">	Content <span class="type">string</span>             <span class="string">`bson:&quot;content&quot;`</span></span><br><span class="line">	Author  <span class="type">string</span>             <span class="string">`bson:&quot;author&quot;`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> (</span><br><span class="line">	ctx        context.Context</span><br><span class="line">	collection *mongo.Collection</span><br><span class="line">)</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	router := gin.Default()</span><br><span class="line"></span><br><span class="line">	router.POST(<span class="string">&quot;/articles&quot;</span>, createArticle)</span><br><span class="line">	router.GET(<span class="string">&quot;/articles/:id&quot;</span>, getArticle)</span><br><span class="line">	router.GET(<span class="string">&quot;/articles&quot;</span>, listArticles)</span><br><span class="line">	router.PUT(<span class="string">&quot;/articles/:id&quot;</span>, updateArticle)</span><br><span class="line">	router.DELETE(<span class="string">&quot;/articles/:id&quot;</span>, deleteArticle)</span><br><span class="line"></span><br><span class="line">	router.Run(<span class="string">&quot;:8080&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">createArticle</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> article Article</span><br><span class="line">	<span class="keyword">if</span> err := c.BindJSON(&amp;article); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		c.JSON(http.StatusBadRequest, gin.H&#123;<span class="string">&quot;error&quot;</span>: err.Error()&#125;)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 自己创建</span></span><br><span class="line">	<span class="comment">// article := bson.D&#123;&#123;&quot;name&quot;, &quot;John&quot;&#125;, &#123;&quot;age&quot;, 30&#125;, &#123;&quot;city&quot;, &quot;New York&quot;&#125;&#125;</span></span><br><span class="line">	<span class="comment">// doc := bson.D&#123;&#123;&quot;name&quot;, &quot;John&quot;&#125;, &#123;&quot;age&quot;, 30&#125;, &#123;&quot;city&quot;, &quot;New York&quot;&#125;, &#123;&quot;hobbies&quot;, bson.A&#123;&quot;reading&quot;, &quot;gaming&quot;, &quot;hiking&quot;&#125;&#125;&#125;</span></span><br><span class="line"></span><br><span class="line">	result, err := collection.InsertOne(ctx, article)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		c.JSON(http.StatusInternalServerError, gin.H&#123;<span class="string">&quot;error&quot;</span>: err.Error()&#125;)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	c.JSON(http.StatusCreated, gin.H&#123;<span class="string">&quot;id&quot;</span>: result.InsertedID&#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getArticle</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">	id := c.Param(<span class="string">&quot;id&quot;</span>)</span><br><span class="line"></span><br><span class="line">	objID, _ := primitive.ObjectIDFromHex(id)</span><br><span class="line">	<span class="keyword">var</span> article Article</span><br><span class="line">	err := collection.FindOne(ctx, bson.M&#123;<span class="string">&quot;_id&quot;</span>: objID&#125;).Decode(&amp;article)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		c.JSON(http.StatusNotFound, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;Article not found&quot;</span>&#125;)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	c.JSON(http.StatusOK, article)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">listArticles</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">	<span class="comment">// 设置投影，排除_id字段</span></span><br><span class="line">	projection := bson.D&#123;&#123;<span class="string">&quot;_id&quot;</span>, <span class="number">0</span>&#125;&#125;</span><br><span class="line">	opts := options.Find().SetProjection(projection)</span><br><span class="line"></span><br><span class="line">	cursor, err := collection.Find(context.Background(), bson.M&#123;&#125;, opts)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		c.JSON(http.StatusInternalServerError, gin.H&#123;<span class="string">&quot;error&quot;</span>: err.Error()&#125;)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">defer</span> cursor.Close(context.Background())</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> articles []bson.M</span><br><span class="line">	<span class="keyword">if</span> err = cursor.All(context.Background(), &amp;articles); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		c.JSON(http.StatusInternalServerError, gin.H&#123;<span class="string">&quot;error&quot;</span>: err.Error()&#125;)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 返回结果时不包含_id字段</span></span><br><span class="line">	c.JSON(http.StatusOK, articles)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">updateArticle</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">	id := c.Param(<span class="string">&quot;id&quot;</span>)</span><br><span class="line"></span><br><span class="line">	objID, _ := primitive.ObjectIDFromHex(id)</span><br><span class="line">	<span class="keyword">var</span> article Article</span><br><span class="line">	<span class="keyword">if</span> err := c.BindJSON(&amp;article); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		c.JSON(http.StatusBadRequest, gin.H&#123;<span class="string">&quot;error&quot;</span>: err.Error()&#125;)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	result, err := collection.UpdateOne(ctx, bson.M&#123;<span class="string">&quot;_id&quot;</span>: objID&#125;, bson.M&#123;<span class="string">&quot;$set&quot;</span>: article&#125;)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		c.JSON(http.StatusInternalServerError, gin.H&#123;<span class="string">&quot;error&quot;</span>: err.Error()&#125;)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	c.JSON(http.StatusOK, gin.H&#123;<span class="string">&quot;updated&quot;</span>: result.ModifiedCount&#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">deleteArticle</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">	id := c.Param(<span class="string">&quot;id&quot;</span>)</span><br><span class="line"></span><br><span class="line">	objID, _ := primitive.ObjectIDFromHex(id)</span><br><span class="line">	result, err := collection.DeleteOne(ctx, bson.M&#123;<span class="string">&quot;_id&quot;</span>: objID&#125;)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		c.JSON(http.StatusInternalServerError, gin.H&#123;<span class="string">&quot;error&quot;</span>: err.Error()&#125;)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	c.JSON(http.StatusOK, gin.H&#123;<span class="string">&quot;deleted&quot;</span>: result.DeletedCount&#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下周更新更多操作</p>
+
+        </div>
+
+        
+            <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> MongoDBCRUD操作（含GO中的库操作）</li>
+        <li><strong>Author:</strong> The Redefine Team</li>
+        <li><strong>Created at
+                :</strong> 2024-03-15 23:38:24</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2024-03-15 23:38:24
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://redefine.ohevan.com/middleware/MongoDB_crud/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
+            
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="../../tags/note/">#note</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="../../tags/middleware/">#middleware</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+                
+                    <div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="prev"
+                        rel="prev"
+                        href="../../Go/go_context/"
+                        >
+                            <span class="left arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">Golang中的context包简介</span>
+                                <span class="post-nav-item">Prev posts</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="next"
+                        rel="next"
+                        href="../../tools/HexArch/"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">Hexagonal Architecture</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+            <div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+                <div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        Comments
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '../../js/libs/waline.mjs';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          lang: 'zh-CN',
+          dark: 'body[class~="dark-mode"]',
+          reaction: false,
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+          recaptchaV3Key: "wasd",
+          
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+            </div>
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">MongoDBCRUD操作（含GO中的库操作）</div>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MongoDBCRUD%E6%93%8D%E4%BD%9C%EF%BC%88%E5%90%ABGO%E4%B8%AD%E7%9A%84%E5%BA%93%E6%93%8D%E4%BD%9C%EF%BC%89"><span class="nav-text">MongoDBCRUD操作（含GO中的库操作）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NoSQL%E6%96%87%E6%A1%A3%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-text">NoSQL文档数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E6%93%8D%E4%BD%9C"><span class="nav-text">主要操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-text">创建数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E6%89%BE%E6%95%B0%E6%8D%AE"><span class="nav-text">查找数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE"><span class="nav-text">插入数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E6%89%BE%E6%95%B0%E6%8D%AE-1"><span class="nav-text">查找数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0-%E6%9B%BF%E6%8D%A2%E6%95%B0%E6%8D%AE"><span class="nav-text">更新&#x2F;替换数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A0%E9%99%A4"><span class="nav-text">删除</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8Golang%E5%BD%93%E4%B8%AD%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="nav-text">在Golang当中的操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-1"><span class="nav-text">安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5"><span class="nav-text">连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80"><span class="nav-text">基础</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CRUD"><span class="nav-text">CRUD</span></a></li></ol></li></ol></li></ol>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
+
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2024&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">The Redefine Team</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        19 posts in total
+                    </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">VISITOR COUNT</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">TOTAL PAGE VIEWS</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.6.4</a></span>
+        </div>
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+    
+<script src="js/libs/Swup.min.js"></script>
+
+<script src="js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="js/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="js/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+
+
+
+<script src="js/tools/imageViewer.js" type="module"></script>
+
+<script src="js/utils.js" type="module"></script>
+
+<script src="js/main.js" type="module"></script>
+
+<script src="js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="js/layouts/categoryList.js" type="module"></script>
+
+
+
+
+
+    
+<script src="js/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="js/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="js/tools/runtime.js"></script>
+
+    
+<script src="js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="js/libs/Typed.min.js"></script>
+
+  
+<script src="js/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+
+<div class="post-scripts" data-swup-reload-script>
+    
+        
+<script src="js/tools/tocToggle.js" type="module"></script>
+
+<script src="js/layouts/toc.js" type="module"></script>
+
+<script src="js/plugins/tabs.js" type="module"></script>
+
+    
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="English">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="The Redefine Team">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://Renewdxin.github.io/middleware/database/1-5/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="基础架构先来看一张图：   MySQL分为Server层和存储引擎层两部分。 Server层：连接器、查询缓存、分析器、优化器、执行器等，涵盖MySQL的大多数核心服务功能，以及所有的内置函数（如日期、时间、数学和加密函数等），所有跨存储引擎的功能都在这一层实现，比如存储过程、触发器、视图等。 而存储引擎层负责数据的存储和提取。其架构模式是插件式的，支持InnoDB、MyISAM、Memory等多">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mysql45讲的1-5的总结">
+<meta property="og:url" content="http://renewdxin.github.io/middleware/database/1-5/index.html">
+<meta property="og:site_name" content="RenXin&#39;s Website">
+<meta property="og:description" content="基础架构先来看一张图：   MySQL分为Server层和存储引擎层两部分。 Server层：连接器、查询缓存、分析器、优化器、执行器等，涵盖MySQL的大多数核心服务功能，以及所有的内置函数（如日期、时间、数学和加密函数等），所有跨存储引擎的功能都在这一层实现，比如存储过程、触发器、视图等。 而存储引擎层负责数据的存储和提取。其架构模式是插件式的，支持InnoDB、MyISAM、Memory等多">
+<meta property="og:locale">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/9d4fe1d7c19d3a2a35b026c7dc525269.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/bc9fb9adffabcea3c369a020acd63b61.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/62298ae2bb6f9707fc4b0e8b58c1b3ef.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/b3d98dd8d083c4dc8a6d2e1d4ec6b40a.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/87a82b2205f110cd49b070d3fbbe55c8.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/df01c7be2e3bcf3710288d38f0a060eb.jpeg">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/3dede2afe49c8e195fe1ccb07ba1bdae.jpeg">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/973b8028762b7c9eed932d35ba895c3d.jpeg">
+<meta property="article:published_time" content="2024-05-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-05-31T09:09:08.824Z">
+<meta property="article:author" content="RenXin">
+<meta property="article:tag" content="database">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/9d4fe1d7c19d3a2a35b026c7dc525269.png">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="../../../images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="../../../images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="../../../images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            mysql45讲的1-5的总结 -
+        
+        Theme Redefine
+    </title>
+
+    
+<link rel="stylesheet" href="fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="../../../css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="assets/build/styles.css">
+
+    
+
+    
+<link rel="stylesheet" href="fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    
+        
+<script src="js/libs/anime.min.js"></script>
+
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"renewdxin.github.io","root":"/","language":"English"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Theme Redefine","subtitle":{"text":[],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.6.4","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2022/8/17 11:45:14"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+<!--        <span class="swup-progress-icon">-->
+<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+<!--        </span>-->
+    
+</div>
+
+
+
+    <style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 500;
+        font-family: 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    <h2 class="ml13">
+        Theme Redefine
+    </h2>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
+
+        var animation = anime.timeline({loop: true})
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [40,0],
+                translateZ: 0,
+                opacity: [0,1],
+                filter: ['blur(5px)', 'blur(0px)'], // Starting from blurred to unblurred
+                easing: "easeOutExpo",
+                duration: 1400,
+                delay: (el, i) => 300 + 30 * i,
+            }).add({
+                targets: '.ml13 .letter',
+                translateY: [0,-40],
+                opacity: [1,0],
+                filter: ['blur(0px)', 'blur(5px)'], // Ending from unblurred to blurred
+                easing: "easeInExpo",
+                duration: 1200,
+                delay: (el, i) => 100 + 30 * i,
+                complete: function() {
+                    hidePreloader(); // Call hidePreloader after the animation completes
+                }
+            });
+
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
+
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
+
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
+
+        window.addEventListener('load', function () {
+            setTimeout(hidePreloader, 5000); // Call hidePreloader after 5000 milliseconds if not already called by animation
+        });
+
+        function hidePreloader() {
+            var preloader = document.querySelector('.preloader');
+            preloader.style.opacity = '0';
+            setTimeout(function () {
+                preloader.style.display = 'none';
+            }, 200);
+        }
+    </script>
+</div>
+
+<main class="page-container" id="swup">
+
+    
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container px-6 md:px-12">
+
+    <div class="navbar-content ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Theme Redefine
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="../../../index.html"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-screen w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="../../../index.html"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="../../../tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">14</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="../../../categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">12</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="../../../archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">19</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container flex relative justify-between box-border w-full h-full">
+    <div class="article-content-container">
+
+        <div class="article-title relative w-full">
+            
+                <div class="w-full flex items-center pt-6 justify-start">
+                    <h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">mysql45讲的1-5的总结</h1>
+                </div>
+            
+            </div>
+
+        
+            <div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+                <div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+                    <img src="../../../images/redefine-avatar.svg">
+                </div>
+                <div class="info flex flex-col justify-between">
+                    <div class="author flex items-center">
+                        <span class="name text-default-text-color text-lg font-semibold">The Redefine Team</span>
+                        
+                            <span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv3</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2024-05-09</span>
+        <span class="mobile">2024-05-09</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2024-05-31 17:09:08</span>
+            <span class="mobile">2024-05-31 17:09:08</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="../../../categories/middleware/">middleware</a>&nbsp;
+                        </li>
+                    
+                    
+                
+                    
+                        
+                            <li>></li>
+                        
+                        <li>
+                            <a href="../../../categories/middleware/database/">database</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="../../../tags/database/">database</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+            <h1 id="基础架构"><a href="#基础架构" class="headerlink" title="基础架构"></a>基础架构</h1><p>先来看一张图：</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/9d4fe1d7c19d3a2a35b026c7dc525269.png"/></div></div>
+
+<p>MySQL分为Server层和存储引擎层两部分。</p>
+<p>Server层：连接器、查询缓存、分析器、优化器、执行器等，涵盖MySQL的大多数核心服务功能，以及所有的内置函数（如日期、时间、数学和加密函数等），所有跨存储引擎的功能都在这一层实现，比如存储过程、触发器、视图等。</p>
+<p>而存储引擎层负责数据的存储和提取。其架构模式是插件式的，支持InnoDB、MyISAM、Memory等多个存储引擎。现在最常用的存储引擎是InnoDB，它从MySQL 5.5.5版本开始成为了默认存储引擎。</p>
+<p>不同存储引擎的表数据存取方式不同，支持的功能也不同</p>
+<p>从图中不难看出，不同的存储引擎共用一个<strong>Server层</strong>，也就是从连接器到执行器的部分。</p>
+<h2 id="连接器"><a href="#连接器" class="headerlink" title="连接器"></a>连接器</h2><p>顾名思义就是负责跟客户端建立连接、获取权限、维持和管理连接的</p>
+<p>我们通常命令行会这么写：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -h<span class="variable">$ip</span> -P<span class="variable">$port</span> -u<span class="variable">$user</span> -p</span><br></pre></td></tr></table></figure>
+
+<p>用户的权限是在登录时就确认好的， 也就是说如果在登录过程中对当前用户的权限进行了修改，当前已登录用户的权限并不会发生改变，直到用户再次登录，权限才会更新</p>
+<p>我们可以通过</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show processlist</span><br></pre></td></tr></table></figure>
+
+<p>对当前链接用户进行查看</p>
+<p>客户端如果太长时间没动静，连接器就会自动将它断开。这个时间是由参数wait_timeout控制的，默认值是8小时。</p>
+<p>如果在连接被断开之后，客户端再次发送请求的话，就会收到一个错误提醒： Lost connection to MySQL server during query。这时候如果你要继续，就需要重连，然后再执行请求了。</p>
+<p>数据库里面，长连接是指连接成功后，如果客户端持续有请求，则一直使用同一个连接。短连接则是指每次执行完很少的几次查询就断开连接，下次查询再重新建立一个。</p>
+<p>建立连接的过程通常是比较复杂的，所以我建议你在使用中要尽量减少建立连接的动作，也就是尽量使用长连接。</p>
+<h2 id="分析器"><a href="#分析器" class="headerlink" title="分析器"></a>分析器</h2><p>作用：语句词法分析</p>
+<p>语法分析器会根据语法规则，判断你输入的这个SQL语句是否满足MySQL语法。</p>
+<p>如果你的语句不对，就会收到“You have an error in your SQL syntax”的错误提醒，比如下面这个语句select少打了开头的字母“s”。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; elect * from t <span class="built_in">where</span> ID=1;</span><br><span class="line"></span><br><span class="line">ERROR 1064 (42000): You have an error <span class="keyword">in</span> your SQL syntax; check the manual that corresponds to your MySQL server version <span class="keyword">for</span> the right syntax to use near <span class="string">&#x27;elect * from t where ID=1&#x27;</span> at line 1</span><br></pre></td></tr></table></figure>
+
+<h2 id="优化器"><a href="#优化器" class="headerlink" title="优化器"></a>优化器</h2><p>在真正执行之前还需要一个优化，比如说当表里面有多个索引的时候，有多个join的时候，谁先谁后，这就是优化器要决定的事情，如何使用让效率变得更高</p>
+<h2 id="执行器"><a href="#执行器" class="headerlink" title="执行器"></a>执行器</h2><p>分析器知道了要怎么做，优化器知道了该怎么做，于是开始执行；</p>
+<p>执行优化器选择的执行计划，与存储引擎协同工作，完成数据的实际检索和修改。</p>
+<p>执行器会先查看是否有表读取权限，如果有权限，就打开表继续执行。打开表的时候，执行器就会根据表的引擎定义，去使用这个引擎提供的接口。</p>
+<h2 id="SQL查询执行过程"><a href="#SQL查询执行过程" class="headerlink" title="SQL查询执行过程"></a>SQL查询执行过程</h2><ul>
+<li><strong>查询示例</strong>：**<code>select * from T where ID=10;</code>**<ul>
+<li><strong>输入</strong>：用户输入的SQL查询语句。</li>
+<li><strong>输出</strong>：查询结果。</li>
+</ul>
+</li>
+</ul>
+<h3 id="详细执行步骤"><a href="#详细执行步骤" class="headerlink" title="详细执行步骤"></a>详细执行步骤</h3><ol>
+<li><p><strong>SQL解析</strong>：</p>
+<ul>
+<li><strong>词法分析</strong>：将SQL语句分解成有意义的元素（词法单元），如关键字、标识符、常量。</li>
+<li><strong>语法分析</strong>：根据MySQL的语法规则验证词法单元的结合是否正确。</li>
+</ul>
+</li>
+<li><p><strong>查询优化</strong>：</p>
+<ul>
+<li><strong>执行计划生成</strong>：优化器评估多种可能的查询路径，生成多个执行计划。</li>
+<li><strong>成本估算</strong>：为每个执行计划估算执行成本，选择成本最低的计划。</li>
+</ul>
+</li>
+<li><p><strong>查询执行</strong>：</p>
+<ul>
+<li><strong>执行器与存储引擎交互</strong>：执行器指挥存储引擎按照优化后的计划执行查询。</li>
+<li><strong>数据检索</strong>：存储引擎从数据文件中检索数据，返回给执行器。</li>
+</ul>
+<h2 id="SQL更新执行过程"><a href="#SQL更新执行过程" class="headerlink" title="SQL更新执行过程"></a>SQL更新执行过程</h2><p> 更新里面其实就是查询+修改</p>
+<p> MySQL可以恢复到半个月内任意一秒的状态，那是怎么做到的？</p>
+<p> 与查询流程不一样的是，更新流程还涉及两个重要的日志模块，它们正是我们今天要讨论的主角：redo log（重做日志）和 binlog（归档日志）。</p>
+<h2 id="重要的日志模块：redo-log"><a href="#重要的日志模块：redo-log" class="headerlink" title="重要的日志模块：redo log"></a>重要的日志模块：redo log</h2><p> 其实就是MySQL里经常说到的WAL技术，WAL的全称是Write-Ahead Logging，它的关键点就是先写日志，再写磁盘，也就是先写粉板，等不忙的时候再写账本。</p>
+<p> 具体来说，当有一条记录需要更新的时候，InnoDB引擎就会先把记录写到redo log（粉板）里面，并更新内存，这个时候更新就算完成了。同时，InnoDB引擎会在适当的时候，将这个操作记录更新到磁盘里面</p>
+<p> InnoDB的redo log是固定大小的，比如可以配置为一组4个文件，每个文件的大小是1GB，那么这块“粉板”总共就可以记录4GB的操作。从头开始写，写到末尾就又回到开头循环写，如下面这个图所示。</p>
+ <div class="tag-plugin image"><div class="image-bg"><img src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/bc9fb9adffabcea3c369a020acd63b61.png"/></div></div>
+<p> write pos是当前记录的位置，一边写一边后移，写到第3号文件末尾后就回到0号文件开头。checkpoint是当前要擦除的位置，也是往后推移并且循环的，擦除记录前要把记录更新到数据文件。</p>
+<p> write pos和checkpoint之间的是“粉板”上还空着的部分，可以用来记录新的操作。如果write pos追上checkpoint，表示“粉板”满了，这时候不能再执行新的更新，得停下来先擦掉一些记录，把checkpoint推进一下。</p>
+<p> 有了redo log，InnoDB就可以保证即使数据库发生异常重启，之前提交的记录都不会丢失，这个能力称为<strong>crash-safe</strong>。</p>
+<p> 要理解crash-safe这个概念，可以想想我们前面赊账记录的例子。只要赊账记录记在了粉板上或写在了账本上，之后即使掌柜忘记了，比如突然停业几天，恢复生意后依然可以通过账本和粉板上的数据明确赊账账目。</p>
+<h2 id="重要的日志模块：binlog"><a href="#重要的日志模块：binlog" class="headerlink" title="重要的日志模块：binlog"></a>重要的日志模块：binlog</h2><p> Server层也有自己的日志，称为binlog（归档日志）</p>
+<p> 因为最开始MySQL里并没有InnoDB引擎。MySQL自带的引擎是MyISAM，但是MyISAM没有crash-safe的能力，binlog日志只能用于归档。而InnoDB是另一个公司以插件形式引入MySQL的，既然只依靠binlog是没有crash-safe能力的，所以InnoDB使用另外一套日志系统——也就是redo log来实现crash-safe能力。</p>
+<p> 这两种日志有以下三点不同。</p>
+<ol>
+<li>redo log是InnoDB引擎特有的；binlog是MySQL的Server层实现的，所有引擎都可以使用。</li>
+<li>redo log是物理日志，记录的是“在某个数据页上做了什么修改”；binlog是逻辑日志，记录的是这个语句的原始逻辑，比如“给ID&#x3D;2这一行的c字段加1 ”。</li>
+<li>redo log是循环写的，空间固定会用完；binlog是可以追加写入的。“追加写”是指binlog文件写到一定大小后会切换到下一个，并不会覆盖以前的日志。</li>
+</ol>
+<p> 更新过程</p>
+<ol>
+<li>执行器先找引擎取ID&#x3D;2这一行。ID是主键，引擎直接用树搜索找到这一行。如果ID&#x3D;2这一行所在的数据页本来就在内存中，就直接返回给执行器；否则，需要先从磁盘读入内存，然后再返回。</li>
+<li>执行器拿到引擎给的行数据，把这个值加上1，比如原来是N，现在就是N+1，得到新的一行数据，再调用引擎接口写入这行新数据。</li>
+<li>引擎将这行新数据更新到内存中，同时将这个更新操作记录到redo log里面，此时redo log处于prepare状态。然后告知执行器执行完成了，随时可以提交事务。</li>
+<li>执行器生成这个操作的binlog，并把binlog写入磁盘。</li>
+<li>执行器调用引擎的提交事务接口，引擎把刚刚写入的redo log改成提交（commit）状态，更新完成。</li>
+</ol>
+ <div class="tag-plugin image"><div class="image-bg"><img src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/62298ae2bb6f9707fc4b0e8b58c1b3ef.png"/></div></div>
+<h3 id="阶段性提交"><a href="#阶段性提交" class="headerlink" title="阶段性提交"></a>阶段性提交</h3><p> 最后三步看上去有点“绕”，将redo log的写入拆成了两个步骤：prepare和commit，这就是”两阶段提交”</p>
+<p> binlog会记录所有的逻辑操作，并且是采用“追加写”的形式。如果你的DBA承诺说半个月内可以恢复，那么备份系统中一定会保存最近半个月的所有binlog，同时系统会定期做整库备份。这里的“定期”取决于系统的重要性，可以是一天一备，也可以是一周一备。</p>
+<p> 当需要恢复到指定的某一秒时，比如某天下午两点发现中午十二点有一次误删表，需要找回数据，那你可以这么做：</p>
+<ul>
+<li>首先，找到最近的一次全量备份，如果你运气好，可能就是昨天晚上的一个备份，从这个备份恢复到临时库；</li>
+<li>然后，从备份的时间点开始，将备份的binlog依次取出来，重放到中午误删表之前的那个时刻。</li>
+</ul>
+<p> 这样你的临时库就跟误删之前的线上库一样了，然后你可以把表数据从临时库取出来，按需要恢复到线上库去。</p>
+<p> 为什么日志需要“两阶段提交”。这里不妨用反证法来进行解释。</p>
+<p> 由于redo log和binlog是两个独立的逻辑，如果不用两阶段提交，要么就是先写完redo log再写binlog，或者采用反过来的顺序。我们看看这两种方式会有什么问题。</p>
+<p> 仍然用前面的update语句来做例子。假设当前ID&#x3D;2的行，字段c的值是0，再假设执行update语句过程中在写完第一个日志后，第二个日志还没有写完期间发生了crash，会出现什么情况呢？</p>
+<ol>
+<li><p><strong>先写redo log后写binlog</strong>。假设在redo log写完，binlog还没有写完的时候，MySQL进程异常重启。由于我们前面说过的，redo log写完之后，系统即使崩溃，仍然能够把数据恢复回来，所以恢复后这一行c的值是1。</p>
+<p> 但是由于binlog没写完就crash了，这时候binlog里面就没有记录这个语句。因此，之后备份日志的时候，存起来的binlog里面就没有这条语句。</p>
+<p> 然后你会发现，如果需要用这个binlog来恢复临时库的话，由于这个语句的binlog丢失，这个临时库就会少了这一次更新，恢复出来的这一行c的值就是0，与原库的值不同。</p>
+</li>
+<li><p><strong>先写binlog后写redo log</strong>。如果在binlog写完之后crash，由于redo log还没写，崩溃恢复以后这个事务无效，所以这一行c的值是0。但是binlog里面已经记录了“把c从0改成1”这个日志。所以，在之后用binlog来恢复的时候就多了一个事务出来，恢复出来的这一行c的值就是1，与原库的值不同。</p>
+</li>
+</ol>
+<p> 可以看到，如果不使用“两阶段提交”，那么数据库的状态就有可能和用它的日志恢复出来的库的状态不一致。</p>
+<p> 不只是误操作后需要用这个过程来恢复数据。当你需要扩容的时候，也就是需要再多搭建一些备库来增加系统的读能力的时候，现在常见的做法也是用全量备份加上应用binlog来实现的，这个“不一致”就会导致你的线上出现主从数据库不一致的情况。</p>
+<p> 简单说，redo log和binlog都可以用于表示事务的提交状态，而两阶段提交就是让这两个状态保持逻辑上的一致。</p>
+<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><p> 当数据库上有多个事务同时执行的时候，就可能出现脏读（dirty read）、不可重复读（non-repeatable read）、幻读（phantom read）的问题，为了解决这些问题，就有了“隔离级别”的概念。</p>
+<p> 隔离得越严实，效率就会越低。因此我们在二者之间寻找一个平衡点。</p>
+<p> SQL标准的事务隔离级别包括：读未提交（read uncommitted）、读提交（read committed）、可重复读（repeatable read）和串行化（serializable ）：</p>
+<ul>
+<li>读未提交是指，一个事务还没提交时，它做的变更就能被别的事务看到。</li>
+<li>读提交是指，一个事务提交之后，它做的变更才会被其他事务看到。</li>
+<li>可重复读是指，一个事务执行过程中看到的数据，总是跟这个事务在启动时看到的数据是一致的。当然在可重复读隔离级别下，未提交变更对其他事务也是不可见的。</li>
+<li>串行化，顾名思义是对于同一行记录，“写”会加“写锁”，“读”会加“读锁”。当出现读写锁冲突的时候，后访问的事务必须等前一个事务执行完成，才能继续执行。</li>
+</ul>
+<p> Oracle数据库的默认隔离级别其实就是“读提交”，因此对于一些从Oracle迁移到MySQL的应用，为保证数据库隔离级别的一致，你一定要记得将MySQL的隔离级别设置为“读提交”。</p>
+<h2 id="事务隔离的实现"><a href="#事务隔离的实现" class="headerlink" title="事务隔离的实现"></a>事务隔离的实现</h2><p> 在MySQL中，实际上每条记录在更新的时候都会同时记录一条回滚操作。记录上的最新值，通过回滚操作，都可以得到前一个状态的值。</p>
+<p> 假设一个值从1被按顺序改成了2、3、4，在回滚日志里面就会有类似下面的记录：</p>
+ <div class="tag-plugin image"><div class="image-bg"><img src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/b3d98dd8d083c4dc8a6d2e1d4ec6b40a.png"/></div></div>
+<p> ，不同时刻启动的事务会有不同的read-view。如图中看到的，在视图A、B、C里面，这一个记录的值分别是1、2、4，同一条记录在系统中可以存在多个版本，就是数据库的多版本并发控制（MVCC）。对于read-view A，要得到1，就必须将当前值依次执行图中所有的回滚操作得到。</p>
+<p> 回滚日志会当系统里没有比这个回滚日志更早的read-view的时候被删除</p>
+<blockquote>
+<p>为什么不要用长事务</p>
+</blockquote>
+<ol>
+<li>长事务意味着系统里面会存在很老的事务视图。由于这些事务随时可能访问数据库里面的任何数据，所以这个事务提交之前，数据库里面它可能用到的回滚记录都必须保留，这就会导致大量占用存储空间。</li>
+<li>长事务还占用锁资源，也可能拖垮整个库</li>
+</ol>
+</li>
+</ol>
+<h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><p>MySQL的事务启动方式有以下几种：</p>
+<ol>
+<li>显式启动事务语句， begin 或 start transaction。配套的提交语句是commit，回滚语句是rollback。</li>
+<li>set autocommit&#x3D;0，这个命令会将这个线程的自动提交关掉。意味着如果你只执行一个select语句，这个事务就启动了，而且并不会自动提交。这个事务持续存在直到你主动执行commit 或 rollback 语句，或者断开连接。</li>
+</ol>
+<p>有些客户端连接框架会默认连接成功后先执行一个set autocommit&#x3D;0的命令。这就导致接下来的查询都在事务中，如果是长连接，就导致了意外的长事务。</p>
+<p>因此，我会建议你总是使用set autocommit&#x3D;1, 通过显式语句的方式来启动事务。</p>
+<p>但是有的开发同学会纠结“多一次交互”的问题。对于一个需要频繁使用事务的业务，第二种方式每个事务在开始时都不需要主动执行一次 “begin”，减少了语句的交互次数。如果你也有这个顾虑，我建议你使用commit work and chain语法。</p>
+<p>在autocommit为1的情况下，用begin显式启动的事务，如果执行commit则提交事务。如果执行 commit work and chain，则是提交事务并自动启动下一个事务，这样也省去了再次执行begin语句的开销。同时带来的好处是从程序开发的角度明确地知道每个语句是否处于事务中。</p>
+<p>你可以在information_schema库的innodb_trx这个表中查询长事务，比如下面这个语句，用于查找持续时间超过60s的事务。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * from information_schema.innodb_trx <span class="built_in">where</span> TIME_TO_SEC(timediff(now(),trx_started))&gt;60</span><br></pre></td></tr></table></figure>
+
+<h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h1><h2 id="数据库索引模型"><a href="#数据库索引模型" class="headerlink" title="数据库索引模型"></a>数据库索引模型</h2><ol>
+<li>哈希表<ul>
+<li>适用于等值查询，比如Memcached及其他一些NoSQL引擎</li>
+<li>查询效率高,但不支持范围查询</li>
+<li>插入删除效率低,可能会出现哈希冲突</li>
+</ul>
+</li>
+<li>有序数组<ul>
+<li>在等值查询和范围查询场景中的性能就都非常优秀</li>
+<li>查询效率高</li>
+<li>插入删除效率低,需要移动数据</li>
+<li>有序数组索引只适用于静态存储引擎</li>
+</ul>
+</li>
+<li>B+树<ul>
+<li>InnoDB采用B+树作为索引模型</li>
+<li>支持等值查询和范围查询</li>
+<li>查询效率高,插入删除效率也较高</li>
+</ul>
+</li>
+</ol>
+<h2 id="InnoDB索引组织结构"><a href="#InnoDB索引组织结构" class="headerlink" title="InnoDB索引组织结构"></a>InnoDB索引组织结构</h2><div class="tag-plugin image"><div class="image-bg"><img src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/87a82b2205f110cd49b070d3fbbe55c8.png"/></div></div>
+
+<p>从图中不难看出，根据叶子节点的内容，索引类型分为主键索引和非主键索引。</p>
+<p>主键索引的叶子节点存的是整行数据。在InnoDB里，主键索引也被称为聚簇索引（clustered index）。</p>
+<p>非主键索引的叶子节点内容是主键的值。在InnoDB里，非主键索引也被称为二级索引（secondary index）。</p>
+<ol>
+<li>主键索引对应聚集索引<ul>
+<li>数据按主键物理顺序存储；主键查询只需要搜索B+树就行</li>
+</ul>
+</li>
+<li>辅助索引的叶子节点为主键值<ul>
+<li>通过主键索引查找数据，普通索引需要先搜索引树得到ID的值，在到ID索引树搜索，称为回表操作；</li>
+</ul>
+</li>
+</ol>
+<p>也就是说，基于非主键索引的查询需要多扫描一棵索引树。因此，我们在应用中应该尽量使用主键查询</p>
+<h2 id="主键选择"><a href="#主键选择" class="headerlink" title="主键选择"></a>主键选择</h2><ol>
+<li>自增主键<ul>
+<li>插入顺序，不会触发分裂</li>
+<li>空间占用小</li>
+</ul>
+</li>
+<li>业务主键<ul>
+<li>更符合实际需求</li>
+<li>也可以直接作为主键索引</li>
+</ul>
+</li>
+</ol>
+<h2 id="B-树维护操作"><a href="#B-树维护操作" class="headerlink" title="B+树维护操作"></a>B+树维护操作</h2><ol>
+<li>插入如果导致页满，需要分裂页</li>
+<li>删除如果导致页利用率低，需要合并页</li>
+</ol>
+<h2 id="索引重建问题"><a href="#索引重建问题" class="headerlink" title="索引重建问题"></a>索引重建问题</h2><ol>
+<li>直接使用ALTER TABLE效率可能不高</li>
+<li>应考虑使用线上DDL或备份还原方式</li>
+</ol>
+<p>显然，主键长度越小，普通索引的叶子节点就越小，普通索引占用的空间也就越小。</p>
+<p>所以，从性能和存储空间方面考量，自增主键往往是更合理的选择。</p>
+<p>有没有什么场景适合用业务字段直接做主键的呢？还是有的。比如，有些业务的场景需求是这样的：</p>
+<ol>
+<li>只有一个索引；</li>
+<li>该索引必须是唯一索引。</li>
+</ol>
+<h1 id="覆盖索引"><a href="#覆盖索引" class="headerlink" title="覆盖索引"></a>覆盖索引</h1><ul>
+<li><strong>定义</strong>：如果一个索引包含了查询所需的所有字段，则称为覆盖索引。</li>
+<li><strong>优点</strong>：能够减少数据库访问成本，因为可以直接在索引中获取数据，无需回表到主数据文件。</li>
+<li><strong>应用</strong>：例如，在查询 <strong><code>SELECT ID FROM T WHERE k BETWEEN 3 AND 5</code></strong> 中，如果索引 <strong><code>k</code></strong> 已经包括 <strong><code>ID</code></strong> 字段，则此索引覆盖了查询需求。</li>
+</ul>
+<h2 id="最左前缀原则"><a href="#最左前缀原则" class="headerlink" title="最左前缀原则"></a>最左前缀原则</h2><div class="tag-plugin image"><div class="image-bg"><img src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/df01c7be2e3bcf3710288d38f0a060eb.jpeg"/></div></div>
+
+<ul>
+<li><strong>定义</strong>：在使用复合索引时，查询条件可以使用索引的最左边的一个或多个字段来优化查询。</li>
+<li><strong>优点</strong>：使得数据库能够利用索引快速定位数据，减少扫描范围。</li>
+<li><strong>实例</strong>：在联合索引 <strong><code>(name, age)</code></strong> 中，查询可以利用 <strong><code>name</code></strong> 或 <strong><code>name</code></strong> 和 <strong><code>age</code></strong> 的组合来加速，但不能只用 **<code>age</code>**。</li>
+</ul>
+<h2 id="索引下推"><a href="#索引下推" class="headerlink" title="索引下推"></a>索引下推</h2><div class="tag-plugin image"><div class="image-bg"><img src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/3dede2afe49c8e195fe1ccb07ba1bdae.jpeg"/></div></div>
+
+<div class="tag-plugin image"><div class="image-bg"><img src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/973b8028762b7c9eed932d35ba895c3d.jpeg"/></div></div>
+
+<ul>
+<li><strong>定义</strong>：MySQL 5.6及以上版本的优化技术，允许在索引层面过滤数据，而不是在找到完整记录后才进行过滤。</li>
+<li><strong>优点</strong>：减少了不必要的数据加载和回表操作，提高查询效率。</li>
+<li><strong>示例</strong>：在 <strong><code>name, age</code></strong> 索引中，查询 <strong><code>SELECT * FROM tuser WHERE name LIKE &#39;张%&#39; AND age = 10</code></strong> 可以直接在索引层过滤掉不符合 <strong><code>age</code></strong> 条件的记录。</li>
+</ul>
+<h3 id="策略选择和权衡"><a href="#策略选择和权衡" class="headerlink" title="策略选择和权衡"></a>策略选择和权衡</h3><ul>
+<li><strong>联合索引的选择</strong>：在创建联合索引时，应考虑查询模式以及字段在查询中的频率和顺序。正确的字段顺序可以减少冗余索引，优化存储和维护成本。</li>
+<li><strong>索引的成本</strong>：尽管索引可以提高查询性能，但它们也会增加写操作的负担，并占用额外的存储空间。因此，在添加索引前需要权衡其对性能的潜在影响。</li>
+</ul>
+<h3 id="建议"><a href="#建议" class="headerlink" title="建议"></a>建议</h3><ul>
+<li><strong>覆盖索引使用建议</strong>：对于高频查询特别是在只需要表中少数几个字段的情况下，考虑使用覆盖索引。</li>
+<li><strong>索引审查</strong>：定期审查现有索引的效能和必要性，移除不再有效或重复的索引，优化索引配置</li>
+</ul>
+
+        </div>
+
+        
+            <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> mysql45讲的1-5的总结</li>
+        <li><strong>Author:</strong> The Redefine Team</li>
+        <li><strong>Created at
+                :</strong> 2024-05-09 00:00:00</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2024-05-31 17:09:08
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://redefine.ohevan.com/middleware/database/1-5/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
+            
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="../../../tags/database/">#database</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+                
+                    <div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="prev"
+                        rel="prev"
+                        href="../../../database/6-10/"
+                        >
+                            <span class="left arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">mysql45讲6-10的总结</span>
+                                <span class="post-nav-item">Prev posts</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="next"
+                        rel="next"
+                        href="../../../Go/goroutine_mode/"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">Go 并发的几个模式-Pipeline、Fan_in_Fan_out模式</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+            <div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+                <div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        Comments
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '../../../js/libs/waline.mjs';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          lang: 'zh-CN',
+          dark: 'body[class~="dark-mode"]',
+          reaction: false,
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+          recaptchaV3Key: "wasd",
+          
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+            </div>
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">mysql45讲的1-5的总结</div>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84"><span class="nav-text">基础架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5%E5%99%A8"><span class="nav-text">连接器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%9E%90%E5%99%A8"><span class="nav-text">分析器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E5%99%A8"><span class="nav-text">优化器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A7%E8%A1%8C%E5%99%A8"><span class="nav-text">执行器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL%E6%9F%A5%E8%AF%A2%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B"><span class="nav-text">SQL查询执行过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%A6%E7%BB%86%E6%89%A7%E8%A1%8C%E6%AD%A5%E9%AA%A4"><span class="nav-text">详细执行步骤</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL%E6%9B%B4%E6%96%B0%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B"><span class="nav-text">SQL更新执行过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E8%A6%81%E7%9A%84%E6%97%A5%E5%BF%97%E6%A8%A1%E5%9D%97%EF%BC%9Aredo-log"><span class="nav-text">重要的日志模块：redo log</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E8%A6%81%E7%9A%84%E6%97%A5%E5%BF%97%E6%A8%A1%E5%9D%97%EF%BC%9Abinlog"><span class="nav-text">重要的日志模块：binlog</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%B6%E6%AE%B5%E6%80%A7%E6%8F%90%E4%BA%A4"><span class="nav-text">阶段性提交</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1"><span class="nav-text">事务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-text">事务隔离的实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8"><span class="nav-text">启动</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95"><span class="nav-text">索引</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B4%A2%E5%BC%95%E6%A8%A1%E5%9E%8B"><span class="nav-text">数据库索引模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#InnoDB%E7%B4%A2%E5%BC%95%E7%BB%84%E7%BB%87%E7%BB%93%E6%9E%84"><span class="nav-text">InnoDB索引组织结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E9%94%AE%E9%80%89%E6%8B%A9"><span class="nav-text">主键选择</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#B-%E6%A0%91%E7%BB%B4%E6%8A%A4%E6%93%8D%E4%BD%9C"><span class="nav-text">B+树维护操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E9%87%8D%E5%BB%BA%E9%97%AE%E9%A2%98"><span class="nav-text">索引重建问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A6%86%E7%9B%96%E7%B4%A2%E5%BC%95"><span class="nav-text">覆盖索引</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%B7%A6%E5%89%8D%E7%BC%80%E5%8E%9F%E5%88%99"><span class="nav-text">最左前缀原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E4%B8%8B%E6%8E%A8"><span class="nav-text">索引下推</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E9%80%89%E6%8B%A9%E5%92%8C%E6%9D%83%E8%A1%A1"><span class="nav-text">策略选择和权衡</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E8%AE%AE"><span class="nav-text">建议</span></a></li></ol></li></ol></li></ol>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
+
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2024&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">The Redefine Team</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        19 posts in total
+                    </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">VISITOR COUNT</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">TOTAL PAGE VIEWS</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.6.4</a></span>
+        </div>
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+    
+<script src="js/libs/Swup.min.js"></script>
+
+<script src="js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="js/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="js/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+
+
+
+<script src="js/tools/imageViewer.js" type="module"></script>
+
+<script src="js/utils.js" type="module"></script>
+
+<script src="js/main.js" type="module"></script>
+
+<script src="js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="js/layouts/categoryList.js" type="module"></script>
+
+
+
+
+
+    
+<script src="js/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="js/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="js/tools/runtime.js"></script>
+
+    
+<script src="js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="js/libs/Typed.min.js"></script>
+
+  
+<script src="js/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+
+<div class="post-scripts" data-swup-reload-script>
+    
+        
+<script src="js/tools/tocToggle.js" type="module"></script>
+
+<script src="js/layouts/toc.js" type="module"></script>
+
+<script src="js/plugins/tabs.js" type="module"></script>
+
+    
+</div>
+
+
+</body>
+</html>

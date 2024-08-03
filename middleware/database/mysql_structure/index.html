@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="English">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="The Redefine Team">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://Renewdxin.github.io/middleware/database/mysql_structure/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="第一层：客户端主要为连接处理、身份验证、确保安全性等 第二层：MySQL的大多数核心功能以及一些跨存储引擎的功能 第三层：存储引擎层，负责数据的存储和提取。存储引擎层还包含几十个底层函数，用于执行诸如“开始一个事务”或者“根据主键提取一行记录”等操作。但存储引擎不会去解析SQL[1]，不同存储引擎之间也不会相互通信，而只是简单地响应服务器的请求。 优化与执行解析查询以创建内部数据结构（解析树）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL架构">
+<meta property="og:url" content="http://renewdxin.github.io/middleware/database/mysql_structure/index.html">
+<meta property="og:site_name" content="RenXin&#39;s Website">
+<meta property="og:description" content="第一层：客户端主要为连接处理、身份验证、确保安全性等 第二层：MySQL的大多数核心功能以及一些跨存储引擎的功能 第三层：存储引擎层，负责数据的存储和提取。存储引擎层还包含几十个底层函数，用于执行诸如“开始一个事务”或者“根据主键提取一行记录”等操作。但存储引擎不会去解析SQL[1]，不同存储引擎之间也不会相互通信，而只是简单地响应服务器的请求。 优化与执行解析查询以创建内部数据结构（解析树）">
+<meta property="og:locale">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240116175435.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240116221802.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240117183056.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240119174656.png">
+<meta property="article:published_time" content="2024-01-19T09:54:24.497Z">
+<meta property="article:modified_time" content="2024-05-27T09:12:18.048Z">
+<meta property="article:author" content="RenXin">
+<meta property="article:tag" content="middleware">
+<meta property="article:tag" content="database">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240116175435.png">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="../../../images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="../../../images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="../../../images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            MySQL架构 -
+        
+        Theme Redefine
+    </title>
+
+    
+<link rel="stylesheet" href="fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="../../../css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="assets/build/styles.css">
+
+    
+
+    
+<link rel="stylesheet" href="fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    
+        
+<script src="js/libs/anime.min.js"></script>
+
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"renewdxin.github.io","root":"/","language":"English"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Theme Redefine","subtitle":{"text":[],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.6.4","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2022/8/17 11:45:14"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+<!--        <span class="swup-progress-icon">-->
+<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+<!--        </span>-->
+    
+</div>
+
+
+
+    <style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 500;
+        font-family: 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    <h2 class="ml13">
+        Theme Redefine
+    </h2>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
+
+        var animation = anime.timeline({loop: true})
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [40,0],
+                translateZ: 0,
+                opacity: [0,1],
+                filter: ['blur(5px)', 'blur(0px)'], // Starting from blurred to unblurred
+                easing: "easeOutExpo",
+                duration: 1400,
+                delay: (el, i) => 300 + 30 * i,
+            }).add({
+                targets: '.ml13 .letter',
+                translateY: [0,-40],
+                opacity: [1,0],
+                filter: ['blur(0px)', 'blur(5px)'], // Ending from unblurred to blurred
+                easing: "easeInExpo",
+                duration: 1200,
+                delay: (el, i) => 100 + 30 * i,
+                complete: function() {
+                    hidePreloader(); // Call hidePreloader after the animation completes
+                }
+            });
+
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
+
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
+
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
+
+        window.addEventListener('load', function () {
+            setTimeout(hidePreloader, 5000); // Call hidePreloader after 5000 milliseconds if not already called by animation
+        });
+
+        function hidePreloader() {
+            var preloader = document.querySelector('.preloader');
+            preloader.style.opacity = '0';
+            setTimeout(function () {
+                preloader.style.display = 'none';
+            }, 200);
+        }
+    </script>
+</div>
+
+<main class="page-container" id="swup">
+
+    
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container px-6 md:px-12">
+
+    <div class="navbar-content ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Theme Redefine
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="../../../index.html"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-screen w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="../../../index.html"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="../../../tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">14</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="../../../categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">12</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="../../../archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">19</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container flex relative justify-between box-border w-full h-full">
+    <div class="article-content-container">
+
+        <div class="article-title relative w-full">
+            
+                <div class="w-full flex items-center pt-6 justify-start">
+                    <h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">MySQL架构</h1>
+                </div>
+            
+            </div>
+
+        
+            <div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+                <div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+                    <img src="../../../images/redefine-avatar.svg">
+                </div>
+                <div class="info flex flex-col justify-between">
+                    <div class="author flex items-center">
+                        <span class="name text-default-text-color text-lg font-semibold">The Redefine Team</span>
+                        
+                            <span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv3</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2024-01-19 17:54:24</span>
+        <span class="mobile">2024-01-19 17:54:24</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2024-05-27 17:12:18</span>
+            <span class="mobile">2024-05-27 17:12:18</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="../../../categories/middleware/">middleware</a>&nbsp;
+                        </li>
+                    
+                    
+                
+                    
+                        
+                            <li>></li>
+                        
+                        <li>
+                            <a href="../../../categories/middleware/database/">database</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="../../../tags/middleware/">middleware</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="../../../tags/database/">database</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+            <div class="tag-plugin image"><div class="image-bg"><img src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240116175435.png"/></div></div>
+
+<p>第一层：客户端主要为连接处理、身份验证、确保安全性等</p>
+<p>第二层：MySQL的大多数核心功能以及一些跨存储引擎的功能</p>
+<p>第三层：存储引擎层，负责数据的存储和提取。存储引擎层还包含几十个底层函数，用于执行诸如“开始一个事务”或者“根据主键提取一行记录”等操作。但存储引擎不会去解析SQL[1]，不同存储引擎之间也不会相互通信，而只是简单地响应服务器的请求。</p>
+<h1 id="优化与执行"><a href="#优化与执行" class="headerlink" title="优化与执行"></a>优化与执行</h1><p>解析查询以创建内部数据结构（解析树），然后对其进行各种优化，包括重写查询、决定表的读取顺序，以及选择合适的索引等。</p>
+<p>用户可以通过特殊关键字向优化器传递提示，从而影响优化器的决策过程。也可以请求服务器解释优化过程的各个方面，使用户可以知道服务器是如何进行优化决策的，并提供一个参考点，便于用户重构查询和schema、修改相关配置，使应用尽可能高效地运行</p>
+<p>存储引擎对于查询优化是有影响的。优化器会向存储引擎询问一些功能</p>
+<h1 id="并发控制"><a href="#并发控制" class="headerlink" title="并发控制"></a>并发控制</h1><p>处理并发读&#x2F;写访问的系统通常实现一个由两种锁类型组成的锁系统。这两种锁通常被称为共享锁（shared lock）和排他锁（exclusive lock），也叫读锁（read lock）和写锁（write lock）</p>
+<p>资源上的读锁是共享的，而写锁既会阻塞读锁也会阻塞其他写锁，从而保证在此时间段内只有一个写入操作</p>
+<p>锁的粒度：锁定的数据大小，比如说行级锁和全部锁</p>
+<p>锁定策略：锁开销和数据安全性的平衡。加锁需要消耗资源。</p>
+<p>MySQL存储引擎都可以实现自己的锁策略和锁粒度。MySQL提供了多种存储引擎，而不是单一的通用解决方案。下面让我们来看两种最重要的锁策略。</p>
+<h2 id="表锁"><a href="#表锁" class="headerlink" title="表锁"></a>表锁</h2><p>最基本也是开销最小的锁策略</p>
+<p>同时只有一个人能对表进行写操作，进行写操作时无法进行读操作</p>
+<h2 id="行级锁"><a href="#行级锁" class="headerlink" title="行级锁"></a>行级锁</h2><p>可以最大程度的支持并发程度，同时也带来了最大的锁开销</p>
+<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><p>一组SQL语句作为一个工作单元以原子方式处理。要么全部执行成功要么全部失败</p>
+<p>一个确保数据安全的事务处理系统，必须满足这些密切相关的标准。ACID代表原子性（atomicity）、一致性（consistency）、隔离性（isolation）和持久性（durability）。</p>
+<p>原子性：不能只执行其中的一部分操作</p>
+<p>一致性：若失败了该事务所作的任何修改都不会被保存到数据库中</p>
+<p>隔离性：在最终提交前对其他事务不可见</p>
+<p>持久性：一旦成功则永久保存</p>
+<h1 id="隔离级别"><a href="#隔离级别" class="headerlink" title="隔离级别"></a>隔离级别</h1><p>READ UNCOMMITTED（未提交读）：在事务中可以查看其他事务中还没有提交的修改。这个隔离级别会导致很多问题，从性能上来说，READ UNCOMMITTED不会比其他级别好太多，却缺乏其他级别的很多好处，在实际应用中一般很少使用。</p>
+<p>读取未提交的数据，也称为脏读（dirty read）。</p>
+<p>READ COMMITTED（提交读）：大多数系统的默认隔离级别是READ COMMITTED（但MySQL不是）。READ COMMITTED满足前面提到的隔离性的简单定义：一个事务可以看到其他事务在它开始之后提交的修改，但在该事务提交之前，其所做的任何修改对其他事务都是不可见的。这个级别仍然允许不可重复读（nonrepeatable read），这意味着同一事务中两次执行相同语句，可能会看到不同的数据结果。</p>
+<p>REPEATABLE READ（可重复读）：解决了READ COMMITTED级别的不可重复读问题，保证在同一事务中多次读取相同行数据的结果一致。但是理论上，可重复读隔离级别还是无法解决另外一个幻读（phantom read）的问题。</p>
+<p>幻读：当某个事务在读取某个范围内的记录时，另外一个事务又在该范围内插入了新的记录，当之前的事务再次读取该范围的记录时，会产生幻行（phantom row）。InnoDB和XtraDB存储引擎通过多版本并发控制（MVCC，Multiversion Concurrency Control）解决了幻读的问题</p>
+<p>REPEATABLE READ是MySQL默认的事务隔离级别。</p>
+<p>SERIALIZABLE（可串行化）：SERIALIZABLE是最高的隔离级别。该级别通过强制事务按序执行，使不同事务之间不可能产生冲突，从而解决了前面说的幻读问题。简单来说，SERIALIZABLE会在读取的每一行数据上都加锁，所以可能导致大量的超时和锁争用的问题。实际应用中很少用到这个隔离级别</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240116221802.png"/></div></div>
+
+<h1 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h1><p>两个或多个事务相互持有和请求相同资源上的锁，产生了循环依赖。</p>
+<p>当多个事务试图以不同的顺序锁定资源时会导致死锁。当多个事务锁定相同的资源时，也可能会发生死锁。</p>
+<p>有些时候会出现死锁导致的崩溃，数据库在检测到后会返回错误信息或者直接终止查询</p>
+<p>InnoDB目前处理死锁的方式是将持有最少行级排他锁的事务回滚（这是一种最容易回滚的近似算法）</p>
+<p>锁的行为和顺序都是和存储引擎有关同样的一系列查询语句有些会产生死锁有一些不会产生死锁。</p>
+<p>死锁产生的原因：数据冲突、存储引擎的方式</p>
+<h1 id="事务日志"><a href="#事务日志" class="headerlink" title="事务日志"></a>事务日志</h1><p>事务日志有助于提高事务的效率。存储引擎只需要更改内存中的数据副本，而不用每次修改磁盘中的表，这会非常快。然后再把更改的记录写入事务日志中，事务日志会被持久化保存在硬盘上。因为事务日志采用的是追加写操作，是在硬盘中一小块区域内的顺序I&#x2F;O，而不是需要写多个地方的随机I&#x2F;O，所以写入事务日志是一种相对较快的操作。最后会有一个后台进程在某个时间去更新硬盘中的表。因此，大多数使用这种技术（write-ahead logging，预写式日志）的存储引擎修改数据最终需要写入磁盘两次。</p>
+<p>如果修改操作已经写入事务日志，那么即使系统在数据本身写入硬盘之前发生崩溃，存储引擎仍可在重新启动时恢复更改。具体的恢复方法则因存储引擎而异。</p>
+<h1 id="MySQL事务（InnoDB引擎）"><a href="#MySQL事务（InnoDB引擎）" class="headerlink" title="MySQL事务（InnoDB引擎）"></a>MySQL事务（InnoDB引擎）</h1><p>AUTOCOMMIT</p>
+<p>定义：默认情况下，单个INSERT、UPDATE或DELETE语句会被隐式包装在一个事务中并在执行成功后立即提交</p>
+<p>通过禁用此模式，可以在事务中执行一系列语句，并在结束时执行COMMIT提交事务或ROLLBACK回滚事务。</p>
+<p>使用SET命令设置AUTOCOMMIT变量来设置自动提交模式。启用可以设置为1或者ON，如果设置了AUTOCOMMIT&#x3D;0，则当前连接总是会处于某个事务中，直到发出COMMIT或者ROLLBACK，然后MySQL会立即启动一个新的事务。</p>
+<p>此外，当启用AUTOCOMMIT时，也可以使用关键字BEGIN或者START TRANSACTION来开始一个多语句的事务。修改AUTOCOMMIT的值对非事务型的表不会有任何影响，这些表没有COMMIT或者ROLLBACK的概念。</p>
+<p>还有一些命令，当在活动的事务中发出时，会导致MySQL在事务的所有语句执行完毕前提交当前事务。这些通常是进行重大更改的DDL命令，如ALTER TABLE，但LOCK TABLES和其他一些语句也具有同样的效果。有关会导致自动提交事务的完整命令列表，请查看对应版本的官方文档。</p>
+<p>MySQL可以通过执行SET TRANSACTION ISOLATION LEVEL命令来设置隔离级别。新的隔离级别会在下一个事务开始的时候生效。可以在配置文件中设置整个服务器的隔离级别，也可以只改变当前会话的隔离级别：</p>
+<p>建议最好在服务器级别设置最常用的隔离，并且只在显式情况下修改。MySQL可以识别所有4个ANSI标准的隔离级别，InnoDB也支持这些隔离级别。在事务中混合使用存储引擎MySQL不在服务器层管理事务，事务是由下层的存储引擎实现的。所以在同一个事务中，混合使用多种存储引擎是不可靠的。</p>
+<p>在事务中混合使用事务表和非事务表（例如，InnoDB和MyISAM表），如果需要回滚，则无法撤销对非事务表的更改。这会使数据库处于不一致的状态，可能难以恢复，并使整个事务问题变得毫无意义。所以，为每张表选择合适的存储引擎，并不惜一切代价避免在应用中混合使用存储引擎是非常重要的。在非事务表中执行事务相关操作的时候，MySQL通常不会发出提醒，也不会报错。有时候只有回滚的时候才会发出一个警告：某些非事务表中的变更无法回滚。但在大多数情况下，对非事务表的操作都不会有提示。</p>
+<p>最好不要在应用程序中混合使用存储引擎。失败的事务可能导致不一致的结果，因为某些部分可以回滚，而其他部分不能回滚。隐式锁定和显式锁定InnoDB使用两阶段锁定协议（two-phase locking protocol）。在事务执行期间，随时都可以获取锁，但锁只有在提交或回滚后才会释放，并且所有的锁会同时释放。前面描述的锁定机制都是隐式的。InnoDB会根据隔离级别自动处理锁。另外，InnoDB还支持通过特定的语句进行显式锁定，这些语句不属于SQL规范：</p>
+<p>MySQL还支持LOCK TABLES和UNLOCK TABLES命令，这些命令在服务器级别而不在存储引擎中实现。如果需要事务，应该使用支持事务的存储引擎。因为InnoDB支持行级锁，所以没必要使用LOCK TABLES。</p>
+<p>LOCK TABLES命令和事务之间的交互非常复杂，并且在一些服务器版本中存在意想不到的行为。因此建议，除了在禁用AUTOCOMMIT的事务中可以使用，其他任何时候都不要显式地执行LOCK TABLES，不管使用的是什么存储引擎。</p>
+<h1 id="多版本并发控制"><a href="#多版本并发控制" class="headerlink" title="多版本并发控制"></a>多版本并发控制</h1><p>MySQL的大多数事务型存储引擎使用的都不是简单的行级锁机制。它们会将行级锁和可以提高并发性能的多版本并发控制（MVCC）技术结合使用。</p>
+<p>MVCC在很多情况下避免了加锁操作，因此开销更低。根据其实现方式，不仅实现了非阻塞的读操作，写操作也只锁定必要的行。</p>
+<p>工作原理：使用数据在某个时间点的快照</p>
+<p>意味着，无论事务运行多长时间，都可以看到数据的一致视图，也意味着不同的事务可以在同一时间看到同一张表中的不同数据</p>
+<p>实现：</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240117183056.png"/></div></div>
+
+<p>InnoDB在每个事务启动时分配一个事务ID实现mvcc，在该事务中修改记录时，将向Undo日志写入一条说明如何恢复该更改的Undo记录，并且事务的回滚指针指向该Undo日志记录。这就是事务如何在需要时执行回滚的方法。</p>
+<p>当不同的会话读取聚簇主键索引记录时，InnoDB会将该记录的事务ID与该会话的读取视图进行比较。如果当前状态下的记录不应可见（更改它的事务尚未提交），那么Undo日志记录将被跟踪并应用，直到会话达到一个符合可见条件的事务ID。这个过程可以一直循环到完全删除这一行的Undo记录，然后向读取视图发出这一行不存在的信号。</p>
+<p><strong>聚簇主键索引：</strong> InnoDB是MySQL数据库的一个存储引擎，它支持使用聚簇主键索引。聚簇主键索引是按照表的主键来组织数据存储的一种方式，表中的数据行按照主键的顺序存储，这有助于提高查询性能</p>
+<p>所有Undo日志写入也都会写入Redo日志，因为Undo日志写入是服务器崩溃恢复过程的一部分，并且是事务性的。</p>
+<p>在记录中保留这些额外信息带来的结果是，大多数读取查询都不再需要获取锁。它们只是尽可能快地读取数据，确保仅查询符合条件的行即可。缺点是存储引擎必须在每一行中存储更多的数据，在检查行时需要做更多的工作，并处理一些额外的内部操作。MVCC仅适用于REPEATABLE READ和READ COMMITTED隔离级别。READ UNCOMMITTED与MVCC不兼容[13]，是因为查询不会读取适合其事务版本的行版本，而是不管怎样都读最新版本。SERIALIZABLE与MVCC也不兼容，是因为读取会锁定它们返回的每一行。</p>
+<p>MVCC仅适用于REPEATABLE READ和READ COMMITTED隔离级别。READ UNCOMMITTED与MVCC不兼容，是因为查询不会读取适合其事务版本的行版本，而是不管怎样都读最新版本。SERIALIZABLE与MVCC也不兼容，是因为读取会锁定它们返回的每一行</p>
+<p>用于在任何给定时间只在一个节点上接受写操作。这在管理一致性方面具有优势，但在需要将数据写入多台服务器或多个地区时，会导致需要做出取舍。MySQL提供了一种原生方式来将一个节点执行的写操作分发到其他节点，这被称为复制。</p>
+<p>源节点为每个副本节点提供一个线程，该线程作为复制客户端登录，当写入发生时会被唤醒，发送新数据。</p>
+<p>一主多副的多个MySQL服务器拓扑树：</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240119174656.png"/></div></div>
+
+<p>对于在生产环境中运行的任何数据，都应该使用复制并至少有三个以上的副本，理想情况下应该分布在不同的地区（在云托管环境中，称为region）用于灾难恢复计划。</p>
+<p>MySQL将表的元数据重新设计为一种数据字典，包含在表的.ibd文件中。这使得表结构上的信息支持事务和原子级数据定义更改。在操作期间，我们不再仅仅依赖information_schema来检索表定义和元数据，而是引入了字典对象缓存，这是一种基于最近最少使用（LRU）的内存缓存，包括分区定义、表定义、存储程序定义、字符集和排序信息。服务器访问表的元数据的方式的这一重大变化减少了I&#x2F;O，非常高效。特别是当前访问最活跃的那些表，在缓存中最常出现。每个表的.ibd和.frm文件被替换为已经被序列化的字典信息（.sdi）。</p>
+<p>InnoDB是MySQL的默认事务型存储引擎，也是最重要、使用最广泛的引擎。它是为处理大量短期事务而设计的，这些事务通常是正常提交的，很少会被回滚。InnoDB的性能和自动崩溃恢复特性，使得它在非事务型存储需求中也很流行。</p>
+<p>InnoDB将数据存储在一系列的数据文件中，这些文件统被称为表空间（tablespace）。表空间本质上是一个由InnoDB自己管理的黑盒。</p>
+<p>并且通过间隙锁（next-key locking）策略来防止在这个隔离级别上的幻读：InnoDB不只锁定在查询中涉及的行，还会对索引结构中的间隙进行锁定，以防止幻行被插入。</p>
+<p>MySQL 8.0的另一个主要变化是删除了基于文件的表元数据存储，并将其转移到使用InnoDB表存储的数据字典中。</p>
+<p>MySQL 8.0引入了原子数据定义更改。</p>
+<p>MySQL通过API来与存储引擎交互需要处理的数据行，</p>
+
+        </div>
+
+        
+            <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> MySQL架构</li>
+        <li><strong>Author:</strong> The Redefine Team</li>
+        <li><strong>Created at
+                :</strong> 2024-01-19 17:54:24</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2024-05-27 17:12:18
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://redefine.ohevan.com/middleware/database/mysql_structure/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
+            
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="../../../tags/middleware/">#middleware</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="../../../tags/database/">#database</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+                
+                    <div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="prev"
+                        rel="prev"
+                        href="../../../tools/HexArch/"
+                        >
+                            <span class="left arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">Hexagonal Architecture</span>
+                                <span class="post-nav-item">Prev posts</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="next"
+                        rel="next"
+                        href="../../../tools/WebSocket/"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">WebSocket简介</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+            <div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+                <div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        Comments
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '../../../js/libs/waline.mjs';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          lang: 'zh-CN',
+          dark: 'body[class~="dark-mode"]',
+          reaction: false,
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+          recaptchaV3Key: "wasd",
+          
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+            </div>
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">MySQL架构</div>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E4%B8%8E%E6%89%A7%E8%A1%8C"><span class="nav-text">优化与执行</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B9%B6%E5%8F%91%E6%8E%A7%E5%88%B6"><span class="nav-text">并发控制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A8%E9%94%81"><span class="nav-text">表锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%8C%E7%BA%A7%E9%94%81"><span class="nav-text">行级锁</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1"><span class="nav-text">事务</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="nav-text">隔离级别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%BB%E9%94%81"><span class="nav-text">死锁</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E6%97%A5%E5%BF%97"><span class="nav-text">事务日志</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL%E4%BA%8B%E5%8A%A1%EF%BC%88InnoDB%E5%BC%95%E6%93%8E%EF%BC%89"><span class="nav-text">MySQL事务（InnoDB引擎）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%9A%E7%89%88%E6%9C%AC%E5%B9%B6%E5%8F%91%E6%8E%A7%E5%88%B6"><span class="nav-text">多版本并发控制</span></a></li></ol>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
+
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2024&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">The Redefine Team</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        19 posts in total
+                    </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">VISITOR COUNT</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">TOTAL PAGE VIEWS</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.6.4</a></span>
+        </div>
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+    
+<script src="js/libs/Swup.min.js"></script>
+
+<script src="js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="js/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="js/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+
+
+
+<script src="js/tools/imageViewer.js" type="module"></script>
+
+<script src="js/utils.js" type="module"></script>
+
+<script src="js/main.js" type="module"></script>
+
+<script src="js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="js/layouts/categoryList.js" type="module"></script>
+
+
+
+
+
+    
+<script src="js/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="js/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="js/tools/runtime.js"></script>
+
+    
+<script src="js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="js/libs/Typed.min.js"></script>
+
+  
+<script src="js/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+
+<div class="post-scripts" data-swup-reload-script>
+    
+        
+<script src="js/tools/tocToggle.js" type="module"></script>
+
+<script src="js/layouts/toc.js" type="module"></script>
+
+<script src="js/plugins/tabs.js" type="module"></script>
+
+    
+</div>
+
+
+</body>
+</html>

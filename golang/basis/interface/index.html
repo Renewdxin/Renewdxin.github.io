@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="English">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="The Redefine Team">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://Renewdxin.github.io/golang/basis/interface/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="Interface整理 接口是一种契约，实现类型必须满足它，它描述了类型的行为，规定类型可以做什么。接口彻底将类型能做什么，以及如何做分离开来，使得相同接口的变量在不同的时刻表现出不同的行为，这就是多态的本质。   编写参数是接口变量的函数，这使得它们更具有一般性。   使用接口使代码更具有普适性。  最近在学Go当中的接口，学的有点云里雾里 ，这个interface和Java的也太不像了，我们先">
+<meta property="og:type" content="article">
+<meta property="og:title" content="golang中的interface">
+<meta property="og:url" content="http://renewdxin.github.io/golang/basis/interface/index.html">
+<meta property="og:site_name" content="RenXin&#39;s Website">
+<meta property="og:description" content="Interface整理 接口是一种契约，实现类型必须满足它，它描述了类型的行为，规定类型可以做什么。接口彻底将类型能做什么，以及如何做分离开来，使得相同接口的变量在不同的时刻表现出不同的行为，这就是多态的本质。   编写参数是接口变量的函数，这使得它们更具有一般性。   使用接口使代码更具有普适性。  最近在学Go当中的接口，学的有点云里雾里 ，这个interface和Java的也太不像了，我们先">
+<meta property="og:locale">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310301806052.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310301806053.png">
+<meta property="article:published_time" content="2023-10-30T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-12-29T11:31:04.874Z">
+<meta property="article:author" content="RenXin">
+<meta property="article:tag" content="note">
+<meta property="article:tag" content="golang">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310301806052.png">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="../../../images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="../../../images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="../../../images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            golang中的interface -
+        
+        Theme Redefine
+    </title>
+
+    
+<link rel="stylesheet" href="fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="../../../css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="assets/build/styles.css">
+
+    
+
+    
+<link rel="stylesheet" href="fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    
+        
+<script src="js/libs/anime.min.js"></script>
+
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"renewdxin.github.io","root":"/","language":"English"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Theme Redefine","subtitle":{"text":[],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.6.4","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2022/8/17 11:45:14"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+<!--        <span class="swup-progress-icon">-->
+<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+<!--        </span>-->
+    
+</div>
+
+
+
+    <style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 500;
+        font-family: 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    <h2 class="ml13">
+        Theme Redefine
+    </h2>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
+
+        var animation = anime.timeline({loop: true})
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [40,0],
+                translateZ: 0,
+                opacity: [0,1],
+                filter: ['blur(5px)', 'blur(0px)'], // Starting from blurred to unblurred
+                easing: "easeOutExpo",
+                duration: 1400,
+                delay: (el, i) => 300 + 30 * i,
+            }).add({
+                targets: '.ml13 .letter',
+                translateY: [0,-40],
+                opacity: [1,0],
+                filter: ['blur(0px)', 'blur(5px)'], // Ending from unblurred to blurred
+                easing: "easeInExpo",
+                duration: 1200,
+                delay: (el, i) => 100 + 30 * i,
+                complete: function() {
+                    hidePreloader(); // Call hidePreloader after the animation completes
+                }
+            });
+
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
+
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
+
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
+
+        window.addEventListener('load', function () {
+            setTimeout(hidePreloader, 5000); // Call hidePreloader after 5000 milliseconds if not already called by animation
+        });
+
+        function hidePreloader() {
+            var preloader = document.querySelector('.preloader');
+            preloader.style.opacity = '0';
+            setTimeout(function () {
+                preloader.style.display = 'none';
+            }, 200);
+        }
+    </script>
+</div>
+
+<main class="page-container" id="swup">
+
+    
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container px-6 md:px-12">
+
+    <div class="navbar-content ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Theme Redefine
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="../../../index.html"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-screen w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="../../../index.html"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="../../../tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">14</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="../../../categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">12</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="../../../archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">19</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container flex relative justify-between box-border w-full h-full">
+    <div class="article-content-container">
+
+        <div class="article-title relative w-full">
+            
+                <div class="w-full flex items-center pt-6 justify-start">
+                    <h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">golang中的interface</h1>
+                </div>
+            
+            </div>
+
+        
+            <div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+                <div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+                    <img src="../../../images/redefine-avatar.svg">
+                </div>
+                <div class="info flex flex-col justify-between">
+                    <div class="author flex items-center">
+                        <span class="name text-default-text-color text-lg font-semibold">The Redefine Team</span>
+                        
+                            <span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv3</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2023-10-31</span>
+        <span class="mobile">2023-10-31</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2023-12-29 19:31:04</span>
+            <span class="mobile">2023-12-29 19:31:04</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="../../../categories/golang/">golang</a>&nbsp;
+                        </li>
+                    
+                    
+                
+                    
+                        
+                            <li>></li>
+                        
+                        <li>
+                            <a href="../../../categories/golang/basis/">basis</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="../../../tags/note/">note</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="../../../tags/golang/">golang</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+            <h1 id="Interface整理"><a href="#Interface整理" class="headerlink" title="Interface整理"></a>Interface整理</h1><blockquote>
+<p>接口是一种契约，实现类型必须满足它，它描述了类型的行为，规定类型可以做什么。接口彻底将类型能做什么，以及如何做分离开来，使得相同接口的变量在不同的时刻表现出不同的行为，这就是多态的本质。</p>
+</blockquote>
+<blockquote>
+<p>编写参数是接口变量的函数，这使得它们更具有一般性。</p>
+</blockquote>
+<blockquote>
+<p><strong>使用接口使代码更具有普适性。</strong></p>
+</blockquote>
+<p>最近在学Go当中的接口，学的有点云里雾里 ，这个interface和Java的也太不像了，我们先来看看Java当中的接口是怎么用的：</p>
+<p>首先我们先定义一个接口：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Study</span> &#123;    <span class="comment">//使用interface表示这是一个接口</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">study</span><span class="params">()</span>;    <span class="comment">//接口中只能定义访问权限为public抽象方法，其中public和abstract关键字可以省略</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>之后我们用关键字继承：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Student</span> <span class="keyword">extends</span> <span class="title class_">Person</span> <span class="keyword">implements</span> <span class="title class_">Study</span> &#123;   <span class="comment">//使用implements关键字来实现接口</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Student</span><span class="params">(String name, <span class="type">int</span> age, String sex)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>(name, age, sex, <span class="string">&quot;学生&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">study</span><span class="params">()</span> &#123;    <span class="comment">//实现接口时，同样需要将接口中所有的抽象方法全部实现</span></span><br><span class="line">        System.out.println(<span class="string">&quot;我会学习！&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Teacher</span> <span class="keyword">extends</span> <span class="title class_">Person</span> <span class="keyword">implements</span> <span class="title class_">Study</span> &#123;</span><br><span class="line">    <span class="keyword">protected</span> <span class="title function_">Teacher</span><span class="params">(String name, <span class="type">int</span> age, String sex)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>(name, age, sex, <span class="string">&quot;教师&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">study</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;我会加倍学习！&quot;</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样一个显示继承的方式非常清晰明了，接下来看看Go里面的接口：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Namer <span class="keyword">interface</span> &#123;</span><br><span class="line">    Method1(param_list) return_type</span><br><span class="line">    Method2(param_list) return_type</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样一看没有什么很大的区别，都需要先声明一个接口但是不使用，接下来看看接口的实现：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Shaper <span class="keyword">interface</span> &#123;</span><br><span class="line">	Area() <span class="type">float32</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Square <span class="keyword">struct</span> &#123;</span><br><span class="line">	side <span class="type">float32</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(sq *Square)</span></span> Area() <span class="type">float32</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> sq.side * sq.side</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	sq1 := <span class="built_in">new</span>(Square)</span><br><span class="line">	sq1.side = <span class="number">5</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> areaIntf Shaper</span><br><span class="line">	areaIntf = sq1</span><br><span class="line">	<span class="comment">// shorter,without separate declaration:</span></span><br><span class="line">	<span class="comment">// areaIntf := Shaper(sq1)</span></span><br><span class="line">	<span class="comment">// or even:</span></span><br><span class="line">	<span class="comment">// areaIntf := sq1</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;The square has area: %f\n&quot;</span>, areaIntf.Area())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样就会发现如下几个区别：</p>
+<ol>
+<li>并没有显式继承</li>
+<li>接口能声明变量，并通过该变量指向方法</li>
+<li>实现方法中的参数为自定义的结构体</li>
+</ol>
+<p>一个接口类型的变量或一个 <strong>接口值</strong> ：</p>
+<p>首先我们来看第一点，关于为什么不显示继承，这一点我在网上搜过，观点基本是Go强调的是组合而非继承，并没有一个很确切的理论，那暂且不议</p>
+<p>第二点：<code>areaIntf</code>是一个多字（multiword）数据结构，它的值是 <code>nil</code>。接口变量里包含了接收者实例的值和指向对应方法表的指针。</p>
+<p>在Go中，我们自定义的结构体就像Java中的类一样，可以实现接口中的方法。我们可以同一个接口被实现多次。当时就有了点疑问：不是不允许函数重载吗？后来发现方法和函数是完全不同的概念：</p>
+<p>Go中不允许函数（function）重载是为了提高效率，而方法（method）的可多次实现则体现了Go的多态，也就是根据场景选择。</p>
+<hr>
+<p>接下来，我们看一些进阶功能：</p>
+<h2 id="接口嵌套接口"><a href="#接口嵌套接口" class="headerlink" title="接口嵌套接口"></a>接口嵌套接口</h2><p>在Java 和go当中，我们都倡导一个接口的简洁明了。比如说先定义一个结构体为综测，综测又是由考试成绩、竞赛、体育等等组成，考试成绩里面又有不同科，体育里面也有不同科，这个时候我们就应该分开定义，之后进行嵌套。我个人的理解的理解就是类似于树一样的存在，而一个结构体就是一个父节点。这里还是放一个实例：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> ReadSeeker <span class="keyword">interface</span> &#123;</span><br><span class="line">	Reader</span><br><span class="line">	Seeker</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Reader <span class="keyword">interface</span> &#123;</span><br><span class="line">	Read(p []<span class="type">byte</span>) (n <span class="type">int</span>, err <span class="type">error</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Seeker <span class="keyword">interface</span> &#123;</span><br><span class="line">	Seek(offset <span class="type">int64</span>, whence <span class="type">int</span>) (<span class="type">int64</span>, <span class="type">error</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="类型断言"><a href="#类型断言" class="headerlink" title="类型断言"></a>类型断言</h2><p>我们通常会想知道一个接口变量里面是什么类型，这个时候我们就会用到类型断言，通用格式为：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">typeA := var1.(T)</span><br></pre></td></tr></table></figure>
+
+<p>var1为接口变量，T是想知道的类型。如果转换合法，<code>typeA</code> 是 <code>var1</code>转换到类型 <code>T</code> 的值</p>
+<p>如果在判断式中使用，则是这样的：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> t, ok := areaIntf.(*Square); ok &#123;</span><br><span class="line">		fmt.Printf(<span class="string">&quot;The type of areaIntf is: %T\n&quot;</span>, t)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果转换合法，<code>t</code> 是 转换到类型的值，<code>ok</code> 会是 <code>true</code>；否则 <code>t</code>是类型的零值，<code>ok</code> 是 <code>false</code>，也没有运行时错误发生。</p>
+<p>注意：如果忽略 <code>areaIntf.(*Square)</code> 中的 <code>*</code> 号，会导致编译错误：<code>impossible type assertion: Square does not implement Shaper (Area method has pointer receiver)</code>。</p>
+<p>同理，我们也可以判断他是否属于该接口：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Stringer <span class="keyword">interface</span> &#123;</span><br><span class="line">    String() <span class="type">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> sv, ok := v.(Stringer); ok &#123;</span><br><span class="line">    fmt.Printf(<span class="string">&quot;v implements String(): %s\n&quot;</span>, sv.String()) <span class="comment">// note: sv, not v</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="类型判断-type-switch"><a href="#类型判断-type-switch" class="headerlink" title="类型判断 type-switch"></a>类型判断 type-switch</h2><p>个人认为如果说类型断言是只想知道值是不是某个类型，那么此语句则是想知道究竟是哪个重要的类型或者不需要知道的类型，常见用法如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">classifier</span><span class="params">(items ...<span class="keyword">interface</span>&#123;&#125;)</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> i, x := <span class="keyword">range</span> items &#123;</span><br><span class="line">		<span class="keyword">switch</span> x.(<span class="keyword">type</span>) &#123;</span><br><span class="line">		<span class="keyword">case</span> <span class="type">bool</span>:</span><br><span class="line">			fmt.Printf(<span class="string">&quot;Param #%d is a bool\n&quot;</span>, i)</span><br><span class="line">		<span class="keyword">case</span> <span class="type">float64</span>:</span><br><span class="line">			fmt.Printf(<span class="string">&quot;Param #%d is a float64\n&quot;</span>, i)</span><br><span class="line">		<span class="keyword">case</span> <span class="type">int</span>, <span class="type">int64</span>:</span><br><span class="line">			fmt.Printf(<span class="string">&quot;Param #%d is a int\n&quot;</span>, i)</span><br><span class="line">		<span class="keyword">case</span> <span class="literal">nil</span>:</span><br><span class="line">			fmt.Printf(<span class="string">&quot;Param #%d is a nil\n&quot;</span>, i)</span><br><span class="line">		<span class="keyword">case</span> <span class="type">string</span>:</span><br><span class="line">			fmt.Printf(<span class="string">&quot;Param #%d is a string\n&quot;</span>, i)</span><br><span class="line">		<span class="keyword">default</span>:</span><br><span class="line">			fmt.Printf(<span class="string">&quot;Param #%d is unknown\n&quot;</span>, i)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以用 <code>type-switch</code> 进行运行时类型分析，但是在 <code>type-switch</code> 不允许有 <code>fallthrough</code> 。</p>
+<h2 id="使用方法集与接口"><a href="#使用方法集与接口" class="headerlink" title="使用方法集与接口"></a>使用方法集与接口</h2><p>作用于变量上的方法实际上是不区分变量到底是指针还是值的。当碰到接口类型值时，这会变得有点复杂，原因是接口变量中存储的具体值是不可寻址的，</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> List []<span class="type">int</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(l List)</span></span> Len() <span class="type">int</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="built_in">len</span>(l)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(l *List)</span></span> Append(val <span class="type">int</span>) &#123;</span><br><span class="line">	*l = <span class="built_in">append</span>(*l, val)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Appender <span class="keyword">interface</span> &#123;</span><br><span class="line">	Append(<span class="type">int</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">CountInto</span><span class="params">(a Appender, start, end <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> i := start; i &lt;= end; i++ &#123;</span><br><span class="line">		a.Append(i)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Lener <span class="keyword">interface</span> &#123;</span><br><span class="line">	Len() <span class="type">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">LongEnough</span><span class="params">(l Lener)</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> l.Len()*<span class="number">10</span> &gt; <span class="number">42</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// A bare value</span></span><br><span class="line">	<span class="keyword">var</span> lst List</span><br><span class="line">	<span class="comment">// compiler error:</span></span><br><span class="line">	<span class="comment">// cannot use lst (type List) as type Appender in argument to CountInto:</span></span><br><span class="line">	<span class="comment">//       List does not implement Appender (Append method has pointer receiver)</span></span><br><span class="line">	</span><br><span class="line">	CountInto(lst, <span class="number">1</span>, <span class="number">10</span>) <span class="comment">//错误代码 </span></span><br><span class="line">	<span class="keyword">if</span> LongEnough(lst) &#123; <span class="comment">// VALID: Identical receiver type</span></span><br><span class="line">		fmt.Printf(<span class="string">&quot;- lst is long enough\n&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// A pointer value</span></span><br><span class="line">	plst := <span class="built_in">new</span>(List)</span><br><span class="line">	CountInto(plst, <span class="number">1</span>, <span class="number">10</span>) <span class="comment">// VALID: Identical receiver type</span></span><br><span class="line">	<span class="keyword">if</span> LongEnough(plst) &#123;</span><br><span class="line">		<span class="comment">// VALID: a *List can be dereferenced for the receiver</span></span><br><span class="line">		fmt.Printf(<span class="string">&quot;- plst is long enough\n&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310301806052.png"/></div></div>
+
+<p><strong>讨论</strong></p>
+<p>在 <code>lst</code> 上调用 <code>CountInto</code> 时会导致一个编译器错误，因为 <code>CountInto</code> 需要一个 <code>Appender</code>，而它的方法 <code>Append</code> 只定义在指针上。 在 <code>lst</code> 上调用 <code>LongEnough</code> 是可以的，因为 <code>Len</code> 定义在值上。</p>
+<p>在 <code>plst</code> 上调用 <code>CountInto</code> 是可以的，因为 <code>CountInto</code> 需要一个 <code>Appender</code>，并且它的方法 <code>Append</code> 定义在指针上。 在 <code>plst</code> 上调用 <code>LongEnough</code> 也是可以的，因为指针会被自动解引用。</p>
+<p><strong>总结</strong></p>
+<p>在接口上调用方法时，必须有和方法定义时相同的接收者类型或者是可以根据具体类型 <code>P</code> 直接辨识的：</p>
+<ul>
+<li>指针方法可以通过指针调用</li>
+<li>值方法可以通过值调用</li>
+<li>接收者是值的方法可以通过指针调用，因为指针会首先被解引用</li>
+<li>接收者是指针的方法不可以通过值调用，因为存储在接口中的值没有地址</li>
+</ul>
+<p>将一个值赋值给一个接口时，编译器会确保所有可能的接口方法都可以在此值上被调用，因此不正确的赋值在编译期就会失败。</p>
+<p><strong>译注</strong></p>
+<p>Go 语言规范定义了接口方法集的调用规则：</p>
+<ul>
+<li>类型 <code>T</code> 的可调用方法集包含接受者为 <code>T</code>或 <code>T</code> 的所有方法集</li>
+<li>类型 <code>T</code> 的可调用方法集包含接受者为 <code>T</code>的所有方法</li>
+<li>类型 <code>T</code> 的可调用方法集<strong>不</strong>包含接受者为 <code>T</code> 的方法</li>
+</ul>
+<p>接下来我们讨论下空接口</p>
+<h2 id="空接口"><a href="#空接口" class="headerlink" title="空接口"></a>空接口</h2><p>定义：不包含任何方法，对实现没有要求</p>
+<p>空接口类似 <code>Java/C#</code> 中所有类的基类： <code>Object</code> 类，二者的目标也很相近。</p>
+<p>可以给一个空接口类型的变量 <code>var val interface &#123;&#125;</code> 赋任何类型的值</p>
+<p>每个 <code>interface &#123;&#125;</code> 变量在内存中占据两个字长：一个用来存储它包含的类型，另一个用来存储它包含的数据或者指向数据的指针。</p>
+<p>这样光看似乎觉得没什么大不了的，我们举个例子，比如说创建树或者其他数据结构，如果我们要根据每个数据类型来定义不同的方法，那无疑是很浪费时间的，这时候就可以用到空接口，实现一键通用：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Node <span class="keyword">struct</span> &#123;</span><br><span class="line">	le   *Node</span><br><span class="line">	data <span class="keyword">interface</span>&#123;&#125;</span><br><span class="line">	rl   *Node</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewNode</span><span class="params">(left, right *Node)</span></span> *Node &#123;</span><br><span class="line">	<span class="keyword">return</span> &amp;Node&#123;left, <span class="literal">nil</span>, right&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(n *Node)</span></span> setData(data <span class="keyword">interface</span>&#123;&#125;) &#123;</span><br><span class="line">	n.data = data</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	root := NewNode(<span class="literal">nil</span>, <span class="literal">nil</span>)</span><br><span class="line">	root.setData(<span class="string">&quot;root node&quot;</span>)</span><br><span class="line">	a := NewNode(<span class="literal">nil</span>, <span class="literal">nil</span>)</span><br><span class="line">	a.setData(<span class="string">&quot;left node&quot;</span>)</span><br><span class="line">	b := NewNode(<span class="literal">nil</span>, <span class="literal">nil</span>)</span><br><span class="line">	b.setData(<span class="number">1</span>)</span><br><span class="line">	root.le = a</span><br><span class="line">	root.rl = b</span><br><span class="line">	fmt.Printf(<span class="string">&quot;%v\n&quot;</span>, root)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="接口赋值给接口"><a href="#接口赋值给接口" class="headerlink" title="接口赋值给接口"></a>接口赋值给接口</h2><p>一个接口的值可以赋值给另一个接口变量，前提是底层类型实现了必要的方法，此转换是在运行时检查的，转换失败的时候会导致一个运行时错误，这也是GO的动态的一点</p>
+<p>比如此代码</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Shaper <span class="keyword">interface</span> &#123;</span><br><span class="line">    Area() <span class="type">float64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Square <span class="keyword">struct</span> &#123;</span><br><span class="line">    side <span class="type">float64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s Square)</span></span> Area() <span class="type">float64</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> s.side * s.side</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Circle <span class="keyword">struct</span> &#123;</span><br><span class="line">    radius <span class="type">float64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> s Shaper</span><br><span class="line">    c := Circle&#123;radius: <span class="number">5.0</span>&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 错误的示例：将接口 Shaper 赋值给接口 Shaper，但底层类型 Circle 并没有实现 Area() 方法</span></span><br><span class="line">    s = c</span><br><span class="line"></span><br><span class="line">    fmt.Printf(<span class="string">&quot;Area of the shape: %f\n&quot;</span>, s.Area())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>错误显示：</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202310301806053.png"/></div></div>
+
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p>我们来看一些实际应用，在GORM框架中，我们创建对象可以使用map的数据结构导入，但是我们无法保证数据都是一个类型，所以就需要一个空接口来帮我们接住所有类型：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">db.Model(&amp;User&#123;&#125;).Create([]<span class="keyword">map</span>[<span class="type">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;</span><br><span class="line">  &#123;<span class="string">&quot;Name&quot;</span>: <span class="string">&quot;jinzhu_1&quot;</span>, <span class="string">&quot;Age&quot;</span>: <span class="number">18</span>&#125;,</span><br><span class="line">  &#123;<span class="string">&quot;Name&quot;</span>: <span class="string">&quot;jinzhu_2&quot;</span>, <span class="string">&quot;Age&quot;</span>: <span class="number">20</span>&#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+        </div>
+
+        
+            <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> golang中的interface</li>
+        <li><strong>Author:</strong> The Redefine Team</li>
+        <li><strong>Created at
+                :</strong> 2023-10-31 00:00:00</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2023-12-29 19:31:04
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://redefine.ohevan.com/golang/basis/interface/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
+            
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="../../../tags/note/">#note</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="../../../tags/golang/">#golang</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+                
+                    <div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="prev"
+                        rel="prev"
+                        href="../../../middleware/redis/"
+                        >
+                            <span class="left arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">redis 入门</span>
+                                <span class="post-nav-item">Prev posts</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="next"
+                        rel="next"
+                        href="../../../Java/JVM/Ubuntu-install-jdk8/"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">关于阿里云服务器Ubuntu系统安装jdk8中遇到的坑及解决方案</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+            <div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+                <div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        Comments
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '../../../js/libs/waline.mjs';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          lang: 'zh-CN',
+          dark: 'body[class~="dark-mode"]',
+          reaction: false,
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+          recaptchaV3Key: "wasd",
+          
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+            </div>
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">golang中的interface</div>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Interface%E6%95%B4%E7%90%86"><span class="nav-text">Interface整理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E5%B5%8C%E5%A5%97%E6%8E%A5%E5%8F%A3"><span class="nav-text">接口嵌套接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E6%96%AD%E8%A8%80"><span class="nav-text">类型断言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E5%88%A4%E6%96%AD-type-switch"><span class="nav-text">类型判断 type-switch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%E9%9B%86%E4%B8%8E%E6%8E%A5%E5%8F%A3"><span class="nav-text">使用方法集与接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A9%BA%E6%8E%A5%E5%8F%A3"><span class="nav-text">空接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E8%B5%8B%E5%80%BC%E7%BB%99%E6%8E%A5%E5%8F%A3"><span class="nav-text">接口赋值给接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B"><span class="nav-text">实例</span></a></li></ol></li></ol></li></ol>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
+
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2024&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">The Redefine Team</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        19 posts in total
+                    </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">VISITOR COUNT</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">TOTAL PAGE VIEWS</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.6.4</a></span>
+        </div>
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+    
+<script src="js/libs/Swup.min.js"></script>
+
+<script src="js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="js/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="js/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+
+
+
+<script src="js/tools/imageViewer.js" type="module"></script>
+
+<script src="js/utils.js" type="module"></script>
+
+<script src="js/main.js" type="module"></script>
+
+<script src="js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="js/layouts/categoryList.js" type="module"></script>
+
+
+
+
+
+    
+<script src="js/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="js/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="js/tools/runtime.js"></script>
+
+    
+<script src="js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="js/libs/Typed.min.js"></script>
+
+  
+<script src="js/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+
+<div class="post-scripts" data-swup-reload-script>
+    
+        
+<script src="js/tools/tocToggle.js" type="module"></script>
+
+<script src="js/layouts/toc.js" type="module"></script>
+
+<script src="js/plugins/tabs.js" type="module"></script>
+
+    
+</div>
+
+
+</body>
+</html>

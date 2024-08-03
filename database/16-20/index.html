@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="English">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="The Redefine Team">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://Renewdxin.github.io/database/16-20/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="MySQL的 ORDER BY 执行流程在开发应用时，经常需要根据指定字段排序来显示结果。以下是关于 MySQL 中 ORDER BY 的执行流程及影响因素的总结。 示例表和查询语句假设有一个市民表，定义如下： 123456789CREATE TABLE &#96;t&#96; (  &#96;id&#96; int(11) NOT NULL,  &#96;city&#96; varchar(16) NOT NULL,  &#96;name&#96; varc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mysql45讲16-20讲的总结">
+<meta property="og:url" content="http://renewdxin.github.io/database/16-20/index.html">
+<meta property="og:site_name" content="RenXin&#39;s Website">
+<meta property="og:description" content="MySQL的 ORDER BY 执行流程在开发应用时，经常需要根据指定字段排序来显示结果。以下是关于 MySQL 中 ORDER BY 的执行流程及影响因素的总结。 示例表和查询语句假设有一个市民表，定义如下： 123456789CREATE TABLE &#96;t&#96; (  &#96;id&#96; int(11) NOT NULL,  &#96;city&#96; varchar(16) NOT NULL,  &#96;name&#96; varc">
+<meta property="og:locale">
+<meta property="article:published_time" content="2024-05-16T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-05-31T09:07:12.232Z">
+<meta property="article:author" content="RenXin">
+<meta property="article:tag" content="database">
+<meta name="twitter:card" content="summary">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="../../images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="../../images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="../../images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            mysql45讲16-20讲的总结 -
+        
+        Theme Redefine
+    </title>
+
+    
+<link rel="stylesheet" href="fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="../../css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="assets/build/styles.css">
+
+    
+
+    
+<link rel="stylesheet" href="fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    
+        
+<script src="js/libs/anime.min.js"></script>
+
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"renewdxin.github.io","root":"/","language":"English"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Theme Redefine","subtitle":{"text":[],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.6.4","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2022/8/17 11:45:14"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+<!--        <span class="swup-progress-icon">-->
+<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+<!--        </span>-->
+    
+</div>
+
+
+
+    <style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 500;
+        font-family: 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    <h2 class="ml13">
+        Theme Redefine
+    </h2>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
+
+        var animation = anime.timeline({loop: true})
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [40,0],
+                translateZ: 0,
+                opacity: [0,1],
+                filter: ['blur(5px)', 'blur(0px)'], // Starting from blurred to unblurred
+                easing: "easeOutExpo",
+                duration: 1400,
+                delay: (el, i) => 300 + 30 * i,
+            }).add({
+                targets: '.ml13 .letter',
+                translateY: [0,-40],
+                opacity: [1,0],
+                filter: ['blur(0px)', 'blur(5px)'], // Ending from unblurred to blurred
+                easing: "easeInExpo",
+                duration: 1200,
+                delay: (el, i) => 100 + 30 * i,
+                complete: function() {
+                    hidePreloader(); // Call hidePreloader after the animation completes
+                }
+            });
+
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
+
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
+
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
+
+        window.addEventListener('load', function () {
+            setTimeout(hidePreloader, 5000); // Call hidePreloader after 5000 milliseconds if not already called by animation
+        });
+
+        function hidePreloader() {
+            var preloader = document.querySelector('.preloader');
+            preloader.style.opacity = '0';
+            setTimeout(function () {
+                preloader.style.display = 'none';
+            }, 200);
+        }
+    </script>
+</div>
+
+<main class="page-container" id="swup">
+
+    
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container px-6 md:px-12">
+
+    <div class="navbar-content ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Theme Redefine
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="../../index.html"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-screen w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="../../index.html"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="../../tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">14</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="../../categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">12</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="../../archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">19</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container flex relative justify-between box-border w-full h-full">
+    <div class="article-content-container">
+
+        <div class="article-title relative w-full">
+            
+                <div class="w-full flex items-center pt-6 justify-start">
+                    <h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">mysql45讲16-20讲的总结</h1>
+                </div>
+            
+            </div>
+
+        
+            <div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+                <div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+                    <img src="../../images/redefine-avatar.svg">
+                </div>
+                <div class="info flex flex-col justify-between">
+                    <div class="author flex items-center">
+                        <span class="name text-default-text-color text-lg font-semibold">The Redefine Team</span>
+                        
+                            <span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv3</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2024-05-17</span>
+        <span class="mobile">2024-05-17</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2024-05-31 17:07:12</span>
+            <span class="mobile">2024-05-31 17:07:12</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="../../categories/database/">database</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="../../tags/database/">database</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+            <h1 id="MySQL的-ORDER-BY-执行流程"><a href="#MySQL的-ORDER-BY-执行流程" class="headerlink" title="MySQL的 ORDER BY 执行流程"></a>MySQL的 ORDER BY 执行流程</h1><p>在开发应用时，经常需要根据指定字段排序来显示结果。以下是关于 MySQL 中 <code>ORDER BY</code> 的执行流程及影响因素的总结。</p>
+<h2 id="示例表和查询语句"><a href="#示例表和查询语句" class="headerlink" title="示例表和查询语句"></a>示例表和查询语句</h2><p>假设有一个市民表，定义如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `t` (</span><br><span class="line">  `id` <span class="type">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `city` <span class="type">varchar</span>(<span class="number">16</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `name` <span class="type">varchar</span>(<span class="number">16</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `age` <span class="type">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `addr` <span class="type">varchar</span>(<span class="number">128</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  <span class="keyword">PRIMARY</span> KEY (`id`),</span><br><span class="line">  KEY `city` (`city`)</span><br><span class="line">) ENGINE<span class="operator">=</span>InnoDB;</span><br></pre></td></tr></table></figure>
+
+<p>查询城市为“杭州”的市民名字，并按姓名排序返回前1000个结果的SQL语句：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> city, name, age <span class="keyword">FROM</span> t <span class="keyword">WHERE</span> city<span class="operator">=</span><span class="string">&#x27;杭州&#x27;</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> name LIMIT <span class="number">1000</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="执行流程"><a href="#执行流程" class="headerlink" title="执行流程"></a>执行流程</h2><h3 id="全字段排序"><a href="#全字段排序" class="headerlink" title="全字段排序"></a>全字段排序</h3><p>当执行一个包含<code>ORDER BY</code>的查询时，如果不使用适当的索引，MySQL会使用全字段排序：</p>
+<ol>
+<li><strong>初始化排序缓冲区</strong>：<code>sort_buffer</code>被用来存储需要排序的列。</li>
+<li><strong>从索引中检索数据</strong>：基于<code>city</code>索引检索满足条件的记录，然后加载相应的字段到<code>sort_buffer</code>。</li>
+<li><strong>执行排序</strong>：在<code>sort_buffer</code>中对数据进行排序。</li>
+<li><strong>输出结果</strong>：根据排序结果输出前1000条数据。</li>
+</ol>
+<h3 id="Rowid-排序"><a href="#Rowid-排序" class="headerlink" title="Rowid 排序"></a>Rowid 排序</h3><p>当单行数据量过大时，MySQL可能采用rowid排序以节约内存：</p>
+<ol>
+<li><strong>排序缓冲区较小</strong>：只存储关键的排序字段和主键id。</li>
+<li><strong>数据检索和排序</strong>：检索并排序关键字段，使用主键再次查询以获取完整数据。</li>
+<li><strong>结果输出</strong>：根据排序后的id顺序输出结果。</li>
+</ol>
+<h3 id="全字段排序-VS-rowid排序"><a href="#全字段排序-VS-rowid排序" class="headerlink" title="全字段排序 VS rowid排序"></a>全字段排序 VS rowid排序</h3><p>在内存足够的情况下优先选择全字段排序，否则rowid排序</p>
+<blockquote>
+<p>体现了MySQL的一个设计思想： <strong>如果内存够，就要多利用内存，尽量减少磁盘访问。</strong></p>
+</blockquote>
+<h3 id="联合索引优化"><a href="#联合索引优化" class="headerlink" title="联合索引优化"></a>联合索引优化</h3><ol>
+<li><strong>创建联合索引</strong>：</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> t <span class="keyword">ADD</span> INDEX city_user(city, name);</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><strong>查询流程简化</strong>：利用联合索引 <code>city_user(city, name)</code>，天然保证按 name 递增排序，避免排序操作，流程如下：<ul>
+<li>从索引(city, name)中找到第一个满足 city&#x3D;’杭州’ 条件的记录。</li>
+<li>取出该记录中的 city、name、age 直接返回。</li>
+<li>重复上述步骤，直到取到1000条记录或不满足条件时停止。</li>
+</ul>
+</li>
+</ol>
+<h3 id="覆盖索引优化"><a href="#覆盖索引优化" class="headerlink" title="覆盖索引优化"></a>覆盖索引优化</h3><ol>
+<li><strong>创建覆盖索引</strong>：</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> t <span class="keyword">ADD</span> INDEX city_user_age(city, name, age);</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><strong>查询流程进一步简化</strong>：利用覆盖索引避免回表操作，流程如下：<ul>
+<li>从索引(city, name, age)中找到第一个满足 city&#x3D;’杭州’ 条件的记录，直接取出并返回。</li>
+<li>重复上述步骤，直到取到1000条记录或不满足条件时停止。</li>
+</ul>
+</li>
+</ol>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>MySQL 的排序操作有多种实现方式，具体选择取决于查询条件和索引情况。为了提高性能，建议合理利用联合索引和覆盖索引，减少排序操作和磁盘访问。</p>
+<h2 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h2><h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>假设表中已有联合索引 <code>city_name(city, name)</code>，查询杭州和苏州两个城市的市民名字，并按名字排序，显示前100条记录：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> t <span class="keyword">WHERE</span> city <span class="keyword">IN</span> (<span class="string">&#x27;杭州&#x27;</span>, <span class="string">&#x27;苏州&#x27;</span>) <span class="keyword">ORDER</span> <span class="keyword">BY</span> name LIMIT <span class="number">100</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="执行过程中是否需要排序？"><a href="#执行过程中是否需要排序？" class="headerlink" title="执行过程中是否需要排序？"></a>执行过程中是否需要排序？</h3><p>由于查询条件包含多个城市，合并后可能无序，无法利用单一的联合索引顺序，MySQL 需要对结果集进行排序。</p>
+<h3 id="如何在数据库端实现不排序？"><a href="#如何在数据库端实现不排序？" class="headerlink" title="如何在数据库端实现不排序？"></a>如何在数据库端实现不排序？</h3><p>每个城市单独查询</p>
+<p>可以创建联合索引 <code>city_name(city, name)</code> 并结合分区查询：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> t <span class="keyword">WHERE</span> city <span class="operator">=</span> <span class="string">&#x27;杭州&#x27;</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> name LIMIT <span class="number">100</span>)</span><br><span class="line"><span class="keyword">UNION</span> <span class="keyword">ALL</span></span><br><span class="line">(<span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> t <span class="keyword">WHERE</span> city <span class="operator">=</span> <span class="string">&#x27;苏州&#x27;</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> name LIMIT <span class="number">100</span>)</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> name LIMIT <span class="number">100</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="实现分页需求"><a href="#实现分页需求" class="headerlink" title="实现分页需求"></a>实现分页需求</h3><p>对于第101页，即查询第10000至10099条记录：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> t <span class="keyword">WHERE</span> city <span class="operator">=</span> <span class="string">&#x27;杭州&#x27;</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> name LIMIT <span class="number">10000</span>, <span class="number">100</span>)</span><br><span class="line"><span class="keyword">UNION</span> <span class="keyword">ALL</span></span><br><span class="line">(<span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> t <span class="keyword">WHERE</span> city <span class="operator">=</span> <span class="string">&#x27;苏州&#x27;</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> name LIMIT <span class="number">10000</span>, <span class="number">100</span>)</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> name LIMIT <span class="number">10000</span>, <span class="number">100</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这种方式避免了单次大数据量排序，提高查询效率。</p>
+<p>本文主要讲述了如何在MySQL中实现随机选择单词的功能，并分析了使用<code>ORDER BY RAND()</code>导致的性能问题，提出了几种优化方法。</p>
+<h1 id="使用ORDER-BY-RAND"><a href="#使用ORDER-BY-RAND" class="headerlink" title="使用ORDER BY RAND()"></a>使用<code>ORDER BY RAND()</code></h1><p>在初步尝试中，可以使用<code>SELECT word FROM words ORDER BY RAND() LIMIT 3;</code>来随机选择三个单词。这种方法虽简单，但随着数据量的增大，性能问题逐渐显现：</p>
+<ul>
+<li>MySQL需要在内存中创建临时表并对其进行随机排序，这一过程涉及大量的数据读取和排序操作。</li>
+<li>根据<code>EXPLAIN</code>命令的输出，此查询需要使用临时表和文件排序，显著增加了查询的资源消耗。</li>
+</ul>
+<h2 id="内存临时表与磁盘临时表"><a href="#内存临时表与磁盘临时表" class="headerlink" title="内存临时表与磁盘临时表"></a>内存临时表与磁盘临时表</h2><p>文章进一步解释了MySQL在处理<code>ORDER BY RAND()</code>时可能使用的两种临时表：</p>
+<ol>
+<li><strong>内存临时表</strong>：如果临时表的大小未超过<code>tmp_table_size</code>配置的限制，则使用内存中的临时表。</li>
+<li><strong>磁盘临时表</strong>：如果临时表大小超过限制，则转为在磁盘上创建临时表，这会进一步降低性能，由<code>internal\_tmp\_disk\_storage\_engine</code>控制。</li>
+</ol>
+<h2 id="随机选择算法的优化"><a href="#随机选择算法的优化" class="headerlink" title="随机选择算法的优化"></a>随机选择算法的优化</h2><p>文章提出了两种优化随机选择单词的方法：</p>
+<ol>
+<li><p><strong>随机算法1</strong>：</p>
+<ul>
+<li>查询表的主键ID的最大和最小值。</li>
+<li>生成一个介于最大和最小ID之间的随机数。</li>
+<li>查询ID大于或等于该随机数的第一条记录。</li>
+<li>这种方法虽然快速，但不够均匀，特别是当ID存在空洞时。</li>
+</ul>
+</li>
+<li><p><strong>随机算法2</strong>：</p>
+<ul>
+<li>计算表中的总行数。</li>
+<li>生成一个随机数来选择行号。</li>
+<li>使用<code>LIMIT</code>语句直接跳过前N行，返回第N+1行。</li>
+<li>这种方法提供了更均匀的随机性，但性能开销大于算法1，尽管依然优于<code>ORDER BY RAND()</code>。</li>
+</ul>
+</li>
+</ol>
+<h2 id="实际应用和进一步优化"><a href="#实际应用和进一步优化" class="headerlink" title="实际应用和进一步优化"></a>实际应用和进一步优化</h2><p>对于实际应用，尤其是行数较多的表，推荐使用随机算法2，并在应用层进行SQL语句的构建和执行。此外，对于随机选择多个单词的需求，可以通过生成多个随机行号并分别查询来实现，尽管这会增加数据库的访问次数。</p>
+<h2 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h2><p>在设计数据库交互时，考虑查询的性能影响是非常关键的。直接使用<code>ORDER BY RAND()</code>可能引起严重的性能问题，尤其是在数据量较大的情况下。通过理解MySQL的内部工作原理和利用优化的查询方法，可以显著提高应用的响应速度和整体性能。</p>
+<h2 id="思考题-1"><a href="#思考题-1" class="headerlink" title="思考题"></a>思考题</h2><ul>
+<li>如何进一步减少随机算法3的扫描行数？</li>
+<li>是否有可能通过改进SQL结构或使用特定的数据库功能（如更复杂的索引策略）来优化随机选择的效率？</li>
+</ul>
+<h2 id="回答"><a href="#回答" class="headerlink" title="回答"></a>回答</h2><p>要减少随机算法3的扫描行数，并优化随机选择的效率，可以采取以下措施：</p>
+<ol>
+<li><p><strong>使用单查询优化</strong>：</p>
+<ul>
+<li>在一次查询中获取多个随机行。例如：<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> words <span class="keyword">WHERE</span> id <span class="operator">&gt;=</span> <span class="variable">@X</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> id LIMIT <span class="number">3</span>;</span><br></pre></td></tr></table></figure></li>
+<li>这样可以减少多次扫描。</li>
+</ul>
+</li>
+<li><p><strong>利用表统计信息</strong>：</p>
+<ul>
+<li>获取表的总行数并计算随机偏移量。<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">INTO</span> <span class="variable">@C</span> <span class="keyword">FROM</span> words;</span><br><span class="line"><span class="keyword">SET</span> <span class="variable">@Y</span> <span class="operator">=</span> <span class="built_in">FLOOR</span>(<span class="variable">@C</span> <span class="operator">*</span> RAND());</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> words LIMIT <span class="variable">@Y</span>, <span class="number">1</span>;</span><br></pre></td></tr></table></figure></li>
+<li>更准确地生成随机数以减少空洞。</li>
+</ul>
+</li>
+<li><p><strong>索引优化</strong>：</p>
+<ul>
+<li>创建复合索引，提高查询速度。</li>
+</ul>
+</li>
+<li><p><strong>应用层优化</strong>：</p>
+<ul>
+<li>缓存部分单词表，应用层随机选择，减少数据库访问。</li>
+<li>预加载单词列表到应用层进行随机选择。</li>
+</ul>
+</li>
+<li><p><strong>利用数据库特性</strong>：</p>
+<ul>
+<li>使用数据库特定的优化功能，如随机选择函数。</li>
+</ul>
+</li>
+</ol>
+<h4 id="示例优化："><a href="#示例优化：" class="headerlink" title="示例优化："></a>示例优化：</h4><p>使用单查询获取多个随机行，并利用表统计信息：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">INTO</span> <span class="variable">@C</span> <span class="keyword">FROM</span> words;</span><br><span class="line"><span class="keyword">SET</span> <span class="variable">@Y1</span> <span class="operator">=</span> <span class="built_in">FLOOR</span>(<span class="variable">@C</span> <span class="operator">*</span> RAND());</span><br><span class="line"><span class="keyword">SET</span> <span class="variable">@Y2</span> <span class="operator">=</span> <span class="built_in">FLOOR</span>(<span class="variable">@C</span> <span class="operator">*</span> RAND());</span><br><span class="line"><span class="keyword">SET</span> <span class="variable">@Y3</span> <span class="operator">=</span> <span class="built_in">FLOOR</span>(<span class="variable">@C</span> <span class="operator">*</span> RAND());</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> words <span class="keyword">WHERE</span> id <span class="operator">&gt;=</span> <span class="variable">@Y1</span> LIMIT <span class="number">1</span>;</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> words <span class="keyword">WHERE</span> id <span class="operator">&gt;=</span> <span class="variable">@Y2</span> LIMIT <span class="number">1</span>;</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> words <span class="keyword">WHERE</span> id <span class="operator">&gt;=</span> <span class="variable">@Y3</span> LIMIT <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+<p>这样可以减少扫描行数，提高效率。</p>
+<h1 id="误区"><a href="#误区" class="headerlink" title="误区"></a>误区</h1><h3 id="案例一：条件字段函数操作"><a href="#案例一：条件字段函数操作" class="headerlink" title="案例一：条件字段函数操作"></a>案例一：条件字段函数操作</h3><ul>
+<li><strong>问题描述</strong>：在使用函数处理索引字段（如<code>month(t_modified)</code>）时，可能会破坏值的有序性，优化器会放弃走树搜索。MySQL无法利用索引进行快速查找，导致性能下降。</li>
+<li><strong>解决方案</strong>：避免在查询条件中对索引字段使用函数。改用基于字段本身的范围查询，例如使用<code>t_modified BETWEEN &#39;2016-7-1&#39; AND &#39;2016-7-31&#39;</code>。</li>
+</ul>
+<h3 id="案例二：隐式类型转换"><a href="#案例二：隐式类型转换" class="headerlink" title="案例二：隐式类型转换"></a>案例二：隐式类型转换</h3><ul>
+<li><strong>问题描述</strong>：当查询条件中的数据类型不匹配字段类型时（如整数与字符串比较<code>tradeid = 110717</code>），会触发类型转换，从而导致索引失效。</li>
+<li><strong>解决方案</strong>：确保查询条件中的数据类型与数据库字段的类型一致，避免隐式类型转换。</li>
+</ul>
+<h3 id="案例三：隐式字符编码转换"><a href="#案例三：隐式字符编码转换" class="headerlink" title="案例三：隐式字符编码转换"></a>案例三：隐式字符编码转换</h3><ul>
+<li><strong>问题描述</strong>：不同表之间的字段字符编码不一致（如<code>utf8</code>与<code>utf8mb4</code>），在进行连接查询时无法使用索引。<blockquote>
+<p>这个设定很好理解，utf8mb4是utf8的超集。类似地，在程序设计语言里面，做自动类型转换的时候，为了避免数据在转换过程中由于截断导致数据错误，也都是“按数据长度增加的方向”进行转换的。</p>
+</blockquote>
+</li>
+<li><strong>解决方案</strong>：<ul>
+<li><strong>调整编码</strong>：调整相关字段的字符编码，使其一致。</li>
+<li><strong>显式转换</strong>：在查询时使用<code>CONVERT</code>函数显式进行字符编码转换。</li>
+</ul>
+</li>
+</ul>
+<h3 id="总结优化策略"><a href="#总结优化策略" class="headerlink" title="总结优化策略"></a>总结优化策略</h3><ol>
+<li><strong>避免在索引字段上使用函数</strong>：使用索引字段本身而非经过函数处理的结果作为查询条件。</li>
+<li><strong>保持数据类型一致</strong>：在查询中使用与数据库字段相同的数据类型。</li>
+<li><strong>统一字符编码</strong>：确保关联查询中涉及的字段具有相同的字符编码，或在查询中指定正确的字符编码转换。</li>
+</ol>
+<h3 id="行动建议"><a href="#行动建议" class="headerlink" title="行动建议"></a>行动建议</h3><ul>
+<li>在业务代码升级时，对可能出现的新SQL语句进行<code>EXPLAIN</code>分析，是一个避免性能问题的好习惯。</li>
+<li>共享实际遇到的性能问题及其解决方案，可以帮助团队成员学习并提高处理类似问题的能力。</li>
+</ul>
+<h1 id="为什么单行查询在MySQL中执行缓慢"><a href="#为什么单行查询在MySQL中执行缓慢" class="headerlink" title="为什么单行查询在MySQL中执行缓慢"></a>为什么单行查询在MySQL中执行缓慢</h1><h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><ul>
+<li>常见的理解是，复杂查询或大数据量返回会导致性能问题，但某些单行查询同样会非常缓慢。</li>
+<li>排除数据库整体负载高的情况，本文专注于单行查询的特定性能问题。</li>
+</ul>
+<h3 id="第一类：查询长时间不返回"><a href="#第一类：查询长时间不返回" class="headerlink" title="第一类：查询长时间不返回"></a>第一类：查询长时间不返回</h3><h4 id="等待MDL锁"><a href="#等待MDL锁" class="headerlink" title="等待MDL锁"></a>等待MDL锁</h4><ul>
+<li><strong>问题</strong>：查询被表的元数据锁（MDL）阻塞。</li>
+<li><strong>诊断</strong>：使用 <code>SHOW PROCESSLIST</code> 查看状态为 <code>Waiting for table metadata lock</code>。</li>
+<li><strong>解决</strong>：通过 <code>sys.schema_table_lock_waits</code> 找到阻塞的线程ID并 <code>KILL</code> 掉。</li>
+</ul>
+<h4 id="等待表Flush"><a href="#等待表Flush" class="headerlink" title="等待表Flush"></a>等待表Flush</h4><ul>
+<li><strong>问题</strong>：查询被 <code>FLUSH TABLES</code> 操作阻塞。</li>
+<li><strong>诊断</strong>：<code>SHOW PROCESSLIST</code> 显示状态为 <code>Waiting for table flush</code>。</li>
+<li><strong>解决</strong>：找到并终止执行 <code>FLUSH TABLES</code> 的会话。</li>
+</ul>
+<h4 id="等待行锁"><a href="#等待行锁" class="headerlink" title="等待行锁"></a>等待行锁</h4><ul>
+<li><strong>问题</strong>：查询被另一个事务持有的行锁阻塞。</li>
+<li><strong>诊断</strong>：<code>SHOW PROCESSLIST</code> 显示状态为 <code>Waiting for lock</code>.</li>
+<li><strong>解决</strong>：使用 <code>sys.innodb_lock_waits</code> 查找持有锁的事务，并 <code>KILL</code> 掉。</li>
+</ul>
+<h3 id="第二类：查询执行慢"><a href="#第二类：查询执行慢" class="headerlink" title="第二类：查询执行慢"></a>第二类：查询执行慢</h3><h4 id="全表扫描"><a href="#全表扫描" class="headerlink" title="全表扫描"></a>全表扫描</h4><ul>
+<li><strong>问题</strong>：查询没有使用索引，导致全表扫描。</li>
+<li><strong>示例</strong>：<code>SELECT * FROM t WHERE c=50000 LIMIT 1;</code></li>
+<li><strong>解决</strong>：添加适当的索引。</li>
+</ul>
+<h4 id="一致性读导致慢查询"><a href="#一致性读导致慢查询" class="headerlink" title="一致性读导致慢查询"></a>一致性读导致慢查询</h4><ul>
+<li><strong>问题</strong>：一致性读导致扫描大量回滚日志（undo log）。</li>
+<li><strong>示例</strong>：<code>SELECT * FROM t WHERE id=1;</code></li>
+<li><strong>复现</strong>：一个事务进行大量更新，导致查询需要回滚大量操作。</li>
+<li><strong>解决</strong>：优化事务设计，避免生成大量的undo log。</li>
+</ul>
+<h3 id="解决查询慢的策略"><a href="#解决查询慢的策略" class="headerlink" title="解决查询慢的策略"></a>解决查询慢的策略</h3><ol>
+<li><strong>使用索引</strong>：确保查询条件使用适当的索引。</li>
+<li><strong>优化事务设计</strong>：避免长事务和大事务，减少锁争用。</li>
+<li><strong>监控和诊断工具</strong>：使用 <code>SHOW PROCESSLIST</code>、<code>sys.innodb_lock_waits</code> 等工具诊断问题。</li>
+</ol>
+<h3 id="小结-2"><a href="#小结-2" class="headerlink" title="小结"></a>小结</h3><p>即使是简单的单行查询也可能因多种原因导致性能问题。了解和识别这些问题的原因是关键，合理使用工具和策略可以显著提升查询效率。</p>
+<h3 id="思考题-2"><a href="#思考题-2" class="headerlink" title="思考题"></a>思考题</h3><p>考虑查询<code>SELECT * FROM t WHERE c = 5 FOR UPDATE;</code>，分析它如何加锁以及锁释放的时机，讨论可能的性能影响。</p>
+<h1 id="幻读"><a href="#幻读" class="headerlink" title="幻读"></a>幻读</h1><h3 id="幻读的定义"><a href="#幻读的定义" class="headerlink" title="幻读的定义"></a>幻读的定义</h3><p>幻读是在数据库事务处理中遇到的一种现象，它发生在一个事务（Transaction）在执行过程中进行两次相同的查询，却得到了不同的结果。这种情况通常是由于在这两次查询间有其他事务插入或修改了数据所致。</p>
+<p>幻读在“当前读”下才会出现</p>
+<h3 id="幻读的问题"><a href="#幻读的问题" class="headerlink" title="幻读的问题"></a>幻读的问题</h3><p>幻读主要问题在于它违反了事务的隔离性，特别是在可重复读（Repeatable Read）隔离级别下。在这个级别，预期事务能够多次读取同样的数据行并得到相同的结果，但幻读破坏了这一期望。</p>
+<p>在上文中提到的例子中，尽管在事务开始时锁定了d&#x3D;5的行（id&#x3D;5），事务中途对其他行（如id&#x3D;0或id&#x3D;1）的修改和新增行（id&#x3D;1新增），导致了幻读，因为这些修改和添加的数据行在后续的查询中被看到了，违反了预期的事务隔离性。</p>
+<h3 id="解决幻读的策略"><a href="#解决幻读的策略" class="headerlink" title="解决幻读的策略"></a>解决幻读的策略</h3><p>为了解决幻读问题，MySQL的InnoDB存储引擎引入了间隙锁（Gap Locks）的概念，除了对查询到的数据行加锁外，还对数据行之间的间隙加锁。这种锁策略不仅锁定数据行，也锁定行之间的间隙，防止其他事务在这些间隙中插入新的行。间隙锁和行锁合称next-key lock，每个next-key lock是前开后闭区间。</p>
+<p>例如，如果事务A查询了所有d&#x3D;5的数据行并对其加锁，通过间隙锁机制，事务B将无法插入一个新的d&#x3D;5的行，因为这将需要在已锁定的间隙中插入数据，而这是被禁止的。</p>
+<h3 id="幻读的业务影响"><a href="#幻读的业务影响" class="headerlink" title="幻读的业务影响"></a>幻读的业务影响</h3><p>幻读可能会导致数据不一致性，影响业务逻辑的正确执行。例如，如果一个事务基于查询结果执行操作（如计算总和或更新数据），由于幻读导致的数据变化可能会使得最终结果不正确或事务失败。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>在处理数据库事务时，了解和应对幻读是确保数据一致性和事务隔离性的关键。通过使用适当的隔离级别和理解数据库的锁机制，可以有效地管理和减少幻读带来的问题。在设计数据库操作和事务逻辑时，合理选择隔离级别和理解其对应的锁策略对于开发稳定可靠的应用程序至关重要。</p>
+
+        </div>
+
+        
+            <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> mysql45讲16-20讲的总结</li>
+        <li><strong>Author:</strong> The Redefine Team</li>
+        <li><strong>Created at
+                :</strong> 2024-05-17 00:00:00</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2024-05-31 17:07:12
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://redefine.ohevan.com/database/16-20/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
+            
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="../../tags/database/">#database</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+                
+                
+                    <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="next"
+                        rel="next"
+                        href="../11-15/"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">mysql45讲11-15的总结</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+            <div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+                <div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        Comments
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '../../js/libs/waline.mjs';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          lang: 'zh-CN',
+          dark: 'body[class~="dark-mode"]',
+          reaction: false,
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+          recaptchaV3Key: "wasd",
+          
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+            </div>
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">mysql45讲16-20讲的总结</div>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL%E7%9A%84-ORDER-BY-%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="nav-text">MySQL的 ORDER BY 执行流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B%E8%A1%A8%E5%92%8C%E6%9F%A5%E8%AF%A2%E8%AF%AD%E5%8F%A5"><span class="nav-text">示例表和查询语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="nav-text">执行流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%A8%E5%AD%97%E6%AE%B5%E6%8E%92%E5%BA%8F"><span class="nav-text">全字段排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Rowid-%E6%8E%92%E5%BA%8F"><span class="nav-text">Rowid 排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%A8%E5%AD%97%E6%AE%B5%E6%8E%92%E5%BA%8F-VS-rowid%E6%8E%92%E5%BA%8F"><span class="nav-text">全字段排序 VS rowid排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%94%E5%90%88%E7%B4%A2%E5%BC%95%E4%BC%98%E5%8C%96"><span class="nav-text">联合索引优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A6%86%E7%9B%96%E7%B4%A2%E5%BC%95%E4%BC%98%E5%8C%96"><span class="nav-text">覆盖索引优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-text">小结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E8%80%83%E9%A2%98"><span class="nav-text">思考题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98"><span class="nav-text">问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B%E4%B8%AD%E6%98%AF%E5%90%A6%E9%9C%80%E8%A6%81%E6%8E%92%E5%BA%8F%EF%BC%9F"><span class="nav-text">执行过程中是否需要排序？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%9C%A8%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AB%AF%E5%AE%9E%E7%8E%B0%E4%B8%8D%E6%8E%92%E5%BA%8F%EF%BC%9F"><span class="nav-text">如何在数据库端实现不排序？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E5%88%86%E9%A1%B5%E9%9C%80%E6%B1%82"><span class="nav-text">实现分页需求</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8ORDER-BY-RAND"><span class="nav-text">使用ORDER BY RAND()</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E4%B8%B4%E6%97%B6%E8%A1%A8%E4%B8%8E%E7%A3%81%E7%9B%98%E4%B8%B4%E6%97%B6%E8%A1%A8"><span class="nav-text">内存临时表与磁盘临时表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E9%80%89%E6%8B%A9%E7%AE%97%E6%B3%95%E7%9A%84%E4%BC%98%E5%8C%96"><span class="nav-text">随机选择算法的优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E5%92%8C%E8%BF%9B%E4%B8%80%E6%AD%A5%E4%BC%98%E5%8C%96"><span class="nav-text">实际应用和进一步优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93-1"><span class="nav-text">小结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E8%80%83%E9%A2%98-1"><span class="nav-text">思考题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9E%E7%AD%94"><span class="nav-text">回答</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%AF%E5%8C%BA"><span class="nav-text">误区</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B%E4%B8%80%EF%BC%9A%E6%9D%A1%E4%BB%B6%E5%AD%97%E6%AE%B5%E5%87%BD%E6%95%B0%E6%93%8D%E4%BD%9C"><span class="nav-text">案例一：条件字段函数操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B%E4%BA%8C%EF%BC%9A%E9%9A%90%E5%BC%8F%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="nav-text">案例二：隐式类型转换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B%E4%B8%89%EF%BC%9A%E9%9A%90%E5%BC%8F%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81%E8%BD%AC%E6%8D%A2"><span class="nav-text">案例三：隐式字符编码转换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93%E4%BC%98%E5%8C%96%E7%AD%96%E7%95%A5"><span class="nav-text">总结优化策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%8C%E5%8A%A8%E5%BB%BA%E8%AE%AE"><span class="nav-text">行动建议</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%8D%95%E8%A1%8C%E6%9F%A5%E8%AF%A2%E5%9C%A8MySQL%E4%B8%AD%E6%89%A7%E8%A1%8C%E7%BC%93%E6%85%A2"><span class="nav-text">为什么单行查询在MySQL中执行缓慢</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-text">背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E7%B1%BB%EF%BC%9A%E6%9F%A5%E8%AF%A2%E9%95%BF%E6%97%B6%E9%97%B4%E4%B8%8D%E8%BF%94%E5%9B%9E"><span class="nav-text">第一类：查询长时间不返回</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E7%B1%BB%EF%BC%9A%E6%9F%A5%E8%AF%A2%E6%89%A7%E8%A1%8C%E6%85%A2"><span class="nav-text">第二类：查询执行慢</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%9F%A5%E8%AF%A2%E6%85%A2%E7%9A%84%E7%AD%96%E7%95%A5"><span class="nav-text">解决查询慢的策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93-2"><span class="nav-text">小结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%9D%E8%80%83%E9%A2%98-2"><span class="nav-text">思考题</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B9%BB%E8%AF%BB"><span class="nav-text">幻读</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%BB%E8%AF%BB%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-text">幻读的定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%BB%E8%AF%BB%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-text">幻读的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E5%B9%BB%E8%AF%BB%E7%9A%84%E7%AD%96%E7%95%A5"><span class="nav-text">解决幻读的策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%BB%E8%AF%BB%E7%9A%84%E4%B8%9A%E5%8A%A1%E5%BD%B1%E5%93%8D"><span class="nav-text">幻读的业务影响</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol></li></ol></li></ol>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
+
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2024&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">The Redefine Team</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        19 posts in total
+                    </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">VISITOR COUNT</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">TOTAL PAGE VIEWS</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.6.4</a></span>
+        </div>
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+    
+<script src="js/libs/Swup.min.js"></script>
+
+<script src="js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="js/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="js/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+
+
+
+<script src="js/tools/imageViewer.js" type="module"></script>
+
+<script src="js/utils.js" type="module"></script>
+
+<script src="js/main.js" type="module"></script>
+
+<script src="js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="js/layouts/categoryList.js" type="module"></script>
+
+
+
+
+
+    
+<script src="js/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="js/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="js/tools/runtime.js"></script>
+
+    
+<script src="js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="js/libs/Typed.min.js"></script>
+
+  
+<script src="js/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+
+<div class="post-scripts" data-swup-reload-script>
+    
+        
+<script src="js/tools/tocToggle.js" type="module"></script>
+
+<script src="js/layouts/toc.js" type="module"></script>
+
+<script src="js/plugins/tabs.js" type="module"></script>
+
+    
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="English">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="The Redefine Team">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://Renewdxin.github.io/go/go_context/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="简介Go语言中的context包定义了一个名为Context的类型，它定义并传递截止日期、取消信号和其他请求范围的值，形成一个链式模型。如果我们查看官方文档，它是这样说的： context包定义了Context类型，它在API边界和进程之间传递截止日期、取消信号和其他请求范围的值。 包中的主要实体是Context本身，它是一个接口。它只有四个方法： 123456type Context inter">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Golang中的context包简介">
+<meta property="og:url" content="http://renewdxin.github.io/Go/go_context/index.html">
+<meta property="og:site_name" content="RenXin&#39;s Website">
+<meta property="og:description" content="简介Go语言中的context包定义了一个名为Context的类型，它定义并传递截止日期、取消信号和其他请求范围的值，形成一个链式模型。如果我们查看官方文档，它是这样说的： context包定义了Context类型，它在API边界和进程之间传递截止日期、取消信号和其他请求范围的值。 包中的主要实体是Context本身，它是一个接口。它只有四个方法： 123456type Context inter">
+<meta property="og:locale">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240408213409.png">
+<meta property="article:published_time" content="2024-04-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-04-08T13:36:15.419Z">
+<meta property="article:author" content="RenXin">
+<meta property="article:tag" content="Go">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240408213409.png">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="../../images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="../../images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="../../images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            Golang中的context包简介 -
+        
+        Theme Redefine
+    </title>
+
+    
+<link rel="stylesheet" href="fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="../../css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="assets/build/styles.css">
+
+    
+
+    
+<link rel="stylesheet" href="fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    
+        
+<script src="js/libs/anime.min.js"></script>
+
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"renewdxin.github.io","root":"/","language":"English"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Theme Redefine","subtitle":{"text":[],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.6.4","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2022/8/17 11:45:14"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+<!--        <span class="swup-progress-icon">-->
+<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+<!--        </span>-->
+    
+</div>
+
+
+
+    <style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 500;
+        font-family: 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    <h2 class="ml13">
+        Theme Redefine
+    </h2>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
+
+        var animation = anime.timeline({loop: true})
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [40,0],
+                translateZ: 0,
+                opacity: [0,1],
+                filter: ['blur(5px)', 'blur(0px)'], // Starting from blurred to unblurred
+                easing: "easeOutExpo",
+                duration: 1400,
+                delay: (el, i) => 300 + 30 * i,
+            }).add({
+                targets: '.ml13 .letter',
+                translateY: [0,-40],
+                opacity: [1,0],
+                filter: ['blur(0px)', 'blur(5px)'], // Ending from unblurred to blurred
+                easing: "easeInExpo",
+                duration: 1200,
+                delay: (el, i) => 100 + 30 * i,
+                complete: function() {
+                    hidePreloader(); // Call hidePreloader after the animation completes
+                }
+            });
+
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
+
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
+
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
+
+        window.addEventListener('load', function () {
+            setTimeout(hidePreloader, 5000); // Call hidePreloader after 5000 milliseconds if not already called by animation
+        });
+
+        function hidePreloader() {
+            var preloader = document.querySelector('.preloader');
+            preloader.style.opacity = '0';
+            setTimeout(function () {
+                preloader.style.display = 'none';
+            }, 200);
+        }
+    </script>
+</div>
+
+<main class="page-container" id="swup">
+
+    
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container px-6 md:px-12">
+
+    <div class="navbar-content ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Theme Redefine
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="../../index.html"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-screen w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="../../index.html"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="../../tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">14</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="../../categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">12</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="../../archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">19</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container flex relative justify-between box-border w-full h-full">
+    <div class="article-content-container">
+
+        <div class="article-title relative w-full">
+            
+                <div class="w-full flex items-center pt-6 justify-start">
+                    <h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">Golang中的context包简介</h1>
+                </div>
+            
+            </div>
+
+        
+            <div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+                <div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+                    <img src="../../images/redefine-avatar.svg">
+                </div>
+                <div class="info flex flex-col justify-between">
+                    <div class="author flex items-center">
+                        <span class="name text-default-text-color text-lg font-semibold">The Redefine Team</span>
+                        
+                            <span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv3</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2024-04-03</span>
+        <span class="mobile">2024-04-03</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2024-04-08 21:36:15</span>
+            <span class="mobile">2024-04-08 21:36:15</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="../../categories/Go/">Go</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="../../tags/Go/">Go</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+            <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Go语言中的<code>context</code>包定义了一个名为<code>Context</code>的类型，它定义并传递截止日期、取消信号和其他请求范围的值，形成一个链式模型。如果我们查看官方文档，它是这样说的：</p>
+<p><code>context</code>包定义了<code>Context</code>类型，它在API边界和进程之间传递截止日期、取消信号和其他请求范围的值。</p>
+<p>包中的主要实体是<code>Context</code>本身，它是一个接口。它只有四个方法：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Context <span class="keyword">interface</span> &#123;</span><br><span class="line">    Deadline() (deadline time.Time, ok <span class="type">bool</span>)</span><br><span class="line">    Done() &lt;-<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line">    Err() <span class="type">error</span></span><br><span class="line">    Value(key <span class="keyword">interface</span>&#123;&#125;) <span class="keyword">interface</span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里，</p>
+<ul>
+<li><code>Deadline</code>：返回应该取消上下文的时间，以及一个布尔值，当没有截止日期时为false</li>
+<li><code>Done</code>：返回一个只接收的空结构体通道，它发出上下文应该被取消的信号</li>
+<li><code>Err</code>：在完成通道打开时返回nil；否则它返回上下文取消的原因</li>
+<li><code>Value</code>：返回与当前上下文的某个键关联的值，如果没有该键的值，则返回nil</li>
+</ul>
+<p>与标准库的其他接口相比，<code>Context</code>有许多方法，这些接口通常只有一两个方法。其中三个密切相关：</p>
+<ul>
+<li><code>Deadline</code>是取消的时间</li>
+<li><code>Done</code>信号上下文完成时</li>
+<li><code>Err</code>返回取消的原因</li>
+</ul>
+<p>最后一个方法，<code>Value</code>，返回与某个键关联的值。包的其余部分是一系列函数，允许你创建不同类型的上下文。</p>
+<p>为什么使用<code>Context</code>？</p>
+<ul>
+<li>它简化了跨进程或API的截止日期和取消的实现。</li>
+<li>它为你的代码扩展做好准备，例如，使用<code>Context</code>会使你的代码清晰易操纵，通过将所有进程以子父关系链式连接，你可以将任何进程绑定&#x2F;连接在一起。</li>
+<li>它易于使用。</li>
+<li>它是Goroutine安全的，即你可以在不同的Goroutine上运行相同的上下文而不会泄露。</li>
+</ul>
+<h2 id="context-Background"><a href="#context-Background" class="headerlink" title="context.Background()"></a>context.Background()</h2><p><code>Background</code>是一个空的上下文，它不会被取消，没有截止日期，也不持有任何值。它主要由主函数用作根上下文或用于测试目的：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;context&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	ctx := context.Background()</span><br><span class="line">	fmt.Println(ctx)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ go run main.go</span><br><span class="line">context.Background</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>输出是“context.Background”，它告诉我们这是一个空的<code>Context</code>，它是一个接口，在这个<code>Context</code>接口上，</p>
+<p>所有这些数据目前都是nil或空的，因为我们有一个空的<code>Context</code>，即背景上下文，它永远不会被取消，没有截止日期，也没有值。<code>Background</code>通常用于main、init和测试中，以及作为传入请求的顶级上下文。</p>
+<p>让我们对所有这些进行<code>fmt.Println</code>检查：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;context&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	ctx := context.Background()</span><br><span class="line">	fmt.Println(<span class="string">&quot;ctx.Err() : &quot;</span>, ctx.Err())</span><br><span class="line">	fmt.Println(<span class="string">&quot;ctx.Done() : &quot;</span>, ctx.Done())</span><br><span class="line">	fmt.Println(<span class="string">&quot;ctx.Value(\&quot;key\&quot;) : &quot;</span>, ctx.Value(<span class="string">&quot;key&quot;</span>))</span><br><span class="line">	fmt.Print(<span class="string">&quot;ctx.Deadline() : &quot;</span>)</span><br><span class="line">	fmt.Print(ctx.Deadline())</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ go run main.go</span><br><span class="line">ctx.Err() :  &lt;nil&gt;</span><br><span class="line">ctx.Done() :  &lt;nil&gt;</span><br><span class="line">ctx.Value(<span class="string">&quot;key&quot;</span>) :  &lt;nil&gt;</span><br><span class="line">ctx.Deadline() : 0001-01-01 00:00:00 +0000 UTC <span class="literal">false</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="上下文取消函数"><a href="#上下文取消函数" class="headerlink" title="上下文取消函数"></a>上下文取消函数</h2><p>Go语言的<code>Context</code>包被用来处理我们的进程或API中的请求流，通过将子上下文与父上下文链接起来，我们可以使用<code>context.WithDeadline</code>或<code>context.WithTimeout</code>方法在链中控制截止日期和取消信号。</p>
+<p>Context的底层是无法改变的，他在main函数创建，之后传递给其他子函数，比如goroutine，子函数无法改变context，也无法被子进程取消</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240408213409.png"/></div></div>
+
+<p>与done channel不同的是，done是以关闭让其他关闭，而context中的cancel函数则是被调用的</p>
+<p>父函数可以取消子函数</p>
+<p>如果子函数创建了自己的子函数，也可以把这个context传递下去</p>
+<p>那如果子函数想取消自己的子函数呢？</p>
+<p>我们可以创建新的context，基于旧的context</p>
+<p>我们来举个例子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line"><span class="comment">// 初始化context</span></span><br><span class="line">	<span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">	ctx, cancel := context.WithTimeout(context.Background(), <span class="number">5</span>*time.Second)</span><br><span class="line">	<span class="keyword">defer</span> cancel()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加数据</span></span><br><span class="line">	generator := <span class="function"><span class="keyword">func</span><span class="params">(data <span class="type">string</span>, stream <span class="keyword">chan</span> any)</span></span> &#123;</span><br><span class="line">		<span class="keyword">for</span> &#123;</span><br><span class="line">			<span class="keyword">select</span> &#123;</span><br><span class="line">			<span class="keyword">case</span> &lt;-ctx.Done():</span><br><span class="line">				<span class="keyword">return</span></span><br><span class="line">			<span class="keyword">case</span> stream &lt;- data:</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	infiniteApples := <span class="built_in">make</span>(<span class="keyword">chan</span> any)</span><br><span class="line">	<span class="keyword">go</span> generator(<span class="string">&quot;apple&quot;</span>, infiniteApples)</span><br><span class="line"></span><br><span class="line">	infiniteBananas := <span class="built_in">make</span>(<span class="keyword">chan</span> any)</span><br><span class="line">	<span class="keyword">go</span> generator(<span class="string">&quot;banana&quot;</span>, infiniteBananas)</span><br><span class="line"></span><br><span class="line">	infiniteOranges := <span class="built_in">make</span>(<span class="keyword">chan</span> any)</span><br><span class="line">	<span class="keyword">go</span> generator(<span class="string">&quot;orange&quot;</span>, infiniteOranges)</span><br><span class="line"></span><br><span class="line">	wg.Add(<span class="number">1</span>)</span><br><span class="line">	<span class="keyword">go</span> func1(ctx, &amp;wg, infiniteApples)</span><br><span class="line">	func2 := genericFunc</span><br><span class="line">	func3 := genericFunc</span><br><span class="line">	wg.Add(<span class="number">1</span>)</span><br><span class="line">	<span class="keyword">go</span> func2(ctx, &amp;wg, infiniteBananas)</span><br><span class="line">	wg.Add(<span class="number">1</span>)</span><br><span class="line">	<span class="keyword">go</span> func3(ctx, &amp;wg, infiniteOranges)</span><br><span class="line"></span><br><span class="line">	wg.Wait()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">func1</span><span class="params">(ctx context.Context, s *sync.WaitGroup, streams &lt;-<span class="keyword">chan</span> any)</span></span> &#123;</span><br><span class="line">	<span class="keyword">defer</span> s.Done()</span><br><span class="line">	<span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line"></span><br><span class="line">	doWOrks := <span class="function"><span class="keyword">func</span><span class="params">(CTX context.Context)</span></span> &#123;</span><br><span class="line">		<span class="keyword">defer</span> wg.Done()</span><br><span class="line">		<span class="keyword">for</span> &#123;</span><br><span class="line">			<span class="keyword">select</span> &#123;</span><br><span class="line">			<span class="keyword">case</span> &lt;-CTX.Done():</span><br><span class="line">				<span class="keyword">return</span></span><br><span class="line">			<span class="keyword">case</span> d, ok := &lt;-streams:</span><br><span class="line">				<span class="keyword">if</span> !ok &#123;</span><br><span class="line">					fmt.Println(<span class="string">&quot;stream closed&quot;</span>)</span><br><span class="line">					<span class="keyword">return</span></span><br><span class="line">				&#125;</span><br><span class="line">				fmt.Println(d)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 基于父上下文设置自己的上下文</span></span><br><span class="line">	newCtx, cancel := context.WithTimeout(ctx, <span class="number">3</span>*time.Second)</span><br><span class="line">	<span class="keyword">defer</span> cancel()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 启动自己的子函数</span></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">3</span>; i++ &#123;</span><br><span class="line">		wg.Add(<span class="number">1</span>)</span><br><span class="line">		<span class="keyword">go</span> doWOrks(newCtx)</span><br><span class="line">	&#125;</span><br><span class="line">	wg.Wait()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 沿用父函数的context</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">genericFunc</span><span class="params">(ctx context.Context, s *sync.WaitGroup, apples <span class="keyword">chan</span> any)</span></span> &#123;</span><br><span class="line">	<span class="keyword">defer</span> s.Done()</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		<span class="keyword">select</span> &#123;</span><br><span class="line">		<span class="keyword">case</span> &lt;-ctx.Done():</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		<span class="keyword">case</span> d, ok := &lt;-apples:</span><br><span class="line">			<span class="keyword">if</span> !ok &#123;</span><br><span class="line">				fmt.Println(<span class="string">&quot;stream closed&quot;</span>)</span><br><span class="line">				<span class="keyword">return</span></span><br><span class="line">			&#125;</span><br><span class="line">			fmt.Println(d)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在输出过程中，我们会发现apple先停止输出，最后5秒到了，另外两个goroutine也停止运行 。</p>
+<h2 id="上下文值传递"><a href="#上下文值传递" class="headerlink" title="上下文值传递"></a>上下文值传递</h2><p>在Go语言中，<code>context</code>上下文可以通过<code>WithValue</code>函数来传递值。这个函数接受一个父上下文（parent Context）、一个键（key）和一个值（value），返回一个新的上下文（Context），这个新上下文与父上下文相同，但是增加了一个键值对。这个键值对可以在上下文的整个传递链中被检索。</p>
+<p>以下是一个使用<code>WithValue</code>传递值的例子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;context&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 创建一个带有值的上下文</span></span><br><span class="line">	ctx := context.WithValue(context.Background(), <span class="string">&quot;language&quot;</span>, <span class="string">&quot;Go&quot;</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 传递ctx到函数中</span></span><br><span class="line">	process(ctx)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">process</span><span class="params">(ctx context.Context)</span></span> &#123;</span><br><span class="line">	<span class="comment">// 从ctx中检索值</span></span><br><span class="line">	<span class="keyword">if</span> language, ok := ctx.Value(<span class="string">&quot;language&quot;</span>).(<span class="type">string</span>); ok &#123;</span><br><span class="line">		fmt.Println(<span class="string">&quot;Language:&quot;</span>, language)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>在这个例子中，我们创建了一个带有键<code>&quot;language&quot;</code>和值<code>&quot;Go&quot;</code>的上下文。然后，我们将这个上下文传递给了<code>process</code>函数，在这个函数中，我们检索并打印出了这个值。</p>
+<p>需要注意的是，<code>context</code>的值应该是请求范围的数据，而不是全局的。它通常用于传递请求相关的元数据，如请求ID、用户身份信息等。此外，由于<code>context</code>是并发安全的，所以它可以在多个goroutine之间安全地传递和使用。</p>
+<h2 id="建议"><a href="#建议" class="headerlink" title="建议"></a>建议</h2><ul>
+<li>每当你需要使用<code>context.Context</code>时，确保它总是作为第一个参数。</li>
+<li>始终使用“ctx”作为变量名，虽然使用其他变量名也可以正常工作，但遵循大多数人的做法是好的，像这样的事情你不需要与众不同。</li>
+<li>确保调用取消函数。</li>
+<li>不要在方法中使用结构体来添加上下文，始终将其作为参数添加，即<code>context.Context</code>。</li>
+<li>不要过度使用<code>context.WithValue</code>。</li>
+</ul>
+<h2 id=""><a href="#" class="headerlink" title=""></a></h2>
+        </div>
+
+        
+            <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> Golang中的context包简介</li>
+        <li><strong>Author:</strong> The Redefine Team</li>
+        <li><strong>Created at
+                :</strong> 2024-04-03 00:00:00</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2024-04-08 21:36:15
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://redefine.ohevan.com/Go/go_context/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
+            
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="../../tags/Go/">#Go</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+                
+                    <div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="prev"
+                        rel="prev"
+                        href="../goroutine_mode/"
+                        >
+                            <span class="left arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">Go 并发的几个模式-Pipeline、Fan_in_Fan_out模式</span>
+                                <span class="post-nav-item">Prev posts</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="next"
+                        rel="next"
+                        href="../../middleware/MongoDB_crud/"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">MongoDBCRUD操作（含GO中的库操作）</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+            <div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+                <div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        Comments
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '../../js/libs/waline.mjs';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          lang: 'zh-CN',
+          dark: 'body[class~="dark-mode"]',
+          reaction: false,
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+          recaptchaV3Key: "wasd",
+          
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+            </div>
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">Golang中的context包简介</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#context-Background"><span class="nav-text">context.Background()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E5%8F%96%E6%B6%88%E5%87%BD%E6%95%B0"><span class="nav-text">上下文取消函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E5%80%BC%E4%BC%A0%E9%80%92"><span class="nav-text">上下文值传递</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%BA%E8%AE%AE"><span class="nav-text">建议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-text"></span></a></li></ol>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
+
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2024&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">The Redefine Team</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        19 posts in total
+                    </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">VISITOR COUNT</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">TOTAL PAGE VIEWS</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.6.4</a></span>
+        </div>
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+    
+<script src="js/libs/Swup.min.js"></script>
+
+<script src="js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="js/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="js/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+
+
+
+<script src="js/tools/imageViewer.js" type="module"></script>
+
+<script src="js/utils.js" type="module"></script>
+
+<script src="js/main.js" type="module"></script>
+
+<script src="js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="js/layouts/categoryList.js" type="module"></script>
+
+
+
+
+
+    
+<script src="js/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="js/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="js/tools/runtime.js"></script>
+
+    
+<script src="js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="js/libs/Typed.min.js"></script>
+
+  
+<script src="js/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+
+<div class="post-scripts" data-swup-reload-script>
+    
+        
+<script src="js/tools/tocToggle.js" type="module"></script>
+
+<script src="js/layouts/toc.js" type="module"></script>
+
+<script src="js/plugins/tabs.js" type="module"></script>
+
+    
+</div>
+
+
+</body>
+</html>
