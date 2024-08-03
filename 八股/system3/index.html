@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="English">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="RenXin">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://Renewdxin.github.io/八股/system3/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="Linux 内存管理  32位系统虚拟内存空间: 4GB（通常是被分隔成多个物理内存碎片），其中内核空间占用1GB（高地址），用户空间占用3GB（低地址）。 用户空间布局: 栈（Stack）: 从高地址向低地址增长，存储函数参数、局部变量等。默认大小通常为8MB，但可自定义。 文件映射: 包括动态库、共享内存，位于栈和堆之间。 堆（Heap）: 动态分配的内存区，从低地址向高地址增长。 未初始化数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统之Linux相关 内存管理、虚拟内存、设计特点、网络编程模型">
+<meta property="og:url" content="http://renewdxin.github.io/%E5%85%AB%E8%82%A1/system3/index.html">
+<meta property="og:site_name" content="RenXin&#39;s Website">
+<meta property="og:description" content="Linux 内存管理  32位系统虚拟内存空间: 4GB（通常是被分隔成多个物理内存碎片），其中内核空间占用1GB（高地址），用户空间占用3GB（低地址）。 用户空间布局: 栈（Stack）: 从高地址向低地址增长，存储函数参数、局部变量等。默认大小通常为8MB，但可自定义。 文件映射: 包括动态库、共享内存，位于栈和堆之间。 堆（Heap）: 动态分配的内存区，从低地址向高地址增长。 未初始化数">
+<meta property="og:locale">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/img_convert/3570315ea6e48a2b2645447b23bd7909.png#pic_center">
+<meta property="article:published_time" content="2024-07-30T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-08-03T15:55:45.707Z">
+<meta property="article:author" content="RenXin">
+<meta property="article:tag" content="八股">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/img_convert/3570315ea6e48a2b2645447b23bd7909.png#pic_center">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="../../images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="../../images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="../../images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            操作系统之Linux相关 内存管理、虚拟内存、设计特点、网络编程模型 -
+        
+        RenXin&#39;s Website
+    </title>
+
+    
+<link rel="stylesheet" href="fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="../../css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="assets/build/styles.css">
+
+    
+
+    
+<link rel="stylesheet" href="fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    
+        
+<script src="js/libs/anime.min.js"></script>
+
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"renewdxin.github.io","root":"/","language":"English"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"https://rxsss.oss-cn-beijing.aliyuncs.com/blog/GPTempDownload.jpg","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Welcome to Wonderland","subtitle":{"text":[],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"default","links":{"github":"https://github.com/Renewdxin","instagram":null,"zhihu":null,"twitter":null,"email":"cissyrenxin@icloud.com","fa-regular fa-pen-to-square":"https://blog.csdn.net/m0_73976305"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.6.4","navbar":{"auto_hide":true,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Status":{"path":"/","icon":"fa-regular fa-chart-bar"},"About":{"icon":"fa-regular fa-user","submenus":{"Me":"/about","Github":"https://github.com/Renewdxin","Blog":"https://blog.csdn.net/m0_73976305","Friends":"/friends"}},"Links":{"icon":"fa-regular fa-link","submenus":{"Link1":"/link1","Link2":"/link2","Link3":"/link3"}}},"search":{"enable":false,"preload":true},"tags":{"Tags":{"icon":"fa-solid fa-tags","path":"/tags/"}},"navbar":null,"categories":{"Categories":{"icon":"fa-solid fa-folder","path":"/categories/"}}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2022/8/17 11:45:14"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+<!--        <span class="swup-progress-icon">-->
+<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+<!--        </span>-->
+    
+</div>
+
+
+
+    <style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 500;
+        font-family: 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    <h2 class="ml13">
+        RenXin&#39;s Website
+    </h2>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
+
+        var animation = anime.timeline({loop: true})
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [40,0],
+                translateZ: 0,
+                opacity: [0,1],
+                filter: ['blur(5px)', 'blur(0px)'], // Starting from blurred to unblurred
+                easing: "easeOutExpo",
+                duration: 1400,
+                delay: (el, i) => 300 + 30 * i,
+            }).add({
+                targets: '.ml13 .letter',
+                translateY: [0,-40],
+                opacity: [1,0],
+                filter: ['blur(0px)', 'blur(5px)'], // Ending from unblurred to blurred
+                easing: "easeInExpo",
+                duration: 1200,
+                delay: (el, i) => 100 + 30 * i,
+                complete: function() {
+                    hidePreloader(); // Call hidePreloader after the animation completes
+                }
+            });
+
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
+
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
+
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
+
+        window.addEventListener('load', function () {
+            setTimeout(hidePreloader, 5000); // Call hidePreloader after 5000 milliseconds if not already called by animation
+        });
+
+        function hidePreloader() {
+            var preloader = document.querySelector('.preloader');
+            preloader.style.opacity = '0';
+            setTimeout(function () {
+                preloader.style.display = 'none';
+            }, 200);
+        }
+    </script>
+</div>
+
+<main class="page-container" id="swup">
+
+    
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container px-6 md:px-12">
+
+    <div class="navbar-content ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                RenXin&#39;s Website
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="../../index.html"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="../../archives"
+                                        >
+                                    <i class="fa-regular fa-archive fa-fw"></i>
+                                    ARCHIVES
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="../../index.html"
+                                        >
+                                    <i class="fa-regular fa-chart-bar fa-fw"></i>
+                                    STATUS
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown"
+                                   href="#"
+                                        onClick=&#34;return false;&#34;>
+                                    <i class="fa-regular fa-user fa-fw"></i>
+                                    ABOUT
+                                    <i class="fa-solid fa-chevron-down fa-fw"></i>
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                        
+                                            <li>
+                                                <a href="../../about">
+                                                    ME
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://github.com/Renewdxin">
+                                                    GITHUB
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_73976305">
+                                                    BLOG
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a href="../../friends">
+                                                    FRIENDS
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown"
+                                   href="#"
+                                        onClick=&#34;return false;&#34;>
+                                    <i class="fa-regular fa-link fa-fw"></i>
+                                    LINKS
+                                    <i class="fa-solid fa-chevron-down fa-fw"></i>
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                        
+                                            <li>
+                                                <a href="../../link1">
+                                                    LINK1
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a href="../../link2">
+                                                    LINK2
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a href="../../link3">
+                                                    LINK3
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-screen w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="../../index.html"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="../../archives"
+                        >
+                            <span>
+                                ARCHIVES
+                            </span>
+                            
+                                <i class="fa-regular fa-archive fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="../../index.html"
+                        >
+                            <span>
+                                STATUS
+                            </span>
+                            
+                                <i class="fa-regular fa-chart-bar fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item-sub text-base my-1.5 flex flex-col w-full">
+                        
+                        <div class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary cursor-pointer text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                             navbar-data-toggle="submenu-About"
+                        >
+                            <span>
+                                ABOUT
+                            </span>
+                            
+                                <i class="fa-solid fa-chevron-right fa-sm fa-fw transition-all"></i>
+                            
+                        </div>
+                        
+
+                        
+                            <div class="flex-col items-start px-2 py-2 hidden" data-target="submenu-About">
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="../../about">ME</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://github.com/Renewdxin">GITHUB</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://blog.csdn.net/m0_73976305">BLOG</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="../../friends">FRIENDS</a>
+                                    </div>
+                                
+                            </div>
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item-sub text-base my-1.5 flex flex-col w-full">
+                        
+                        <div class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary cursor-pointer text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                             navbar-data-toggle="submenu-Links"
+                        >
+                            <span>
+                                LINKS
+                            </span>
+                            
+                                <i class="fa-solid fa-chevron-right fa-sm fa-fw transition-all"></i>
+                            
+                        </div>
+                        
+
+                        
+                            <div class="flex-col items-start px-2 py-2 hidden" data-target="submenu-Links">
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="../../link1">LINK1</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="../../link2">LINK2</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="../../link3">LINK3</a>
+                                    </div>
+                                
+                            </div>
+                        
+                    </li>
+            
+
+            
+            
+                
+                    
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="../../tags"
+                        >
+                            <span>Tags</span>
+                            <i class="fa-regular fa-tags fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="../../categories"
+                        >
+                            <span>Categories</span>
+                            <i class="fa-regular fa-folder fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="../../tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">15</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="../../categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">13</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="../../archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">23</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container flex relative justify-between box-border w-full h-full">
+    <div class="article-content-container">
+
+        <div class="article-title relative w-full">
+            
+                <div class="w-full flex items-center pt-6 justify-start">
+                    <h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">操作系统之Linux相关 内存管理、虚拟内存、设计特点、网络编程模型</h1>
+                </div>
+            
+            </div>
+
+        
+            <div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+                <div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+                    <img src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/59169859dbecb22beab9c89dc2f1e26.jpg">
+                </div>
+                <div class="info flex flex-col justify-between">
+                    <div class="author flex items-center">
+                        <span class="name text-default-text-color text-lg font-semibold">RenXin</span>
+                        
+                            <span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv3</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2024-07-31</span>
+        <span class="mobile">2024-07-31</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2024-08-03 23:55:45</span>
+            <span class="mobile">2024-08-03 23:55:45</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="../../categories/%E5%85%AB%E8%82%A1/">八股</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="../../tags/%E5%85%AB%E8%82%A1/">八股</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+            <h2 id="Linux-内存管理"><a href="#Linux-内存管理" class="headerlink" title="Linux 内存管理"></a>Linux 内存管理</h2><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://img-blog.csdnimg.cn/img_convert/3570315ea6e48a2b2645447b23bd7909.png#pic_center"
+                      alt="image.png|300"
+                ></p>
+<ul>
+<li><strong>32位系统虚拟内存空间</strong>: 4GB（通常是被分隔成多个物理内存碎片），其中内核空间占用1GB（高地址），用户空间占用3GB（低地址）。</li>
+<li><strong>用户空间布局</strong>:<ul>
+<li><strong>栈（Stack）</strong>: 从高地址向低地址增长，存储函数参数、局部变量等。默认大小通常为8MB，但可自定义。</li>
+<li><strong>文件映射</strong>: 包括动态库、共享内存，位于栈和堆之间。</li>
+<li><strong>堆（Heap）</strong>: 动态分配的内存区，从低地址向高地址增长。</li>
+<li><strong>未初始化数据段（.bss）</strong>: 存放未初始化的全局变量和静态变量。</li>
+<li><strong>已初始化数据段（.data）</strong>: 存放已初始化的全局变量和静态变量。</li>
+<li><strong>程序代码段（.text）</strong>: 存放可执行代码。</li>
+</ul>
+</li>
+<li><strong>分页机制</strong>: 每页大小通常为4KB。</li>
+<li><strong>页表</strong>: 实现虚拟地址到物理地址的映射。</li>
+<li><strong>段页式内存管理</strong>: 地址结构包括段号、段内页号和页内位移。</li>
+</ul>
+<h2 id="Linux-虚拟内存"><a href="#Linux-虚拟内存" class="headerlink" title="Linux 虚拟内存"></a>Linux 虚拟内存</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><ul>
+<li><strong>虚拟内存空间</strong>：32位处理器的虚拟内存空间为4GB。</li>
+<li><strong>进程视角</strong>：每个进程认为自己拥有4GB的连续虚拟地址空间，实际上只有部分映射到物理内存。</li>
+<li><strong>物理内存与外部存储</strong>：物理内存中可能会存在碎片，部分内容会存储在外部磁盘上，需要进行数据的交换（页置换）。</li>
+</ul>
+<h3 id="虚拟地址与物理地址的映射"><a href="#虚拟地址与物理地址的映射" class="headerlink" title="虚拟地址与物理地址的映射"></a>虚拟地址与物理地址的映射</h3><ul>
+<li><strong>两次映射</strong>：<ol>
+<li>映射到虚拟内存空间。</li>
+<li>映射到物理内存空间。</li>
+</ol>
+</li>
+<li><strong>责任分配</strong>：<ul>
+<li><strong>硬件部分</strong>：存储管理单元 (MMU) 负责将虚拟地址转换为物理地址。</li>
+<li><strong>软件部分</strong>：操作系统的内存管理模块负责维护和更新页表。</li>
+</ul>
+</li>
+</ul>
+<h3 id="内存分页"><a href="#内存分页" class="headerlink" title="内存分页"></a>内存分页</h3><ul>
+<li><strong>定义</strong>：将虚拟内存和物理内存分成固定大小的块（页），在Linux中每页大小一般为4KB。</li>
+<li><strong>页表映射</strong>：通过页表将虚拟地址转换为物理地址。</li>
+<li><strong>缺页异常处理</strong>：<ul>
+<li>当访问的虚拟地址没有对应的物理内存时，产生缺页异常。操作系统通过分配物理内存、更新页表来恢复进程运行。</li>
+</ul>
+</li>
+</ul>
+<h3 id="分页的优势"><a href="#分页的优势" class="headerlink" title="分页的优势"></a>分页的优势</h3><ul>
+<li><strong>减少内存碎片</strong>：以页为单位进行内存管理，从而避免小内存块无法使用的问题。</li>
+<li><strong>提高交换效率</strong>：在物理内存不足时，只交换最近未使用的页（页面置换算法，如LRU）。</li>
+<li><strong>延迟加载</strong>：按需加载，程序在需要时才将虚拟内存中的指令和数据加载到物理内存，提高内存利用效率。</li>
+</ul>
+<h3 id="虚拟地址到物理地址的映射机制"><a href="#虚拟地址到物理地址的映射机制" class="headerlink" title="虚拟地址到物理地址的映射机制"></a>虚拟地址到物理地址的映射机制</h3><ul>
+<li><strong>虚拟地址组成</strong>：虚拟地址包含页号和页内偏移。</li>
+<li><strong>页表引用</strong>：页号用于索引页表，页表存储物理页的基地址，基地址与页内偏移组合，形成实际的物理地址。</li>
+</ul>
+<h3 id="分级页表的缺陷"><a href="#分级页表的缺陷" class="headerlink" title="分级页表的缺陷"></a>分级页表的缺陷</h3><ul>
+<li><strong>存储需求</strong>：32位地址空间（4GB），每页4KB，共有2^20个页。单级页表需要4MB的存储空间，多个进程下存储需求会极大增加。</li>
+<li><strong>分级设计</strong>：分级页表（如二级页表）减少了单进程的页表存储需求。一级页表覆盖全部虚拟空间，二级页表按需创建。</li>
+</ul>
+<h3 id="段页式内存管理"><a href="#段页式内存管理" class="headerlink" title="段页式内存管理"></a>段页式内存管理</h3><ul>
+<li><strong>地址结构</strong>：虚拟地址由段号、页号和页内偏移组成。</li>
+<li><strong>访问流程</strong>：<ol>
+<li>根据段号访问段表，获取段基地址和段界限。</li>
+<li>根据页号访问页表，获取物理页的基地址。</li>
+<li>将物理页号与页内偏移组合，得到物理地址。</li>
+</ol>
+</li>
+<li><strong>成本与效率</strong>：虽然段页式内存管理增加了硬件和软件开销，但结合了分段和分页的优点，提高了内存利用率和系统的灵活性。</li>
+</ul>
+<h2 id="Linux-信号"><a href="#Linux-信号" class="headerlink" title="Linux 信号"></a>Linux 信号</h2><ul>
+<li><strong>用途</strong>: 用于进程间通信或进程与系统内核通信，通知某个状态改变或系统异常。</li>
+<li><strong>常用信号</strong>:<ul>
+<li><strong>SIGHUP (1)</strong>: 控制终端挂起或终止。</li>
+<li><strong>SIGPIPE (13)</strong>: 写入到读端关闭的管道或socket时产生。</li>
+<li><strong>SIGURG (23)</strong>: socket连接上收到紧急数据。</li>
+</ul>
+</li>
+</ul>
+<h2 id="Linux-设计特点"><a href="#Linux-设计特点" class="headerlink" title="Linux 设计特点"></a>Linux 设计特点</h2><ul>
+<li><strong>多任务（MultiTask）</strong>: 支持并发和并行的多个任务执行。</li>
+<li><strong>对称多处理（SMP）</strong>: CPU共享内存和硬件资源，多个CPU地位相等。</li>
+<li><strong>可执行文件链接格式（ELF）</strong>: Linux中可执行文件的存储格式。</li>
+<li><strong>宏内核（Monolithic Kernel）</strong>: 所有系统服务运行在内核态，如文件系统、设备驱动、网络协议等。</li>
+</ul>
+<h2 id="I-O-多路复用"><a href="#I-O-多路复用" class="headerlink" title="I&#x2F;O 多路复用"></a>I&#x2F;O 多路复用</h2><ul>
+<li><strong>概念</strong>: 在单个线程中处理多个I&#x2F;O操作。</li>
+<li><strong>实现方式</strong>:<ul>
+<li><strong>select</strong>: 最古老的多路复用机制；使用位图表示文件描述符集合。在某些系统中，默认最多监视1024个文件描述符，但这个限制可以通过系统配置进行调整。</li>
+<li><strong>poll</strong>: 使用数组存储文件描述符，理论上没有数量限制。但在处理非常大量的文件描述符时，性能可能会因为数组遍历的成本而受影响。</li>
+<li><strong>epoll</strong>: 仅在Linux系统上可用的I&#x2F;O多路复用机制。它使用一个事件表和红黑树来管理文件描述符，从而提高了处理大量文件描述符的效率。epoll通过事件通知的方式工作，只在文件描述符状态改变时通知应用程序，减少了不必要的轮询。</li>
+</ul>
+</li>
+<li><strong>epoll 的优势</strong>:<ul>
+<li><strong>效率高</strong>: 直接返回就绪的文件描述符，减少了内核与用户空间的数据复制，提高了数据处理效率。</li>
+<li><strong>可扩展性好</strong>: 支持的并发连接数量远大于select和poll，适用于高负载环境。</li>
+<li><strong>实时性强</strong>: 事件驱动机制允许快速响应文件描述符状态的改变。</li>
+</ul>
+</li>
+</ul>
+<h2 id="五种-I-O-模型详解"><a href="#五种-I-O-模型详解" class="headerlink" title="五种 I&#x2F;O 模型详解"></a>五种 I&#x2F;O 模型详解</h2><ul>
+<li><strong>阻塞式 I&#x2F;O</strong>: 进程阻塞等待I&#x2F;O完成。</li>
+<li><strong>非阻塞式 I&#x2F;O</strong>: 定期轮询检查I&#x2F;O是否就绪。</li>
+<li><strong>I&#x2F;O 多路复用</strong>: 使用select&#x2F;poll&#x2F;epoll监视多个文件描述符。</li>
+<li><strong>信号驱动 I&#x2F;O</strong>: 使用信号通知I&#x2F;O就绪。</li>
+<li><strong>异步 I&#x2F;O</strong>: 内核负责整个I&#x2F;O操作，完成后通知进程。</li>
+</ul>
+<h2 id="Linux-网络编程模型"><a href="#Linux-网络编程模型" class="headerlink" title="Linux 网络编程模型"></a>Linux 网络编程模型</h2><ul>
+<li><strong>多进程服务器</strong>:<ul>
+<li>父进程处理连接请求，子进程处理业务逻辑。</li>
+<li>需要处理进程间通信和僵尸进程问题。</li>
+</ul>
+</li>
+<li><strong>I&#x2F;O 复用服务器</strong>:<ul>
+<li>使用select&#x2F;poll&#x2F;epoll同时处理多个连接。</li>
+<li>避免了进程创建和切换的开销。</li>
+</ul>
+</li>
+<li><strong>多线程服务器</strong>:<ul>
+<li>资源共享更方便，切换开销更小。</li>
+<li>需要考虑线程安全和通信问题。</li>
+</ul>
+</li>
+</ul>
+<h2 id="软链接和硬链接对比"><a href="#软链接和硬链接对比" class="headerlink" title="软链接和硬链接对比"></a>软链接和硬链接对比</h2><ul>
+<li><strong>软链接</strong>:<ul>
+<li><strong>独立文件</strong>，包含目标文件路径。</li>
+<li><strong>功能</strong>: 可链接文件或目录，甚至不存在的文件。</li>
+<li><strong>行为</strong>: 原文件删除后，链接失效。</li>
+<li><strong>使用方式</strong>: 可跨文件系统，使用<code>ln -s</code>命令创建。</li>
+</ul>
+</li>
+<li><strong>硬链接</strong>:<ul>
+<li><strong>共享inode</strong>，与原文件共享同一个inode。</li>
+<li><strong>功能</strong>: 只能链接同一文件系统内的文件，不能链接目录。</li>
+<li><strong>行为</strong>: 原文件删除不会影响硬链接文件的使用。</li>
+<li><strong>使用方式</strong>: 使用<code>ln</code>命令创建，增加文件的链接计数。</li>
+</ul>
+</li>
+</ul>
+<h2 id="中断和异常"><a href="#中断和异常" class="headerlink" title="中断和异常"></a>中断和异常</h2><ul>
+<li><strong>中断</strong>: 外部事件触发，如硬件设备中断、时钟中断。</li>
+<li><strong>异常</strong>: 内部事件触发，如程序错误、地址越界、运算溢出。</li>
+<li><strong>处理</strong>: 都会导致处理器暂停当前任务，执行相应的处理程序。</li>
+</ul>
+<h2 id="用户态和核心态"><a href="#用户态和核心态" class="headerlink" title="用户态和核心态"></a>用户态和核心态</h2><ul>
+<li><strong>用户态</strong>:<ul>
+<li><strong>特征</strong>: 进程只能访问受限资源，不能直接访问硬件。</li>
+</ul>
+</li>
+<li><strong>核心态</strong>:<ul>
+<li><strong>特征</strong>: 可以执行特权指令，访问所有资源。</li>
+</ul>
+</li>
+<li><strong>切换场景</strong>: 系统调用、异常和中断。</li>
+</ul>
+<h2 id="并行和并发"><a href="#并行和并发" class="headerlink" title="并行和并发"></a>并行和并发</h2><ul>
+<li><strong>并行</strong>: 同时执行多个任务，需要多个处理单元。</li>
+<li><strong>并发</strong>: 在同一时间段内交替执行多个任务，可在单个处理单元上实现。</li>
+</ul>
+<h2 id="孤儿进程和僵尸进程"><a href="#孤儿进程和僵尸进程" class="headerlink" title="孤儿进程和僵尸进程"></a>孤儿进程和僵尸进程</h2><ul>
+<li><strong>孤儿进程</strong>:<ul>
+<li><strong>定义</strong>: 父进程先于子进程退出。</li>
+<li><strong>处理</strong>: 被init进程（PID 1）收养。</li>
+</ul>
+</li>
+<li><strong>僵尸进程</strong>:<ul>
+<li><strong>定义</strong>: 子进程退出但父进程未回收其状态信息。</li>
+<li><strong>影响</strong>: 仍占用系统资源（进程表项）。</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+
+        
+            <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> 操作系统之Linux相关 内存管理、虚拟内存、设计特点、网络编程模型</li>
+        <li><strong>Author:</strong> RenXin</li>
+        <li><strong>Created at
+                :</strong> 2024-07-31 00:00:00</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2024-08-03 23:55:45
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://blog.renxin.space/八股/system3/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
+            
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="../../tags/%E5%85%AB%E8%82%A1/">#八股</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+                
+                    <div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="prev"
+                        rel="prev"
+                        href="../redis2/"
+                        >
+                            <span class="left arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">redis基础知识总结</span>
+                                <span class="post-nav-item">Prev posts</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="next"
+                        rel="next"
+                        href="../system2/"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">操作系统中的文件系统概念和实现&amp;磁盘结构和调度算法</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+            <div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+                <div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        Comments
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '../../js/libs/waline.mjs';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          lang: 'zh-CN',
+          dark: 'body[class~="dark-mode"]',
+          reaction: false,
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+          recaptchaV3Key: "wasd",
+          
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+            </div>
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">操作系统之Linux相关 内存管理、虚拟内存、设计特点、网络编程模型</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="nav-text">Linux 内存管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98"><span class="nav-text">Linux 虚拟内存</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-text">概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E4%B8%8E%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%E7%9A%84%E6%98%A0%E5%B0%84"><span class="nav-text">虚拟地址与物理地址的映射</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E9%A1%B5"><span class="nav-text">内存分页</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E9%A1%B5%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="nav-text">分页的优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E5%88%B0%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80%E7%9A%84%E6%98%A0%E5%B0%84%E6%9C%BA%E5%88%B6"><span class="nav-text">虚拟地址到物理地址的映射机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E7%BA%A7%E9%A1%B5%E8%A1%A8%E7%9A%84%E7%BC%BA%E9%99%B7"><span class="nav-text">分级页表的缺陷</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AE%B5%E9%A1%B5%E5%BC%8F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="nav-text">段页式内存管理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux-%E4%BF%A1%E5%8F%B7"><span class="nav-text">Linux 信号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux-%E8%AE%BE%E8%AE%A1%E7%89%B9%E7%82%B9"><span class="nav-text">Linux 设计特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#I-O-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8"><span class="nav-text">I&#x2F;O 多路复用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E7%A7%8D-I-O-%E6%A8%A1%E5%9E%8B%E8%AF%A6%E8%A7%A3"><span class="nav-text">五种 I&#x2F;O 模型详解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux-%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="nav-text">Linux 网络编程模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AF%E9%93%BE%E6%8E%A5%E5%92%8C%E7%A1%AC%E9%93%BE%E6%8E%A5%E5%AF%B9%E6%AF%94"><span class="nav-text">软链接和硬链接对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E5%92%8C%E5%BC%82%E5%B8%B8"><span class="nav-text">中断和异常</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E6%A0%B8%E5%BF%83%E6%80%81"><span class="nav-text">用户态和核心态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B9%B6%E8%A1%8C%E5%92%8C%E5%B9%B6%E5%8F%91"><span class="nav-text">并行和并发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%A4%E5%84%BF%E8%BF%9B%E7%A8%8B%E5%92%8C%E5%83%B5%E5%B0%B8%E8%BF%9B%E7%A8%8B"><span class="nav-text">孤儿进程和僵尸进程</span></a></li></ol>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
+
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2024&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">RenXin</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        23 posts in total
+                    </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">VISITOR COUNT</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">TOTAL PAGE VIEWS</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.6.4</a></span>
+        </div>
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+    
+<script src="js/libs/Swup.min.js"></script>
+
+<script src="js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="js/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="js/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+
+
+
+<script src="js/tools/imageViewer.js" type="module"></script>
+
+<script src="js/utils.js" type="module"></script>
+
+<script src="js/main.js" type="module"></script>
+
+<script src="js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="js/layouts/categoryList.js" type="module"></script>
+
+
+
+
+
+    
+<script src="js/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="js/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="js/tools/runtime.js"></script>
+
+    
+<script src="js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="js/libs/Typed.min.js"></script>
+
+  
+<script src="js/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+
+<div class="post-scripts" data-swup-reload-script>
+    
+        
+<script src="js/tools/tocToggle.js" type="module"></script>
+
+<script src="js/layouts/toc.js" type="module"></script>
+
+<script src="js/plugins/tabs.js" type="module"></script>
+
+    
+</div>
+
+
+</body>
+</html>

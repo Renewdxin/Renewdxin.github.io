@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="English">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="RenXin">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://Renewdxin.github.io/八股/redis2/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="Redis 基础Redis 是什么，有哪些特点Redis 是一个开源的基于内存的数据库，具有以下特点：  基于内存：读写速度非常快，适用于缓存、高性能应用场景。 持久性：支持将数据持久化到磁盘，防止数据丢失。 多数据结构：支持字符串、哈希表、列表、集合、有序集合等。 原子性操作：保证操作的原子性，确保数据一致性。 分布式特性：提供多种集群方案，提高可扩展性和可用性。  为什么要使用 Redis 而">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis基础知识总结">
+<meta property="og:url" content="http://renewdxin.github.io/%E5%85%AB%E8%82%A1/redis2/index.html">
+<meta property="og:site_name" content="RenXin&#39;s Website">
+<meta property="og:description" content="Redis 基础Redis 是什么，有哪些特点Redis 是一个开源的基于内存的数据库，具有以下特点：  基于内存：读写速度非常快，适用于缓存、高性能应用场景。 持久性：支持将数据持久化到磁盘，防止数据丢失。 多数据结构：支持字符串、哈希表、列表、集合、有序集合等。 原子性操作：保证操作的原子性，确保数据一致性。 分布式特性：提供多种集群方案，提高可扩展性和可用性。  为什么要使用 Redis 而">
+<meta property="og:locale">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/image-20240802164324909.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/image-20240802164814316.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240802181533.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240802180654.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240802180938.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240802190810.png">
+<meta property="article:published_time" content="2024-07-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-08-03T15:57:26.691Z">
+<meta property="article:author" content="RenXin">
+<meta property="article:tag" content="八股">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/image-20240802164324909.png">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="../../images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="../../images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="../../images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            redis基础知识总结 -
+        
+        RenXin&#39;s Website
+    </title>
+
+    
+<link rel="stylesheet" href="fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="../../css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="assets/build/styles.css">
+
+    
+
+    
+<link rel="stylesheet" href="fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    
+        
+<script src="js/libs/anime.min.js"></script>
+
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"renewdxin.github.io","root":"/","language":"English"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"https://rxsss.oss-cn-beijing.aliyuncs.com/blog/GPTempDownload.jpg","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Welcome to Wonderland","subtitle":{"text":[],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"default","links":{"github":"https://github.com/Renewdxin","instagram":null,"zhihu":null,"twitter":null,"email":"cissyrenxin@icloud.com","fa-regular fa-pen-to-square":"https://blog.csdn.net/m0_73976305"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.6.4","navbar":{"auto_hide":true,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Status":{"path":"/","icon":"fa-regular fa-chart-bar"},"About":{"icon":"fa-regular fa-user","submenus":{"Me":"/about","Github":"https://github.com/Renewdxin","Blog":"https://blog.csdn.net/m0_73976305","Friends":"/friends"}},"Links":{"icon":"fa-regular fa-link","submenus":{"Link1":"/link1","Link2":"/link2","Link3":"/link3"}}},"search":{"enable":false,"preload":true},"tags":{"Tags":{"icon":"fa-solid fa-tags","path":"/tags/"}},"navbar":null,"categories":{"Categories":{"icon":"fa-solid fa-folder","path":"/categories/"}}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2022/8/17 11:45:14"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+<!--        <span class="swup-progress-icon">-->
+<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+<!--        </span>-->
+    
+</div>
+
+
+
+    <style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 500;
+        font-family: 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    <h2 class="ml13">
+        RenXin&#39;s Website
+    </h2>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
+
+        var animation = anime.timeline({loop: true})
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [40,0],
+                translateZ: 0,
+                opacity: [0,1],
+                filter: ['blur(5px)', 'blur(0px)'], // Starting from blurred to unblurred
+                easing: "easeOutExpo",
+                duration: 1400,
+                delay: (el, i) => 300 + 30 * i,
+            }).add({
+                targets: '.ml13 .letter',
+                translateY: [0,-40],
+                opacity: [1,0],
+                filter: ['blur(0px)', 'blur(5px)'], // Ending from unblurred to blurred
+                easing: "easeInExpo",
+                duration: 1200,
+                delay: (el, i) => 100 + 30 * i,
+                complete: function() {
+                    hidePreloader(); // Call hidePreloader after the animation completes
+                }
+            });
+
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
+
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
+
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
+
+        window.addEventListener('load', function () {
+            setTimeout(hidePreloader, 5000); // Call hidePreloader after 5000 milliseconds if not already called by animation
+        });
+
+        function hidePreloader() {
+            var preloader = document.querySelector('.preloader');
+            preloader.style.opacity = '0';
+            setTimeout(function () {
+                preloader.style.display = 'none';
+            }, 200);
+        }
+    </script>
+</div>
+
+<main class="page-container" id="swup">
+
+    
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container px-6 md:px-12">
+
+    <div class="navbar-content ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                RenXin&#39;s Website
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="../../index.html"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="../../archives"
+                                        >
+                                    <i class="fa-regular fa-archive fa-fw"></i>
+                                    ARCHIVES
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="../../index.html"
+                                        >
+                                    <i class="fa-regular fa-chart-bar fa-fw"></i>
+                                    STATUS
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown"
+                                   href="#"
+                                        onClick=&#34;return false;&#34;>
+                                    <i class="fa-regular fa-user fa-fw"></i>
+                                    ABOUT
+                                    <i class="fa-solid fa-chevron-down fa-fw"></i>
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                        
+                                            <li>
+                                                <a href="../../about">
+                                                    ME
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://github.com/Renewdxin">
+                                                    GITHUB
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_73976305">
+                                                    BLOG
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a href="../../friends">
+                                                    FRIENDS
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown"
+                                   href="#"
+                                        onClick=&#34;return false;&#34;>
+                                    <i class="fa-regular fa-link fa-fw"></i>
+                                    LINKS
+                                    <i class="fa-solid fa-chevron-down fa-fw"></i>
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                        
+                                            <li>
+                                                <a href="../../link1">
+                                                    LINK1
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a href="../../link2">
+                                                    LINK2
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a href="../../link3">
+                                                    LINK3
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-screen w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="../../index.html"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="../../archives"
+                        >
+                            <span>
+                                ARCHIVES
+                            </span>
+                            
+                                <i class="fa-regular fa-archive fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="../../index.html"
+                        >
+                            <span>
+                                STATUS
+                            </span>
+                            
+                                <i class="fa-regular fa-chart-bar fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item-sub text-base my-1.5 flex flex-col w-full">
+                        
+                        <div class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary cursor-pointer text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                             navbar-data-toggle="submenu-About"
+                        >
+                            <span>
+                                ABOUT
+                            </span>
+                            
+                                <i class="fa-solid fa-chevron-right fa-sm fa-fw transition-all"></i>
+                            
+                        </div>
+                        
+
+                        
+                            <div class="flex-col items-start px-2 py-2 hidden" data-target="submenu-About">
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="../../about">ME</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://github.com/Renewdxin">GITHUB</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://blog.csdn.net/m0_73976305">BLOG</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="../../friends">FRIENDS</a>
+                                    </div>
+                                
+                            </div>
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item-sub text-base my-1.5 flex flex-col w-full">
+                        
+                        <div class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary cursor-pointer text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                             navbar-data-toggle="submenu-Links"
+                        >
+                            <span>
+                                LINKS
+                            </span>
+                            
+                                <i class="fa-solid fa-chevron-right fa-sm fa-fw transition-all"></i>
+                            
+                        </div>
+                        
+
+                        
+                            <div class="flex-col items-start px-2 py-2 hidden" data-target="submenu-Links">
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="../../link1">LINK1</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="../../link2">LINK2</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="../../link3">LINK3</a>
+                                    </div>
+                                
+                            </div>
+                        
+                    </li>
+            
+
+            
+            
+                
+                    
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="../../tags"
+                        >
+                            <span>Tags</span>
+                            <i class="fa-regular fa-tags fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="../../categories"
+                        >
+                            <span>Categories</span>
+                            <i class="fa-regular fa-folder fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="../../tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">15</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="../../categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">13</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="../../archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">23</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container flex relative justify-between box-border w-full h-full">
+    <div class="article-content-container">
+
+        <div class="article-title relative w-full">
+            
+                <div class="w-full flex items-center pt-6 justify-start">
+                    <h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">redis基础知识总结</h1>
+                </div>
+            
+            </div>
+
+        
+            <div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+                <div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+                    <img src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/59169859dbecb22beab9c89dc2f1e26.jpg">
+                </div>
+                <div class="info flex flex-col justify-between">
+                    <div class="author flex items-center">
+                        <span class="name text-default-text-color text-lg font-semibold">RenXin</span>
+                        
+                            <span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv3</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2024-08-01</span>
+        <span class="mobile">2024-08-01</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2024-08-03 23:57:26</span>
+            <span class="mobile">2024-08-03 23:57:26</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="../../categories/%E5%85%AB%E8%82%A1/">八股</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="../../tags/%E5%85%AB%E8%82%A1/">八股</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+            <h2 id="Redis-基础"><a href="#Redis-基础" class="headerlink" title="Redis 基础"></a>Redis 基础</h2><h3 id="Redis-是什么，有哪些特点"><a href="#Redis-是什么，有哪些特点" class="headerlink" title="Redis 是什么，有哪些特点"></a>Redis 是什么，有哪些特点</h3><p>Redis 是一个开源的基于内存的数据库，具有以下特点：</p>
+<ol>
+<li><strong>基于内存</strong>：读写速度非常快，适用于缓存、高性能应用场景。</li>
+<li><strong>持久性</strong>：支持将数据持久化到磁盘，防止数据丢失。</li>
+<li><strong>多数据结构</strong>：支持字符串、哈希表、列表、集合、有序集合等。</li>
+<li><strong>原子性操作</strong>：保证操作的原子性，确保数据一致性。</li>
+<li><strong>分布式特性</strong>：提供多种集群方案，提高可扩展性和可用性。</li>
+</ol>
+<h3 id="为什么要使用-Redis-而不仅仅依赖-MySQL"><a href="#为什么要使用-Redis-而不仅仅依赖-MySQL" class="headerlink" title="为什么要使用 Redis 而不仅仅依赖 MySQL"></a>为什么要使用 Redis 而不仅仅依赖 MySQL</h3><ul>
+<li><strong>高性能</strong>：读写速度快，适用于<strong>频繁读写</strong>的数据。</li>
+<li><strong>高并发</strong>：高效处理并发请求，适用于快速响应的场景。</li>
+<li><strong>丰富的数据结构</strong>：处理特定类型数据和实现特定功能更灵活。</li>
+<li><strong>减轻数据库压力</strong>：缓存常用数据，减轻 MySQL 等数据库的压力。</li>
+</ul>
+<h3 id="Redis-是单线程吗"><a href="#Redis-是单线程吗" class="headerlink" title="Redis 是单线程吗"></a>Redis 是单线程吗</h3><p>Redis 的<strong>网络请求模块</strong>是单线程的，但其他模块使用多线程，以提高性能。</p>
+<h3 id="Redis-单线程为什么还这么快"><a href="#Redis-单线程为什么还这么快" class="headerlink" title="Redis 单线程为什么还这么快"></a>Redis 单线程为什么还这么快</h3><ol>
+<li><strong>基于内存存储</strong>：内存访问速度快。</li>
+<li><strong>非阻塞单线程</strong>：避免多线程竞争和同步开销。</li>
+<li><strong>高效的数据结构</strong>：如 STRING、LIST、HASH 等。</li>
+<li><strong>I&#x2F;O 多路复用</strong>：同时监听多个 Socket，实现高效并发处理。</li>
+</ol>
+<h2 id="Redis-数据类型和数据结构"><a href="#Redis-数据类型和数据结构" class="headerlink" title="Redis 数据类型和数据结构"></a>Redis 数据类型和数据结构</h2><h3 id="五种基本数据结构及应用场景"><a href="#五种基本数据结构及应用场景" class="headerlink" title="五种基本数据结构及应用场景"></a>五种基本数据结构及应用场景</h3><ol>
+<li><strong>String（字符串）</strong>：缓存对象、计数、分布式锁。底层的数据结构实现主要是SDS(简单动态字符串)</li>
+<li><strong>List（列表）</strong>：消息队列。底层数据结构是双向链表或者压缩列表</li>
+<li><strong>Set（集合）</strong>：点赞、共同关注、抽奖活动。底层由哈希表或整数集合（都是整数且元素个数小于 512个）实现</li>
+<li><strong>Hash（哈希）</strong>：缓存对象、购物车。底层由哈希表或压缩列表（哈希类型元素个数小于512个，所有值小于 64 字节）实现</li>
+<li><strong>Zset（有序集合）</strong>：排行榜。底层数据结构压缩列表或跳表<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/image-20240802164324909.png"
+                      alt="image-20240802164324909|500|500|500"
+                ></li>
+</ol>
+<h3 id="其他数据类型"><a href="#其他数据类型" class="headerlink" title="其他数据类型"></a>其他数据类型</h3><ol>
+<li><strong>BitMap</strong>：签到统计、用户登陆态判断。</li>
+<li><strong>HyperLogLog</strong>：基数统计，如网页面 UV 计数。不准确。优点在输入元素的 数量或者体积非常非常大时，所需的内存空间总是固定的、并且很小</li>
+<li><strong>GEO</strong>：存储地理位置信息。</li>
+<li><strong>Stream</strong>：消息队列。自动生成全局唯一ID，支持以消费组形式消费数据</li>
+</ol>
+<h3 id="Redis-底层数据结构"><a href="#Redis-底层数据结构" class="headerlink" title="Redis 底层数据结构"></a>Redis 底层数据结构</h3><ol>
+<li><strong>SDS（简单动态字符串）</strong>：动态扩容，支持字符串和二进制数据。</li>
+<li><strong>双端链表</strong>：快速插入和删除。无法很好的利用CPU缓存，内存开销比较大</li>
+<li><strong>压缩列表</strong>：压缩列表是一种紧凑的、可变⻓度，由连续内存块组成的顺序型数据结构。在内存使用效率上比较高</li>
+<li><strong>哈希表</strong>：快速查询，采用了拉链法解决哈希冲突。</li>
+<li><strong>整数集合</strong>：高效存储整数值。二进制表示</li>
+<li><strong>跳表</strong>：多层有序链表，查找复杂度 O(logN)。</li>
+<li><strong>quicklist</strong>：双向链表+压缩列表的组合。quicklist 就是一个链表，而链表中的每个元素又是一个压缩列 表</li>
+<li><strong>listpack</strong>：只记录当前节点的长度，避免连锁更新问题。<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/image-20240802164814316.png"
+                      alt="image-20240802164814316|500|500|500"
+                ></li>
+</ol>
+<h2 id="Redis-持久化"><a href="#Redis-持久化" class="headerlink" title="Redis 持久化"></a>Redis 持久化</h2><h3 id="数据不丢失的实现"><a href="#数据不丢失的实现" class="headerlink" title="数据不丢失的实现"></a>数据不丢失的实现</h3><p>Redis 通过以下三种方式实现数据持久化，将数据存储到磁盘，确保在重启时可以恢复数据：</p>
+<ul>
+<li><strong>AOF 日志</strong>：记录每个写操作命令，以日志形式存储。</li>
+<li><strong>RDB 快照</strong>：定期将内存数据快照保存为二进制文件。</li>
+<li><strong>混合持久化</strong>：结合 AOF 和 RDB 的优点，提供更快的恢复速度和较少的数据丢失。</li>
+</ul>
+<h3 id="AOF-日志"><a href="#AOF-日志" class="headerlink" title="AOF 日志"></a>AOF 日志</h3><ul>
+<li><strong>机制</strong>：先执行命令，把数据写入内存，记录每个写操作命令，重启时重放日志恢复数据。</li>
+<li><strong>优点</strong>：避免记录错误命令，不阻塞当前写操作。</li>
+<li><strong>写回策略</strong>：<ul>
+<li><strong>Always</strong>：每次写操作后立即写回磁盘，最安全，但性能较低。</li>
+<li><strong>Everysec</strong>：每秒写回一次，折中方案，性能和数据安全性较好。</li>
+<li><strong>No</strong>：由操作系统控制写回时机，性能最高，但数据安全性较低。</li>
+</ul>
+</li>
+<li><strong>重写机制</strong>：扫描数据中所有的键值对数据，然后为每一个键值对生成一条写操作命令，接着将该命令写入到新的 AOF 文件，重写完成后，就替换掉现有的 AOF 日志。重写的过程是由后台子进程完成的，这样可以使得主进程可以继续正常处理命令。<ul>
+<li><strong>触发时机</strong>：<ul>
+<li>手动执行 <code>bgrewriteaof</code> 命令。</li>
+<li>主从复制完成。</li>
+<li>AOF 重写被设置为待调度执行。</li>
+<li>AOF 文件大小比例超出阈值，以及 AOF 文件的大小绝对值超出阈值。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="RDB-快照"><a href="#RDB-快照" class="headerlink" title="RDB 快照"></a>RDB 快照</h3><ul>
+<li><strong>机制</strong>：记录某一时刻的内存数据快照，以二进制方式保存到磁盘。</li>
+<li><strong>优点</strong>：数据恢复速度快，文件体积小。</li>
+<li><strong>缺点</strong>：频率太低会丢失数据，频率太高会影响性能。</li>
+<li><strong>生成方式</strong>：<ul>
+<li><strong>save</strong>：在主线程执行，可能阻塞 Redis 的其他操作。</li>
+<li><strong>bgsave</strong>：在子进程执行，避免阻塞主线程，适合大规模数据保存。</li>
+</ul>
+</li>
+</ul>
+<h3 id="混合持久化"><a href="#混合持久化" class="headerlink" title="混合持久化"></a>混合持久化</h3><ul>
+<li><strong>机制</strong>：结合 AOF 和 RDB，先将内存数据以 RDB 方式写入 AOF 文件，然后将增量命令以 AOF 方式写入。文件前半部分是 RDB 格式的全量数据（加载速度快），后半部分是 AOF 格式的增量数据（数据丢失更少）。</li>
+<li><strong>优点</strong>：快速恢复数据，降低数据丢失风险，结合了 RDB 的快速加载和 AOF 的持久性优势。</li>
+<li><strong>缺点</strong>：AOF 文件可读性变差，兼容性较差（Redis 4.0 之前版本不支持）。</li>
+</ul>
+<h3 id="AOF-和-RDB-的选择"><a href="#AOF-和-RDB-的选择" class="headerlink" title="AOF 和 RDB 的选择"></a>AOF 和 RDB 的选择</h3><ul>
+<li><strong>AOF 优点</strong>：持久性更好，丢失数据较少，但恢复速度较慢。</li>
+<li><strong>RDB 优点</strong>：数据恢复速度快，但快照频率难以掌控。</li>
+<li><strong>混合持久化</strong>：综合两者优点，适合需要快速恢复数据且不希望数据丢失的场景。</li>
+</ul>
+<h3 id="AOF-重写的执行过程"><a href="#AOF-重写的执行过程" class="headerlink" title="AOF 重写的执行过程"></a>AOF 重写的执行过程</h3><ol>
+<li><strong>启动重写</strong>：手动或触发条件满足时，Redis 启动 AOF 重写。</li>
+<li><strong>生成新文件</strong>：子进程遍历所有数据，生成新的 AOF 文件。</li>
+<li><strong>处理增量数据</strong>：在生成新文件过程中，增量数据被记录到缓冲区。</li>
+<li><strong>替换旧文件</strong>：新 AOF 文件生成完毕后，增量数据写入新文件，替换旧 AOF 文件。</li>
+</ol>
+<h3 id="RDB-快照的执行过程"><a href="#RDB-快照的执行过程" class="headerlink" title="RDB 快照的执行过程"></a>RDB 快照的执行过程</h3><ol>
+<li><strong>save 命令</strong>：主线程执行，阻塞其他操作。</li>
+<li><strong>bgsave 命令</strong>：子进程执行，避免主线程阻塞。</li>
+<li><strong>文件生成</strong>：快照生成的文件包含当前内存中的所有数据。</li>
+<li><strong>文件加载</strong>：重启时加载 RDB 文件恢复数据。</li>
+</ol>
+<h3 id="混合持久化的执行过程"><a href="#混合持久化的执行过程" class="headerlink" title="混合持久化的执行过程"></a>混合持久化的执行过程</h3><ol>
+<li><strong>启动重写</strong>：AOF 重写过程中，子进程将内存数据以 RDB 方式写入 AOF 文件。</li>
+<li><strong>记录增量数据</strong>：主线程处理的操作命令记录到重写缓冲区，以 AOF 方式写入新文件。</li>
+<li><strong>文件替换</strong>：新文件生成后，通知主进程将其替换旧文件。新文件前半部分为 RDB 格式数据，后半部分为 AOF 格式数据。</li>
+<li><strong>快速恢复</strong>：重启时，先加载 RDB 部分，快速恢复大部分数据，再加载 AOF 部分，确保数据一致性。</li>
+</ol>
+<h2 id="Redis-功能和高可用性"><a href="#Redis-功能和高可用性" class="headerlink" title="Redis 功能和高可用性"></a>Redis 功能和高可用性</h2><h3 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h3><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240802181533.png"
+                      alt="image.png|500|500|500"
+                ><br>Redis 通过主从复制模式实现数据的高可用性，保证数据副本的一致性。主从复制模式下，读写操作分离：</p>
+<ul>
+<li><strong>读操作</strong>：主库和从库都可以接收。</li>
+<li><strong>写操作</strong>：<strong>先在主库执行，然后同步到从库</strong>。</li>
+</ul>
+<h4 id="全量复制"><a href="#全量复制" class="headerlink" title="全量复制"></a>全量复制</h4><ol>
+<li><strong>建立连接</strong>：从库与主库建立连接，主库确认后开始同步。</li>
+<li><strong>主库发送数据</strong>：主库发送当前数据的 RDB 快照及增量写命令。</li>
+<li><strong>从库接收数据</strong>：从库接收 RDB 文件和增量写命令，更新数据状态。<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240802180654.png"
+                      alt="image.png|500|500|500"
+                ></li>
+</ol>
+<h4 id="增量复制"><a href="#增量复制" class="headerlink" title="增量复制"></a>增量复制</h4><p>从库发生宕机，重新连接后数据的同步操作（增量复制）<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240802180938.png"
+                      alt="image.png|500|500|500"
+                ></p>
+<ol>
+<li><strong>从库宕机重连</strong>：从库发生宕机，主库会把断连期间收到的写操作命令，写到repl_backlog_buffer中；从库重新连接主库后，发送 psync 命令并传递当前的复制偏移量slave_repl_offset。</li>
+<li><strong>数据同步</strong>：主库根据从库的复制偏移量，决定进行增量复制还是全量复制（从库相差 &gt; repl_backlog_buffer）。</li>
+</ol>
+<h4 id="全量复制使用-RDB-的原因"><a href="#全量复制使用-RDB-的原因" class="headerlink" title="全量复制使用 RDB 的原因"></a>全量复制使用 RDB 的原因</h4><ol>
+<li><strong>压缩数据</strong>：RDB 文件内容是经过压缩的二进制，文件较小。</li>
+<li><strong>性能影响小</strong>：AOF 文件需要选择文件刷盘的策略，选择不当会影响性能，而 RDB 文件只在备份和同步时生成。</li>
+</ol>
+<h3 id="哨兵模式"><a href="#哨兵模式" class="headerlink" title="哨兵模式"></a>哨兵模式</h3><p>Redis 的哨兵模式用于监控主从服务器，提供主从节点故障转移的功能，实现自动故障转移和高可用性。哨兵的功能包括：</p>
+<ul>
+<li><strong>监控</strong>：定期检查主从服务器状态。</li>
+<li><strong>通知</strong>：发现问题时通知相关人员。</li>
+<li><strong>故障迁移</strong>：自动主从切换。</li>
+<li><strong>配置管理</strong>：统一管理主从地址。</li>
+</ul>
+<h3 id="切片集群"><a href="#切片集群" class="headerlink" title="切片集群"></a>切片集群</h3><p>当缓存数据量大到一台服务器无法承载时，使用 Redis 切片集群将数据分布在多个服务器上，降低系统对单主机点的依赖，提高读写性能。切片集群的工作原理：</p>
+<ol>
+<li><strong>数据分片</strong>：将数据集划分为 16384 个槽，每个节点管理部分槽的数据。</li>
+<li><strong>节点间通信</strong>：节点通过 gossip 协议互相通信，保持一致性。</li>
+<li><strong>数据分布</strong>：根据键的 CRC16 哈希值确定数据属于哪个槽，并存储到相应节点。</li>
+<li><strong>故障检测</strong>：哨兵机制检测节点状态，重新分配槽并选举新主节点。</li>
+<li><strong>客户端路由</strong>：客户端根据键的哈希值确定目标节点，直接与负责数据的节点通信。</li>
+<li><strong>数据复制</strong>：每个槽有一个主节点和若干个从节点，数据写入主节点后异步复制到从节点。</li>
+</ol>
+<h3 id="集群脑裂"><a href="#集群脑裂" class="headerlink" title="集群脑裂"></a>集群脑裂</h3><p>脑裂是指在网络故障时，主节点的网络突然发生了问题与所有的从节点都失联，但与客户端正常通信，这些数据被主节点缓存到了缓冲区里。哨兵 也发现主节点失联了，就会在从节点中选举出一个leader作为主节点，导致出现多个主节点。解决方法：</p>
+<ol>
+<li><strong>主节点写保护</strong>：主节点在发现从节点断开或通信超时数量少于阈值时，禁止写操作。</li>
+<li><strong>从节点配置</strong>：设置主节点需要从节点的 ACK 消息数量和延迟限制，确保数据一致性。</li>
+</ol>
+<h2 id="过期删除"><a href="#过期删除" class="headerlink" title="过期删除"></a>过期删除</h2><p>Redis 支持为键设置过期时间，自动删除过期键值对，采用以下删除策略：</p>
+<ol>
+<li><strong>定时删除</strong>：设置定时事件，到时间自动删除键，占用 CPU 时间多。</li>
+<li><strong>惰性删除</strong>：不主动删除，访问键时检查其是否过期，节省 CPU 时间，但可能浪费内存。</li>
+<li><strong>定期删除</strong>：每隔一段时间随机抽取部分键进行检查和删除，均衡 CPU 和内存使用。<br>Redis 选择「惰性删除+定期删除」这两种策略配和使用，以求在合理使用 CPU 时间和避免内存浪费之间取得平衡</li>
+</ol>
+<h2 id="内存淘汰策略"><a href="#内存淘汰策略" class="headerlink" title="内存淘汰策略"></a>内存淘汰策略</h2><p>当内存不足时，Redis 会根据配置的淘汰策略删除一些键以释放内存。常见策略：</p>
+<ol>
+<li><strong>NoEviction</strong>：不进行数据淘汰，内存不足时返回错误。</li>
+<li><strong>VolatileTTL</strong>：优先淘汰更早过期的键。</li>
+<li><strong>VolatileLRU</strong>：对带过期时间的键使用 LRU 策略，其他键使用 NoEviction 策略。</li>
+<li><strong>VolatileRandom</strong>：对带过期时间的键随机淘汰，其他键使用 NoEviction 策略。</li>
+<li><strong>VolatileLFU</strong>：对带过期时间的键使用 LFU 策略，其他键使用 NoEviction 策略。</li>
+<li><strong>AllKeysLRU</strong>：根据最近最少使用原则淘汰最久未使用的键。</li>
+<li><strong>AllKeysRandom</strong>：随机选择一个键进行淘汰。</li>
+<li><strong>AllKeysLFU</strong>：根据最少频繁使用原则淘汰最少使用的键。<br>可以使用 <code>config get maxmemory-policy</code> 命令，来查看当前 Redis 的内存淘汰策略</li>
+</ol>
+<h3 id="LRU-和-LFU-算法"><a href="#LRU-和-LFU-算法" class="headerlink" title="LRU 和 LFU 算法"></a>LRU 和 LFU 算法</h3><ol>
+<li><strong>LRU（Least Recently Used）</strong>：淘汰最近最少使用的对象。<ul>
+<li><strong>实现</strong>：随机取若干值，淘汰最久未使用的对象。</li>
+</ul>
+</li>
+<li><strong>LFU（Least Frequently Used）</strong>：淘汰使用频率最低的对象。<ul>
+<li><strong>实现</strong>：维护使用计数，淘汰使用计数最低的对象。</li>
+</ul>
+</li>
+</ol>
+<p><strong>区别</strong>：</p>
+<ul>
+<li><strong>LRU</strong>：关注最近访问情况，认为最近访问的对象更可能被再次访问。</li>
+<li><strong>LFU</strong>：关注使用频率，认为使用频率低的对象未来访问概率低。</li>
+</ul>
+<h2 id="Redis缓存"><a href="#Redis缓存" class="headerlink" title="Redis缓存"></a>Redis缓存</h2><p>由于用户请求频繁访问数据库，直接访问数据库可能导致数据库崩溃，因此常常使用Redis作为数据库的缓存层。</p>
+<h3 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h3><p>概念：某个时间点，缓存中的大量数据同时失效，大量请求涌向数据库，导致数据库压力剧增。<br>原因：缓存过期时间设置相近或Redis故障。</p>
+<h4 id="应对策略"><a href="#应对策略" class="headerlink" title="应对策略"></a>应对策略</h4><ol>
+<li><p><strong>大量数据同时过期</strong></p>
+<ul>
+<li><strong>均匀设置过期时间</strong>：加随机数，避免大量数据同一时间失效。</li>
+<li><strong>使用互斥锁</strong>：确保同一时间只有一个请求构建缓存。</li>
+<li><strong>后台线程定时更新缓存</strong>：让缓存设置“永久有效”。</li>
+</ul>
+</li>
+<li><p><strong>Redis故障宕机</strong></p>
+<ul>
+<li><strong>服务熔断或请求限流</strong>：减少直接对数据库的压力。</li>
+<li><strong>构建Redis高可靠集群</strong>：通过从节点切换为主节点避免缓存雪崩确保服务连续。</li>
+</ul>
+</li>
+</ol>
+<h3 id="缓存击穿"><a href="#缓存击穿" class="headerlink" title="缓存击穿"></a>缓存击穿</h3><p>缓存击穿：热点数据过期时，大量并发请求查询该数据，导致直接访问数据库，增加数据库负载。缓存击穿是缓存雪崩的一个子集<br>解决方案：互斥锁或后台更新缓存</p>
+<h3 id="缓存穿透"><a href="#缓存穿透" class="headerlink" title="缓存穿透"></a>缓存穿透</h3><p>缓存穿透：请求的数据既不在缓存中，也不在数据库中，导致所有请求直接访问数据库，增加负载。</p>
+<h4 id="常见原因及处理方法"><a href="#常见原因及处理方法" class="headerlink" title="常见原因及处理方法"></a>常见原因及处理方法</h4><p>原因： 业务误操作或恶意攻击。<br>解决方案：</p>
+<ul>
+<li><strong>对非法请求做限制</strong>。</li>
+<li><strong>缓存中设置空值或默认值</strong>。</li>
+<li><strong>使用布隆过滤器判断数据是否存在</strong>。</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240802190810.png"
+                      alt="image.png|500|500|500"
+                ></li>
+</ul>
+<h3 id="保证数据库和缓存的一致性"><a href="#保证数据库和缓存的一致性" class="headerlink" title="保证数据库和缓存的一致性"></a>保证数据库和缓存的一致性</h3><p><strong>Cache Aside策略</strong>：细分为读策略和写策略·</p>
+<h4 id="写策略"><a href="#写策略" class="headerlink" title="写策略"></a>写策略</h4><ul>
+<li>更新数据库后删除缓存。</li>
+</ul>
+<h4 id="读策略"><a href="#读策略" class="headerlink" title="读策略"></a>读策略</h4><ul>
+<li>读取的数据命中返回数据；</li>
+<li>未命中从数据库读取数据后写入缓存并返回。</li>
+</ul>
+<p>为了高缓存命中率，可以采用更新数据库加<strong>更新缓存</strong>的方法<br>但需解决并发导致的一致性问题，例如加分布式锁或设置较短的缓存过期时间。</p>
+<h3 id="保证删除缓存操作一定能成功"><a href="#保证删除缓存操作一定能成功" class="headerlink" title="保证删除缓存操作一定能成功"></a>保证删除缓存操作一定能成功</h3><h4 id="重试机制"><a href="#重试机制" class="headerlink" title="重试机制"></a>重试机制</h4><p>引入消息队列，应用删除失败从消息队列重新读取数据再进行删除，重试多次未成功则报错。</p>
+<h4 id="订阅BINLog"><a href="#订阅BINLog" class="headerlink" title="订阅BINLog"></a>订阅BINLog</h4><p>订阅binlog日志，准确删除缓存中的数据。通过模拟MySQL从节点获取binlog，解析后删除缓存数据。</p>
+
+        </div>
+
+        
+            <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> redis基础知识总结</li>
+        <li><strong>Author:</strong> RenXin</li>
+        <li><strong>Created at
+                :</strong> 2024-08-01 00:00:00</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2024-08-03 23:57:26
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://blog.renxin.space/八股/redis2/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
+            
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="../../tags/%E5%85%AB%E8%82%A1/">#八股</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+                
+                
+                    <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="next"
+                        rel="next"
+                        href="../system3/"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">操作系统之Linux相关 内存管理、虚拟内存、设计特点、网络编程模型</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+            <div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+                <div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        Comments
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '../../js/libs/waline.mjs';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          lang: 'zh-CN',
+          dark: 'body[class~="dark-mode"]',
+          reaction: false,
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+          recaptchaV3Key: "wasd",
+          
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+            </div>
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">redis基础知识总结</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-%E5%9F%BA%E7%A1%80"><span class="nav-text">Redis 基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%8C%E6%9C%89%E5%93%AA%E4%BA%9B%E7%89%B9%E7%82%B9"><span class="nav-text">Redis 是什么，有哪些特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E7%94%A8-Redis-%E8%80%8C%E4%B8%8D%E4%BB%85%E4%BB%85%E4%BE%9D%E8%B5%96-MySQL"><span class="nav-text">为什么要使用 Redis 而不仅仅依赖 MySQL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E6%98%AF%E5%8D%95%E7%BA%BF%E7%A8%8B%E5%90%97"><span class="nav-text">Redis 是单线程吗</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E5%8D%95%E7%BA%BF%E7%A8%8B%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%98%E8%BF%99%E4%B9%88%E5%BF%AB"><span class="nav-text">Redis 单线程为什么还这么快</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-text">Redis 数据类型和数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%94%E7%A7%8D%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8F%8A%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-text">五种基本数据结构及应用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-text">其他数据类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-text">Redis 底层数据结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-text">Redis 持久化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E4%B8%8D%E4%B8%A2%E5%A4%B1%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-text">数据不丢失的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AOF-%E6%97%A5%E5%BF%97"><span class="nav-text">AOF 日志</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RDB-%E5%BF%AB%E7%85%A7"><span class="nav-text">RDB 快照</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%B7%E5%90%88%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-text">混合持久化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AOF-%E5%92%8C-RDB-%E7%9A%84%E9%80%89%E6%8B%A9"><span class="nav-text">AOF 和 RDB 的选择</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AOF-%E9%87%8D%E5%86%99%E7%9A%84%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B"><span class="nav-text">AOF 重写的执行过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RDB-%E5%BF%AB%E7%85%A7%E7%9A%84%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B"><span class="nav-text">RDB 快照的执行过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%B7%E5%90%88%E6%8C%81%E4%B9%85%E5%8C%96%E7%9A%84%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B"><span class="nav-text">混合持久化的执行过程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-%E5%8A%9F%E8%83%BD%E5%92%8C%E9%AB%98%E5%8F%AF%E7%94%A8%E6%80%A7"><span class="nav-text">Redis 功能和高可用性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="nav-text">主从复制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8F"><span class="nav-text">哨兵模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%87%E7%89%87%E9%9B%86%E7%BE%A4"><span class="nav-text">切片集群</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9B%86%E7%BE%A4%E8%84%91%E8%A3%82"><span class="nav-text">集群脑裂</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%87%E6%9C%9F%E5%88%A0%E9%99%A4"><span class="nav-text">过期删除</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5"><span class="nav-text">内存淘汰策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#LRU-%E5%92%8C-LFU-%E7%AE%97%E6%B3%95"><span class="nav-text">LRU 和 LFU 算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis%E7%BC%93%E5%AD%98"><span class="nav-text">Redis缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9"><span class="nav-text">缓存雪崩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF"><span class="nav-text">缓存击穿</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F"><span class="nav-text">缓存穿透</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%9D%E8%AF%81%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8C%E7%BC%93%E5%AD%98%E7%9A%84%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-text">保证数据库和缓存的一致性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%9D%E8%AF%81%E5%88%A0%E9%99%A4%E7%BC%93%E5%AD%98%E6%93%8D%E4%BD%9C%E4%B8%80%E5%AE%9A%E8%83%BD%E6%88%90%E5%8A%9F"><span class="nav-text">保证删除缓存操作一定能成功</span></a></li></ol></li></ol>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
+
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2024&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">RenXin</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        23 posts in total
+                    </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">VISITOR COUNT</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">TOTAL PAGE VIEWS</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.6.4</a></span>
+        </div>
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+    
+<script src="js/libs/Swup.min.js"></script>
+
+<script src="js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="js/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="js/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+
+
+
+<script src="js/tools/imageViewer.js" type="module"></script>
+
+<script src="js/utils.js" type="module"></script>
+
+<script src="js/main.js" type="module"></script>
+
+<script src="js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="js/layouts/categoryList.js" type="module"></script>
+
+
+
+
+
+    
+<script src="js/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="js/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="js/tools/runtime.js"></script>
+
+    
+<script src="js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="js/libs/Typed.min.js"></script>
+
+  
+<script src="js/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+
+<div class="post-scripts" data-swup-reload-script>
+    
+        
+<script src="js/tools/tocToggle.js" type="module"></script>
+
+<script src="js/layouts/toc.js" type="module"></script>
+
+<script src="js/plugins/tabs.js" type="module"></script>
+
+    
+</div>
+
+
+</body>
+</html>
