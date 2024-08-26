@@ -18,18 +18,18 @@
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta name="description" content="关于阿里云服务器Ubuntu系统安装jdk8中遇到的坑及解决方案关于阿里云服务器无法登录的问题基本反馈是这样的：   如果你添加了ip之后仍然登不进去，有一种方法是直接从第三个选项进去登录之后修改文件   然后输入命令： 1vim &#x2F;etc&#x2F;ssh&#x2F;sshd_config  再在最底部修改PasswordAuthentication的参数为yes，输入:wq之后输入命令（直接重启也行）： 1ser">
+        <meta name="description" content="关于阿里云服务器无法登录的问题基本反馈是这样的：  如果你添加了ip之后仍然登不进去，有一种方法是直接从第三个选项进去登录之后修改文件  然后输入命令： 1vim &#x2F;etc&#x2F;ssh&#x2F;sshd_config  再在最底部修改PasswordAuthentication的参数为yes，输入:wq之后输入命令（直接重启也行）： 1service sshd restart    安装旧版gcc先安装一些基">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于阿里云服务器Ubuntu系统安装jdk8中遇到的坑及解决方案">
 <meta property="og:url" content="http://renewdxin.github.io/Java/JVM/Ubuntu-install-jdk8/index.html">
 <meta property="og:site_name" content="RenXin&#39;s Website">
-<meta property="og:description" content="关于阿里云服务器Ubuntu系统安装jdk8中遇到的坑及解决方案关于阿里云服务器无法登录的问题基本反馈是这样的：   如果你添加了ip之后仍然登不进去，有一种方法是直接从第三个选项进去登录之后修改文件   然后输入命令： 1vim &#x2F;etc&#x2F;ssh&#x2F;sshd_config  再在最底部修改PasswordAuthentication的参数为yes，输入:wq之后输入命令（直接重启也行）： 1ser">
+<meta property="og:description" content="关于阿里云服务器无法登录的问题基本反馈是这样的：  如果你添加了ip之后仍然登不进去，有一种方法是直接从第三个选项进去登录之后修改文件  然后输入命令： 1vim &#x2F;etc&#x2F;ssh&#x2F;sshd_config  再在最底部修改PasswordAuthentication的参数为yes，输入:wq之后输入命令（直接重启也行）： 1service sshd restart    安装旧版gcc先安装一些基">
 <meta property="og:locale">
 <meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309162055825.png">
 <meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309162053586.png">
 <meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309162108365.png">
 <meta property="article:published_time" content="2023-08-30T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-12-29T11:31:04.874Z">
+<meta property="article:modified_time" content="2024-08-26T10:09:13.927Z">
 <meta property="article:author" content="RenXin">
 <meta property="article:tag" content="经验总结">
 <meta property="article:tag" content="JVM">
@@ -630,7 +630,7 @@
         <div class="label text-third-text-color text-sm">Categories</div>
     </a>
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="../../../archives">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">23</div>
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">24</div>
         <div class="label text-third-text-color text-sm">Posts</div>
     </a>
 </div>
@@ -684,8 +684,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2023-12-29 19:31:04</span>
-            <span class="mobile">2023-12-29 19:31:04</span>
+            <span class="desktop">2024-08-26 18:09:13</span>
+            <span class="mobile">2024-08-26 18:09:13</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -753,103 +753,115 @@
 
 
         <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-            <h1 id="关于阿里云服务器Ubuntu系统安装jdk8中遇到的坑及解决方案"><a href="#关于阿里云服务器Ubuntu系统安装jdk8中遇到的坑及解决方案" class="headerlink" title="关于阿里云服务器Ubuntu系统安装jdk8中遇到的坑及解决方案"></a>关于阿里云服务器Ubuntu系统安装jdk8中遇到的坑及解决方案</h1><h2 id="关于阿里云服务器无法登录的问题"><a href="#关于阿里云服务器无法登录的问题" class="headerlink" title="关于阿里云服务器无法登录的问题"></a>关于阿里云服务器无法登录的问题</h2><p>基本反馈是这样的：</p>
-<div class="tag-plugin image"><div class="image-bg"><img src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309162055825.png"/></div></div>
-
+            <h2 id="关于阿里云服务器无法登录的问题"><a href="#关于阿里云服务器无法登录的问题" class="headerlink" title="关于阿里云服务器无法登录的问题"></a>关于阿里云服务器无法登录的问题</h2><p>基本反馈是这样的：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309162055825.png"
+                      alt="image-20230916205505741"
+                ></p>
 <p>如果你添加了ip之后仍然登不进去，有一种方法是直接从第三个选项进去登录之后修改文件</p>
-<div class="tag-plugin image"><div class="image-bg"><img src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309162053586.png"/></div></div>
-
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309162053586.png"
+                      alt="image-20230916205356481"
+                ></p>
 <p>然后输入命令：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/ssh/sshd_config</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Sh"><figure class="iseeu highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/ssh/sshd_config</span><br></pre></td></tr></table></figure></div>
 
 <p>再在最底部修改<code>PasswordAuthentication</code>的参数为<code>yes</code>，输入<code>:wq</code>之后输入命令（直接重启也行）：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service sshd restart</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Sh"><figure class="iseeu highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service sshd restart</span><br></pre></td></tr></table></figure></div>
 
 
 
 <h2 id="安装旧版gcc"><a href="#安装旧版gcc" class="headerlink" title="安装旧版gcc"></a>安装旧版gcc</h2><p>先安装一些基本的依赖：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install build-essential libxrender-dev xorg-dev libasound2-dev libcups2-dev gawk zip libxtst-dev libxi-dev libxt-dev gobjc</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Sh"><figure class="iseeu highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install build-essential libxrender-dev xorg-dev libasound2-dev libcups2-dev gawk zip libxtst-dev libxi-dev libxt-dev gobjc</span><br></pre></td></tr></table></figure></div>
 
 <p>接着我们先将JDK的编译环境配置好，首先是安装gcc和g++的4.8版本，但是最新的源没有这个版本了，我们先导入旧版软件源：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/apt/sources.list</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Sh"><figure class="iseeu highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/apt/sources.list</span><br></pre></td></tr></table></figure></div>
 
 <p>在最下方添加旧版源地址并保存：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">deb http://archive.ubuntu.com/ubuntu xenial main</span><br><span class="line">deb http://archive.ubuntu.com/ubuntu xenial universe</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">deb http://archive.ubuntu.com/ubuntu xenial main</span><br><span class="line">deb http://archive.ubuntu.com/ubuntu xenial universe</span><br></pre></td></tr></table></figure></div>
 
 <p>接着更新一下apt源信息，并安装gcc和g++：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install gcc-4.8 g++-4.8</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Sh"><figure class="iseeu highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install gcc-4.8 g++-4.8</span><br></pre></td></tr></table></figure></div>
 
 <p>于是在这里就碰见问题了，他说找不到</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Can not run configure command: &quot;No such file or directory&quot;</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Can not run configure command: &quot;No such file or directory&quot;</span><br></pre></td></tr></table></figure></div>
 
 <p>于是网上提供了两种方案</p>
 <p>第一种解决了gcc的安装问题</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install gcc-4.8 g++-4.8</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install gcc-4.8 g++-4.8</span><br></pre></td></tr></table></figure></div>
 
 <p>第二种，则解决了所有问题</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">wget http://mirrors.kernel.org/ubuntu/pool/universe/g/gcc-4.8/g++-4.8_4.8.5-4ubuntu8_amd64.deb </span><br><span class="line">wget http://mirrors.kernel.org/ubuntu/pool/universe/g/gcc-4.8/libstdc++-4.8-dev_4.8.5-4ubuntu8_amd64.deb </span><br><span class="line">wget http://mirrors.kernel.org/ubuntu/pool/universe/g/gcc-4.8/gcc-4.8-base_4.8.5-4ubuntu8_amd64.deb </span><br><span class="line">wget http://mirrors.kernel.org/ubuntu/pool/universe/g/gcc-4.8/gcc-4.8_4.8.5-4ubuntu8_amd64.deb </span><br><span class="line">wget http://mirrors.kernel.org/ubuntu/pool/universe/g/gcc-4.8/libgcc-4.8-dev_4.8.5-4ubuntu8_amd64.deb </span><br><span class="line">wget http://mirrors.kernel.org/ubuntu/pool/universe/g/gcc-4.8/cpp-4.8_4.8.5-4ubuntu8_amd64.deb </span><br><span class="line">wget http://mirrors.kernel.org/ubuntu/pool/universe/g/gcc-4.8/libasan0_4.8.5-4ubuntu8_amd64.deb </span><br><span class="line">sudo apt install ./gcc-4.8_4.8.5-4ubuntu8_amd64.deb ./gcc-4.8-base_4.8.5-4ubuntu8_amd64.deb ./libstdc++-4.8-dev_4.8.5-4ubuntu8_amd64.deb ./cpp-4.8_4.8.5-4ubuntu8_amd64.deb ./libgcc-4.8-dev_4.8.5-4ubuntu8_amd64.deb ./libasan0_4.8.5-4ubuntu8_amd64.deb ./g++-4.8_4.8.5-4ubuntu8_amd64.deb</span><br><span class="line">sudo apt update</span><br><span class="line">sudo apt-get install gcc-4.8 g++-4.8</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">wget http://mirrors.kernel.org/ubuntu/pool/universe/g/gcc-4.8/g++-4.8_4.8.5-4ubuntu8_amd64.deb </span><br><span class="line">wget http://mirrors.kernel.org/ubuntu/pool/universe/g/gcc-4.8/libstdc++-4.8-dev_4.8.5-4ubuntu8_amd64.deb </span><br><span class="line">wget http://mirrors.kernel.org/ubuntu/pool/universe/g/gcc-4.8/gcc-4.8-base_4.8.5-4ubuntu8_amd64.deb </span><br><span class="line">wget http://mirrors.kernel.org/ubuntu/pool/universe/g/gcc-4.8/gcc-4.8_4.8.5-4ubuntu8_amd64.deb </span><br><span class="line">wget http://mirrors.kernel.org/ubuntu/pool/universe/g/gcc-4.8/libgcc-4.8-dev_4.8.5-4ubuntu8_amd64.deb </span><br><span class="line">wget http://mirrors.kernel.org/ubuntu/pool/universe/g/gcc-4.8/cpp-4.8_4.8.5-4ubuntu8_amd64.deb </span><br><span class="line">wget http://mirrors.kernel.org/ubuntu/pool/universe/g/gcc-4.8/libasan0_4.8.5-4ubuntu8_amd64.deb </span><br><span class="line">sudo apt install ./gcc-4.8_4.8.5-4ubuntu8_amd64.deb ./gcc-4.8-base_4.8.5-4ubuntu8_amd64.deb ./libstdc++-4.8-dev_4.8.5-4ubuntu8_amd64.deb ./cpp-4.8_4.8.5-4ubuntu8_amd64.deb ./libgcc-4.8-dev_4.8.5-4ubuntu8_amd64.deb ./libasan0_4.8.5-4ubuntu8_amd64.deb ./g++-4.8_4.8.5-4ubuntu8_amd64.deb</span><br><span class="line">sudo apt update</span><br><span class="line">sudo apt-get install gcc-4.8 g++-4.8</span><br></pre></td></tr></table></figure></div>
 
 <p>接着配置：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 100</span><br><span class="line">sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 100</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Sh"><figure class="iseeu highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 100</span><br><span class="line">sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 100</span><br></pre></td></tr></table></figure></div>
 
 <p>最后查看版本是否为4.8版本：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">nagocoler@ubuntu-server:~$ gcc --version</span><br><span class="line">gcc (Ubuntu 4.8.5-4ubuntu2) 4.8.5</span><br><span class="line">Copyright (C) 2015 Free Software Foundation, Inc.</span><br><span class="line">This is free software; see the <span class="built_in">source</span> <span class="keyword">for</span> copying conditions.  There is NO</span><br><span class="line">warranty; not even <span class="keyword">for</span> MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.</span><br><span class="line"></span><br><span class="line">nagocoler@ubuntu-server:~$ g++ --version</span><br><span class="line">g++ (Ubuntu 4.8.5-4ubuntu2) 4.8.5</span><br><span class="line">Copyright (C) 2015 Free Software Foundation, Inc.</span><br><span class="line">This is free software; see the <span class="built_in">source</span> <span class="keyword">for</span> copying conditions.  There is NO</span><br><span class="line">warranty; not even <span class="keyword">for</span> MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Sh"><figure class="iseeu highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">nagocoler@ubuntu-server:~$ gcc --version</span><br><span class="line">gcc (Ubuntu 4.8.5-4ubuntu2) 4.8.5</span><br><span class="line">Copyright (C) 2015 Free Software Foundation, Inc.</span><br><span class="line">This is free software; see the <span class="built_in">source</span> <span class="keyword">for</span> copying conditions.  There is NO</span><br><span class="line">warranty; not even <span class="keyword">for</span> MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.</span><br><span class="line"></span><br><span class="line">nagocoler@ubuntu-server:~$ g++ --version</span><br><span class="line">g++ (Ubuntu 4.8.5-4ubuntu2) 4.8.5</span><br><span class="line">Copyright (C) 2015 Free Software Foundation, Inc.</span><br><span class="line">This is free software; see the <span class="built_in">source</span> <span class="keyword">for</span> copying conditions.  There is NO</span><br><span class="line">warranty; not even <span class="keyword">for</span> MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.</span><br></pre></td></tr></table></figure></div>
 
 <p>接着安装make 3.81版本，需要从官方下载：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://ftp.gnu.org/gnu/make/make-3.81.tar.gz</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Sh"><figure class="iseeu highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://ftp.gnu.org/gnu/make/make-3.81.tar.gz</span><br></pre></td></tr></table></figure></div>
 
 <p>下载好之后进行解压，并进入目录：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf make-3.81.tar.gz </span><br><span class="line"><span class="built_in">cd</span> make-3.81/</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Sh"><figure class="iseeu highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf make-3.81.tar.gz </span><br><span class="line"><span class="built_in">cd</span> make-3.81/</span><br></pre></td></tr></table></figure></div>
 
 <p>接着我们修改一下代码，打开<code>glob/glob.c</code>文件：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span>  HAVE_CONFIG_H</span></span><br><span class="line"><span class="meta"># <span class="keyword">include</span> <span class="string">&lt;config.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> __alloca alloca   &lt;- 添加这一句</span></span><br><span class="line"><span class="comment">/* Enable GNU extensions </span></span><br><span class="line"><span class="comment">...</span></span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span>  HAVE_CONFIG_H</span></span><br><span class="line"><span class="meta"># <span class="keyword">include</span> <span class="string">&lt;config.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> __alloca alloca   &lt;- 添加这一句</span></span><br><span class="line"><span class="comment">/* Enable GNU extensions </span></span><br><span class="line"><span class="comment">...</span></span><br></pre></td></tr></table></figure></div>
 
 <p>接着进行配置并完成编译和安装：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bash configure</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Sh"><figure class="iseeu highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bash configure</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure></div>
 
 <p>安装完成后，将make已经变成3.81版本了：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">nagocoler@ubuntu-server:~/make-3.81$ make -verison</span><br><span class="line">GNU Make 3.81</span><br><span class="line">Copyright (C) 2006  Free Software Foundation, Inc.</span><br><span class="line">This is free software; see the <span class="built_in">source</span> <span class="keyword">for</span> copying conditions.</span><br><span class="line">There is NO warranty; not even <span class="keyword">for</span> MERCHANTABILITY or FITNESS FOR A</span><br><span class="line">PARTICULAR PURPOSE.</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Sh"><figure class="iseeu highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">nagocoler@ubuntu-server:~/make-3.81$ make -verison</span><br><span class="line">GNU Make 3.81</span><br><span class="line">Copyright (C) 2006  Free Software Foundation, Inc.</span><br><span class="line">This is free software; see the <span class="built_in">source</span> <span class="keyword">for</span> copying conditions.</span><br><span class="line">There is NO warranty; not even <span class="keyword">for</span> MERCHANTABILITY or FITNESS FOR A</span><br><span class="line">PARTICULAR PURPOSE.</span><br></pre></td></tr></table></figure></div>
 
-<h2 id="安装jdk8源码"><a href="#安装jdk8源码" class="headerlink" title="安装jdk8源码"></a>安装jdk8源码</h2><p><a target="_blank" rel="noopener" href="https://codeload.github.com/openjdk/jdk/zip/refs/tags/jdk8-b120">OpenJDK源码</a></p>
+<h2 id="安装jdk8源码"><a href="#安装jdk8源码" class="headerlink" title="安装jdk8源码"></a>安装jdk8源码</h2><p><a class="link"   target="_blank" rel="noopener" href="https://codeload.github.com/openjdk/jdk/zip/refs/tags/jdk8-b120" >OpenJDK源码 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p>于JDK中某些代码是Java编写的，所以我们还需要安装一个启动JDK，启动JDK可以是当前版本或低一版本，比如我们要编译JDK8的源码，那么就可以使用JDK7、JDK8作为启动JDK，对源码中的一些java文件进行编译。这里我们选择安装OpenJDK8作为启动JDK：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install openjdk-8-jdk</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Sh"><figure class="iseeu highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install openjdk-8-jdk</span><br></pre></td></tr></table></figure></div>
 
 <p>这样，我们的系统环境就准备完成了，接着我们需要下载OpenJDK8的源码（已经放在网盘了）解压：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unzip jdk-jdk8-b120.zip</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Sh"><figure class="iseeu highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unzip jdk-jdk8-b120.zip</span><br></pre></td></tr></table></figure></div>
 
 <p>接着我们需要安装JetBrains Gateway在我们的服务器上导入项目，这里我们使用CLion后端，等待下载远程后端，这样我们的Linux服务器上虽然没有图形化界面，但是依然可以使用IDEA、CLion等工具，只是服务器上只有后端程序，而界面由我们电脑上的前端程序提供（目前此功能还在Beta阶段，暂不支持arm架构的Linux服务器）整个过程根据服务器配置决定可能需要5-20分钟。</p>
 <p>完成之后，我们操作起来就很方便了，界面和IDEA其实差不多，我们打开终端，开始进行配置：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash configure --with-debug-level=slowdebug --enable-debug-symbols ZIP_DEBUGINFO_FIELS=0</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Sh"><figure class="iseeu highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash configure --with-debug-level=slowdebug --enable-debug-symbols ZIP_DEBUGINFO_FIELS=0</span><br></pre></td></tr></table></figure></div>
 
 <p>配置完成后，再次确认是否和教程中的配置信息一致：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Configuration summary:</span><br><span class="line">* Debug level:    slowdebug</span><br><span class="line">* JDK variant:    normal</span><br><span class="line">* JVM variants:   server</span><br><span class="line">* OpenJDK target: OS: linux, CPU architecture: x86, address length: 64</span><br><span class="line"></span><br><span class="line">Tools summary:</span><br><span class="line">* Boot JDK:       openjdk version &quot;1.8.0_312&quot; OpenJDK Runtime Environment (build 1.8.0_312-8u312-b07-0ubuntu1~20.04-b07) OpenJDK 64-Bit Server VM (build 25.312-b07, mixed mode)  (at /usr/lib/jvm/java-8-openjdk-amd64)</span><br><span class="line">* C Compiler:     gcc-4.8 (Ubuntu 4.8.5-4ubuntu2) version 4.8.5 (at /usr/bin/gcc-4.8)</span><br><span class="line">* C++ Compiler:   g++-4.8 (Ubuntu 4.8.5-4ubuntu2) version 4.8.5 (at /usr/bin/g++-4.8)</span><br><span class="line"></span><br><span class="line">Build performance summary:</span><br><span class="line">* Cores to use:   3</span><br><span class="line">* Memory limit:   3824 MB</span><br><span class="line">* ccache status:  not installed (consider installing)</span><br><span class="line"></span><br><span class="line">WARNING: The result of this configuration has overridden an older</span><br><span class="line">configuration. You *should* run &#x27;make clean&#x27; to make sure you get a</span><br><span class="line">proper build. Failure to do so might result in strange build problems.</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Configuration summary:</span><br><span class="line">* Debug level:    slowdebug</span><br><span class="line">* JDK variant:    normal</span><br><span class="line">* JVM variants:   server</span><br><span class="line">* OpenJDK target: OS: linux, CPU architecture: x86, address length: 64</span><br><span class="line"></span><br><span class="line">Tools summary:</span><br><span class="line">* Boot JDK:       openjdk version &quot;1.8.0_312&quot; OpenJDK Runtime Environment (build 1.8.0_312-8u312-b07-0ubuntu1~20.04-b07) OpenJDK 64-Bit Server VM (build 25.312-b07, mixed mode)  (at /usr/lib/jvm/java-8-openjdk-amd64)</span><br><span class="line">* C Compiler:     gcc-4.8 (Ubuntu 4.8.5-4ubuntu2) version 4.8.5 (at /usr/bin/gcc-4.8)</span><br><span class="line">* C++ Compiler:   g++-4.8 (Ubuntu 4.8.5-4ubuntu2) version 4.8.5 (at /usr/bin/g++-4.8)</span><br><span class="line"></span><br><span class="line">Build performance summary:</span><br><span class="line">* Cores to use:   3</span><br><span class="line">* Memory limit:   3824 MB</span><br><span class="line">* ccache status:  not installed (consider installing)</span><br><span class="line"></span><br><span class="line">WARNING: The result of this configuration has overridden an older</span><br><span class="line">configuration. You *should* run &#x27;make clean&#x27; to make sure you get a</span><br><span class="line">proper build. Failure to do so might result in strange build problems.</span><br></pre></td></tr></table></figure></div>
 
 <p>接着我们需要修改几个文件，不然一会会编译失败，首先是<code>hotspot/make/linux/Makefile</code>文件：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">原有的 SUPPORTED_OS_VERSION = 2.4% 2.5% 2.6% 3%</span><br><span class="line">修改为 SUPPORTED_OS_VERSION = 2.4% 2.5% 2.6% 3% 4% 5%</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">原有的 SUPPORTED_OS_VERSION = 2.4% 2.5% 2.6% 3%</span><br><span class="line">修改为 SUPPORTED_OS_VERSION = 2.4% 2.5% 2.6% 3% 4% 5%</span><br></pre></td></tr></table></figure></div>
 
 <p>接着是<code>hotspot/make/linux/makefiles/gcc.make</code>文件：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">原有的 WARNINGS_ARE_ERRORS = -Werror</span><br><span class="line">修改为 #WARNINGS_ARE_ERRORS = -Werror</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">原有的 WARNINGS_ARE_ERRORS = -Werror</span><br><span class="line">修改为 #WARNINGS_ARE_ERRORS = -Werror</span><br></pre></td></tr></table></figure></div>
 
 <p>接着是<code>nashorn/make/BuildNashorn.gmk</code>文件：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">  $(CP) -R -p $(NASHORN_OUTPUTDIR)/nashorn_classes/* $(@D)/</span><br><span class="line">  $(FIXPATH) $(JAVA) \</span><br><span class="line">原有的 -cp &quot;$(NASHORN_OUTPUTDIR)/nasgen_classes$(PATH_SEP)$(NASHORN_OUTPUTDIR)/nashorn_classes&quot; \</span><br><span class="line">修改为  -Xbootclasspath/p:&quot;$(NASHORN_OUTPUTDIR)/nasgen_classes$(PATH_SEP)$(NASHORN_OUTPUTDIR)/nashorn_classes&quot; \</span><br><span class="line">   jdk.nashorn.internal.tools.nasgen.Main $(@D) jdk.nashorn.internal.objects $(@D)</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">  $(CP) -R -p $(NASHORN_OUTPUTDIR)/nashorn_classes/* $(@D)/</span><br><span class="line">  $(FIXPATH) $(JAVA) \</span><br><span class="line">原有的 -cp &quot;$(NASHORN_OUTPUTDIR)/nasgen_classes$(PATH_SEP)$(NASHORN_OUTPUTDIR)/nashorn_classes&quot; \</span><br><span class="line">修改为  -Xbootclasspath/p:&quot;$(NASHORN_OUTPUTDIR)/nasgen_classes$(PATH_SEP)$(NASHORN_OUTPUTDIR)/nashorn_classes&quot; \</span><br><span class="line">   jdk.nashorn.internal.tools.nasgen.Main $(@D) jdk.nashorn.internal.objects $(@D)</span><br></pre></td></tr></table></figure></div>
 
 <p>开始编译：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make all</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make all</span><br></pre></td></tr></table></figure></div>
 
 <p>这里又遇到了问题</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gmake[5]: *** [/root/jdk-jdk8-b120/hotspot/make/linux/makefiles/top.make:91: ad_stuff] Error 2</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gmake[5]: *** [/root/jdk-jdk8-b120/hotspot/make/linux/makefiles/top.make:91: ad_stuff] Error 2</span><br></pre></td></tr></table></figure></div>
 
 <p>后来发现最主要应该是看前面的内容</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sys/sysctl.h: No such file or directory  #include &lt;sys/sysctl.h&gt;</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sys/sysctl.h: No such file or directory  #include &lt;sys/sysctl.h&gt;</span><br></pre></td></tr></table></figure></div>
 
 <p>后来在网上查了才知道是Ubuntu的版本已经取消了这个头文件，我的版本：</p>
-<div class="tag-plugin image"><div class="image-bg"><img src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309162108365.png"/></div></div>
-
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/img/202309162108365.png"
+                      alt="image-20230916210819253"
+                ></p>
 <p>所以我们需要做的就是按照他所说的文件报错然后把该文件里的该头文件删掉</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vim build/linux-x86_64-normal-server-slowdebug/jdk/objs/libnet/PlainSocketImpl.o</span><br><span class="line">vim jdk/src/solaris/native/java/net/PlainDatagramSocketImpl.c</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Sh"><figure class="iseeu highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vim build/linux-x86_64-normal-server-slowdebug/jdk/objs/libnet/PlainSocketImpl.o</span><br><span class="line">vim jdk/src/solaris/native/java/net/PlainDatagramSocketImpl.c</span><br></pre></td></tr></table></figure></div>
 
 <p>注释</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">// #include &lt;sys/sysctl.h&gt;</span><br></pre></td></tr></table></figure>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">// #include &lt;sys/sysctl.h&gt;</span><br></pre></td></tr></table></figure></div>
 
 <p>最后弄了两三天的东西终于好了</p>
 
@@ -866,7 +878,7 @@
         
             <li>
                 <strong>Updated at
-                    :</strong> 2023-12-29 19:31:04
+                    :</strong> 2024-08-26 18:09:13
             </li>
         
         <li>
@@ -994,7 +1006,7 @@
     <div class="post-toc">
         <div class="toc-title">On this page</div>
         <div class="page-title">关于阿里云服务器Ubuntu系统安装jdk8中遇到的坑及解决方案</div>
-        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8Ubuntu%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85jdk8%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-text">关于阿里云服务器Ubuntu系统安装jdk8中遇到的坑及解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%97%A0%E6%B3%95%E7%99%BB%E5%BD%95%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-text">关于阿里云服务器无法登录的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E6%97%A7%E7%89%88gcc"><span class="nav-text">安装旧版gcc</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85jdk8%E6%BA%90%E7%A0%81"><span class="nav-text">安装jdk8源码</span></a></li></ol></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%97%A0%E6%B3%95%E7%99%BB%E5%BD%95%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-text">关于阿里云服务器无法登录的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E6%97%A7%E7%89%88gcc"><span class="nav-text">安装旧版gcc</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85jdk8%E6%BA%90%E7%A0%81"><span class="nav-text">安装jdk8源码</span></a></li></ol>
 
     </div>
 </div>
@@ -1027,7 +1039,7 @@
                 
                 <p class="post-count space-x-0.5">
                     <span>
-                        23 posts in total
+                        24 posts in total
                     </span>
                     
                 </p>

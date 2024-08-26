@@ -1,0 +1,1595 @@
+<!DOCTYPE html>
+<html lang="English">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="RenXin">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://Renewdxin.github.io/八股/netwa/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="输入URL之后的全过程 从输入的URL中解析出使用的协议、主机、端口号等，构造一个HTTP请求 DNS解析域名，解析成对应的ip地址 TCP三次握手，建立连接 浏览器发送HTTP&#x2F;HTTPS请求到web服务器 服务器处理HTTP&#x2F;HTTPS请求并返回报文 浏览器渲染页面 断开连接，tcp四次挥手  URL URI在网络技术中，URI（Uniform Resource Ident">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机网络八股总结">
+<meta property="og:url" content="http://renewdxin.github.io/%E5%85%AB%E8%82%A1/netwa/index.html">
+<meta property="og:site_name" content="RenXin&#39;s Website">
+<meta property="og:description" content="输入URL之后的全过程 从输入的URL中解析出使用的协议、主机、端口号等，构造一个HTTP请求 DNS解析域名，解析成对应的ip地址 TCP三次握手，建立连接 浏览器发送HTTP&#x2F;HTTPS请求到web服务器 服务器处理HTTP&#x2F;HTTPS请求并返回报文 浏览器渲染页面 断开连接，tcp四次挥手  URL URI在网络技术中，URI（Uniform Resource Ident">
+<meta property="og:locale">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240807170350.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240807174158.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/Pasted%20image%2020240813205534.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240814122806.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240814163425.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240814175329.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240814182942.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240814203851.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240817172208.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240817172059.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240818185222.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240818190424.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240820161441.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240820161843.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240823155918.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240823160103.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240824180704.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240826113001.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240826112937.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240826141430.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240826141436.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240826142322.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240826144703.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240826152503.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240826154223.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240826160609.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240826170053.png">
+<meta property="og:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240826170053.png">
+<meta property="article:published_time" content="2024-08-25T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-08-26T10:12:56.867Z">
+<meta property="article:author" content="RenXin">
+<meta property="article:tag" content="八股">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240807170350.png">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="../../images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="../../images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="../../images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            计算机网络八股总结 -
+        
+        RenXin&#39;s Website
+    </title>
+
+    
+<link rel="stylesheet" href="fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="../../css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="assets/build/styles.css">
+
+    
+
+    
+<link rel="stylesheet" href="fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    
+        
+<script src="js/libs/anime.min.js"></script>
+
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"renewdxin.github.io","root":"/","language":"English"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"https://rxsss.oss-cn-beijing.aliyuncs.com/blog/GPTempDownload.jpg","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Welcome to Wonderland","subtitle":{"text":[],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"default","links":{"github":"https://github.com/Renewdxin","instagram":null,"zhihu":null,"twitter":null,"email":"cissyrenxin@icloud.com","fa-regular fa-pen-to-square":"https://blog.csdn.net/m0_73976305"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.6.4","navbar":{"auto_hide":true,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Status":{"path":"/","icon":"fa-regular fa-chart-bar"},"About":{"icon":"fa-regular fa-user","submenus":{"Me":"/about","Github":"https://github.com/Renewdxin","Blog":"https://blog.csdn.net/m0_73976305","Friends":"/friends"}},"Links":{"icon":"fa-regular fa-link","submenus":{"Link1":"/link1","Link2":"/link2","Link3":"/link3"}}},"search":{"enable":false,"preload":true},"tags":{"Tags":{"icon":"fa-solid fa-tags","path":"/tags/"}},"navbar":null,"categories":{"Categories":{"icon":"fa-solid fa-folder","path":"/categories/"}}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2022/8/17 11:45:14"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+<!--        <span class="swup-progress-icon">-->
+<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+<!--        </span>-->
+    
+</div>
+
+
+
+    <style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 500;
+        font-family: 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    <h2 class="ml13">
+        RenXin&#39;s Website
+    </h2>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
+
+        var animation = anime.timeline({loop: true})
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [40,0],
+                translateZ: 0,
+                opacity: [0,1],
+                filter: ['blur(5px)', 'blur(0px)'], // Starting from blurred to unblurred
+                easing: "easeOutExpo",
+                duration: 1400,
+                delay: (el, i) => 300 + 30 * i,
+            }).add({
+                targets: '.ml13 .letter',
+                translateY: [0,-40],
+                opacity: [1,0],
+                filter: ['blur(0px)', 'blur(5px)'], // Ending from unblurred to blurred
+                easing: "easeInExpo",
+                duration: 1200,
+                delay: (el, i) => 100 + 30 * i,
+                complete: function() {
+                    hidePreloader(); // Call hidePreloader after the animation completes
+                }
+            });
+
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
+
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
+
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
+
+        window.addEventListener('load', function () {
+            setTimeout(hidePreloader, 5000); // Call hidePreloader after 5000 milliseconds if not already called by animation
+        });
+
+        function hidePreloader() {
+            var preloader = document.querySelector('.preloader');
+            preloader.style.opacity = '0';
+            setTimeout(function () {
+                preloader.style.display = 'none';
+            }, 200);
+        }
+    </script>
+</div>
+
+<main class="page-container" id="swup">
+
+    
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container px-6 md:px-12">
+
+    <div class="navbar-content ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                RenXin&#39;s Website
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="../../index.html"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="../../archives"
+                                        >
+                                    <i class="fa-regular fa-archive fa-fw"></i>
+                                    ARCHIVES
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="../../index.html"
+                                        >
+                                    <i class="fa-regular fa-chart-bar fa-fw"></i>
+                                    STATUS
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown"
+                                   href="#"
+                                        onClick=&#34;return false;&#34;>
+                                    <i class="fa-regular fa-user fa-fw"></i>
+                                    ABOUT
+                                    <i class="fa-solid fa-chevron-down fa-fw"></i>
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                        
+                                            <li>
+                                                <a href="../../about">
+                                                    ME
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://github.com/Renewdxin">
+                                                    GITHUB
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_73976305">
+                                                    BLOG
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a href="../../friends">
+                                                    FRIENDS
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown"
+                                   href="#"
+                                        onClick=&#34;return false;&#34;>
+                                    <i class="fa-regular fa-link fa-fw"></i>
+                                    LINKS
+                                    <i class="fa-solid fa-chevron-down fa-fw"></i>
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                        
+                                            <li>
+                                                <a href="../../link1">
+                                                    LINK1
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a href="../../link2">
+                                                    LINK2
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a href="../../link3">
+                                                    LINK3
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-screen w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="../../index.html"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="../../archives"
+                        >
+                            <span>
+                                ARCHIVES
+                            </span>
+                            
+                                <i class="fa-regular fa-archive fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="../../index.html"
+                        >
+                            <span>
+                                STATUS
+                            </span>
+                            
+                                <i class="fa-regular fa-chart-bar fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item-sub text-base my-1.5 flex flex-col w-full">
+                        
+                        <div class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary cursor-pointer text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                             navbar-data-toggle="submenu-About"
+                        >
+                            <span>
+                                ABOUT
+                            </span>
+                            
+                                <i class="fa-solid fa-chevron-right fa-sm fa-fw transition-all"></i>
+                            
+                        </div>
+                        
+
+                        
+                            <div class="flex-col items-start px-2 py-2 hidden" data-target="submenu-About">
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="../../about">ME</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://github.com/Renewdxin">GITHUB</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           target="_blank" rel="noopener" href="https://blog.csdn.net/m0_73976305">BLOG</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="../../friends">FRIENDS</a>
+                                    </div>
+                                
+                            </div>
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item-sub text-base my-1.5 flex flex-col w-full">
+                        
+                        <div class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary cursor-pointer text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                             navbar-data-toggle="submenu-Links"
+                        >
+                            <span>
+                                LINKS
+                            </span>
+                            
+                                <i class="fa-solid fa-chevron-right fa-sm fa-fw transition-all"></i>
+                            
+                        </div>
+                        
+
+                        
+                            <div class="flex-col items-start px-2 py-2 hidden" data-target="submenu-Links">
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="../../link1">LINK1</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="../../link2">LINK2</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl"
+                                           href="../../link3">LINK3</a>
+                                    </div>
+                                
+                            </div>
+                        
+                    </li>
+            
+
+            
+            
+                
+                    
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="../../tags"
+                        >
+                            <span>Tags</span>
+                            <i class="fa-regular fa-tags fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="../../categories"
+                        >
+                            <span>Categories</span>
+                            <i class="fa-regular fa-folder fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="../../tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">15</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="../../categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">13</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="../../archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">24</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container flex relative justify-between box-border w-full h-full">
+    <div class="article-content-container">
+
+        <div class="article-title relative w-full">
+            
+                <div class="w-full flex items-center pt-6 justify-start">
+                    <h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">计算机网络八股总结</h1>
+                </div>
+            
+            </div>
+
+        
+            <div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+                <div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+                    <img src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/59169859dbecb22beab9c89dc2f1e26.jpg">
+                </div>
+                <div class="info flex flex-col justify-between">
+                    <div class="author flex items-center">
+                        <span class="name text-default-text-color text-lg font-semibold">RenXin</span>
+                        
+                            <span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv3</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2024-08-26</span>
+        <span class="mobile">2024-08-26</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2024-08-26 18:12:56</span>
+            <span class="mobile">2024-08-26 18:12:56</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="../../categories/%E5%85%AB%E8%82%A1/">八股</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="../../tags/%E5%85%AB%E8%82%A1/">八股</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+            <h3 id="输入URL之后的全过程"><a href="#输入URL之后的全过程" class="headerlink" title="输入URL之后的全过程"></a>输入URL之后的全过程</h3><ol>
+<li>从输入的URL中解析出使用的协议、主机、端口号等，构造一个HTTP请求</li>
+<li>DNS解析域名，解析成对应的ip地址</li>
+<li>TCP三次握手，建立连接</li>
+<li>浏览器发送HTTP&#x2F;HTTPS请求到web服务器</li>
+<li>服务器处理HTTP&#x2F;HTTPS请求并返回报文</li>
+<li>浏览器渲染页面</li>
+<li>断开连接，tcp四次挥手</li>
+</ol>
+<h3 id="URL-URI"><a href="#URL-URI" class="headerlink" title="URL URI"></a>URL URI</h3><p>在网络技术中，URI（Uniform Resource Identifier，统一资源标识符）和URL（Uniform Resource Locator，统一资源定位符）是两个非常基本的概念，它们都用于在网络上标识资源，但它们之间存在一些区别：</p>
+<ol>
+<li><p><strong>URI（统一资源标识符）</strong>：</p>
+<ul>
+<li>URI是一个用于标识某一互联网资源名称的字符串。</li>
+<li>URI的主要目的是标识资源，它可以是URL或URN（Uniform Resource Name，统一资源名称）。</li>
+<li>例如，<code>https://example.com/path?query=123</code> 是一个URI。</li>
+</ul>
+</li>
+<li><p><strong>URL（统一资源定位符）</strong>：</p>
+<ul>
+<li>URL是URI的一个子集，不仅标识资源，还提供了找到该资源的方式。</li>
+<li>URL通常包括协议（如HTTP、HTTPS）、服务器位置和资源在服务器上的具体地址。</li>
+<li>例如，<code>https://example.com/path?query=123</code> 是一个URL，它告诉你如何通过HTTPS协议访问example.com上的某个资源。</li>
+</ul>
+</li>
+</ol>
+<p>总结来说，每个URL都是URI，但不是每个URI都是URL。URI更广泛，它还包括URN，而URN仅仅标识资源的名称，不提供定位信息。例如，<code>urn:isbn:0451450523</code>是一个URN，用于标识特定的书籍，但并不提供获取书籍的具体位置。</p>
+<h1 id="DNS-Domain-Name-System"><a href="#DNS-Domain-Name-System" class="headerlink" title="DNS (Domain Name System)"></a>DNS (Domain Name System)</h1><p>概念：将域名转换为ip的分布式系统<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240807170350.png"
+                      alt="image.png|500"
+                ></p>
+<h2 id="为什么分布式"><a href="#为什么分布式" class="headerlink" title="为什么分布式"></a>为什么分布式</h2><ol>
+<li>单点故障会使整个网络瘫痪</li>
+<li>远程服务器请求时间较长，造成严重的时延</li>
+<li>维护成本过高</li>
+</ol>
+<h2 id="域名的层级关系"><a href="#域名的层级关系" class="headerlink" title="域名的层级关系"></a>域名的层级关系</h2><p>考点号来分隔，代表不同层次，越靠右层级越高</p>
+<h2 id="解析过程"><a href="#解析过程" class="headerlink" title="解析过程"></a>解析过程</h2><ol>
+<li>先查询浏览器缓存是否存有ip地址</li>
+<li>若没有，则查询计算机本地的host文件是否有缓存</li>
+<li>向本地的DNS服务器发送查询请求，有就返回</li>
+<li>若没有，本地的DNS解析器会向根DNS服务器发出查询请求，返回结果是应该向哪个顶级域的DNS服务器查询</li>
+<li>本地解析器向顶级域名DNS服务器发送请求，返回结果是向哪个权威DNS服务器查询下一步</li>
+<li>本地解析器发送请求给权威DNS服务器，返回结果是ip地址</li>
+<li>本地解析器返回结果给浏览器，同时将结果缓存本地</li>
+<li>浏览器发起连接</li>
+</ol>
+<h2 id="递归查询和迭代查询"><a href="#递归查询和迭代查询" class="headerlink" title="递归查询和迭代查询"></a>递归查询和迭代查询</h2><p>递归查询：DNS客户端只需要发送一个查询请求，就可以等待完整的解析结果<br>迭代查询：DNS客户端通过向上级DNS服务器发送请求，获取更高级的域名服务器地址，向其发送请求，直到获得完整的解析结果<br>总结：递归查询适合普通用户和客户端，迭代查询适用于DNS服务器之间的通信</p>
+<h1 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h1><h2 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h2><p><strong>简单</strong>：基本报文格式为header+body，头部信息是key-value简单文本的形式<br><strong>灵活和易于扩展</strong>：协议中的各种请求方法、URL\URI、状态码、头字段等每个组成部分没有被定死，允许自行补充；在应用层，下层可以随意变换；HTTPS是在http和tcp之间添加了ssl&#x2F;tsl安全传输层，HTTP&#x2F;3则是把TCP换成了基于UDP的QUIC<br><strong>无状态</strong>：服务器不会去记忆HTTP的状态，可以减轻服务器负担<br><strong>明文传输</strong>：信息透明易被窃取<br><strong>不安全</strong>：通信使用明文；不验证身份、无法证明完整性<br><strong>应用广泛且跨平台</strong></p>
+<h2 id="版本演变"><a href="#版本演变" class="headerlink" title="版本演变"></a>版本演变</h2><h3 id="0-9"><a href="#0-9" class="headerlink" title="0.9"></a>0.9</h3><p>只支持GET，只能返回HTML格式<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240807174158.png"
+                      alt="image.png|500"
+                ></p>
+<h3 id="1-0"><a href="#1-0" class="headerlink" title="1.0"></a>1.0</h3><p>第一个正式版本<br>引入请求头和响应头，支持多种请求方法和状态码<br>不支持持久连接</p>
+<h3 id="1-1"><a href="#1-1" class="headerlink" title="1.1"></a>1.1</h3><p>提出了长连接，客户端和服务端任意一端没有明确提出断开连接，则保持tcp连接<br>管道网络传输：解决请求的队头堵塞；可以同时发送多个请求，服务器必须按照接受请求的顺序处理，会造成响应队头堵塞</p>
+<h4 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h4><ol>
+<li>延迟难以下降，达到了延迟的下限</li>
+<li>并发连接有限，而且每一个连接都要经过TCP和TLS握手耗时，以及TCP慢启动过程带来的影响</li>
+<li>头部冗余，头部巨大且重复，特别是携带cookie的，cookie的大小通常很大</li>
+<li>响应队头堵塞</li>
+<li>没有请求优先级控制</li>
+<li>不支持服务器推送消息，只能客户端发送请求，浪费了大量的带宽和服务器资源</li>
+</ol>
+<h4 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h4><ol>
+<li>将多张小图合并成大图供js切割，也就是多个请求合并成一个请求；但是当一个小图改变了就要重新请求大图</li>
+<li>将图片的二进制数据通过base64编码之后，将数据嵌入到css或者html</li>
+<li>将多个体积较小的js文件使用webpack等工具打包成一个体积更大js，带来的问题跟小图合并成大图一样</li>
+<li>将同一个页面资源分散到不同域名，提升并发连接上限</li>
+</ol>
+<h3 id="2"><a href="#2" class="headerlink" title="2"></a>2</h3><p>基于HTTPS；为改善HTTP1.1而提出，同时兼容了HTTP1.1</p>
+<h4 id="兼容"><a href="#兼容" class="headerlink" title="兼容"></a>兼容</h4><ol>
+<li>平滑升级：没有引入新的协议名，只需要浏览器和服务器在背后升级协议</li>
+<li>只在应用层做改变，分解成语义和语法；语义方面完全一致（请求方法、状态码、头字段等）</li>
+</ol>
+<h4 id="改变"><a href="#改变" class="headerlink" title="改变"></a>改变</h4><p>在语法方面做了很多改变，基本改变了HTTP报文传输</p>
+<ol>
+<li>头部压缩：使用 <code>HPACK</code> 压缩算法对请求响应头部进行压缩，减少了传输的头部数据量，降低了延迟。 </li>
+<li>二进制帧：将数据分割成二进制帧进行传输，分为头信息帧（Headers Frame）和数据帧（Data Frame），增加了数据传输的效率。 </li>
+<li>并发传输：引出了 Stream 概念，多个 Stream 复用在一条 TCP 连接，针对不同的 HTTP 请求用独一无二的 Stream ID 来区分，接收端可以通过 Stream ID 有序组装成 HTTP 消息，不同 Stream 的帧是可以乱序发送 的，因此可以并发不同的 Stream ，也就是 HTTP&#x2F;2 可以并行交错地发送请求和响应。 </li>
+<li>服务器推送：服务器可以对客户端的一个请求发送多个响应，即服务器可以额外的向客户端推送资源，而无需客户端明确的请求。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>改进</th>
+<th>HTTP1存在问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>头部压缩（HPACK）</td>
+<td>使用<code>HPACK</code>压缩算法对请求和响应的头部进行压缩，减少了传输的头部数据量，降低了延迟。<br>HPACK算法：静态字典（为高频出现的字符串和字段建立一张静态表），动态字典（生效的前提，必须同一个连接，重复传输完全相同的HTTP头部）、Huffman编码（压缩算法）</td>
+<td>1. 含有很多固定字段<br>2. 大量的请求和相应的报文有很多字段值重复 <br>3. 字段是ASCII编码，效率低，需要改成二进制编码</td>
+</tr>
+<tr>
+<td>二进制帧</td>
+<td>将数据分割成二进制帧进行传输，主要有头信息帧（Headers Frame）和数据帧（Data Frame），还可以使用位运算，增加数据传输的效率。</td>
+<td>HTTP1文本格式降低了传输效率</td>
+</tr>
+<tr>
+<td>并发传输</td>
+<td>引入了<strong>Stream</strong>概念，多个Stream可以复用在一条TCP连接上。每个HTTP请求用独一无二的Stream ID来标识，使得接收端可以通过Stream ID有序组装成完整的HTTP消息。不同Stream的帧可以乱序发送，允许并行交错地发送请求和响应。</td>
+<td></td>
+</tr>
+<tr>
+<td>服务器推送</td>
+<td>服务器可以对一个客户端请求发送多个响应，即服务器可以在没有客户端明确请求的情况下，向客户端推送额外的资源。</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>但是 HTTP&#x2F;2 仍然存在着队头阻塞的问题，只不过问题是在传输层</p>
+<h4 id="推送实现"><a href="#推送实现" class="headerlink" title="推送实现"></a>推送实现</h4><p>客户端发送的请求必须是奇数号Stream，服务器主动推送的则是偶数号。<br>服务器推送资源时，通过帧中的<code>Promise Stream ID</code>告诉客户端包体的位置</p>
+<h4 id="与HTTP1对比"><a href="#与HTTP1对比" class="headerlink" title="与HTTP1对比"></a>与HTTP1对比</h4><p>HTTP1.1 基于请求-响应模型。同一个连接中，HTTP完成一个事务（请求与响应），才能处理下一个事务。即：再发出请求等待响应的过程种是没办法做其他事情的，会造成【队头阻塞】问题。<br>HTTP2通过Stream这个设计（多个Stream复用一条TCP连接，达到并发的效果），解决了【队头阻塞】的问题， 提高了HTTP传输的吞吐量。<br>HTTP2在访问HTML的时候主动推送CSS文件，减少消息传递次数</p>
+<h4 id="并发实现"><a href="#并发实现" class="headerlink" title="并发实现"></a>并发实现</h4><p>关键：Stream</p>
+<ol>
+<li>HTTP消息可以由多个Frame构成 </li>
+<li>一个Frame可以由多个TCP报文构成（Frame是最小的单位，以二进制压缩格式存放内容）<br>不同Stream的帧可以乱序发送，可以通过StreamID组装HTTP消息。还可以设置优先级。</li>
+</ol>
+<h4 id="缺陷"><a href="#缺陷" class="headerlink" title="缺陷"></a>缺陷</h4><p>队头阻塞：TCP是字节流协议<br>TCP与TLS的握手时延迟<br>网络迁移需要重新连接</p>
+<h3 id="3"><a href="#3" class="headerlink" title="3"></a>3</h3><p><strong>HTTP&#x2F;3 把TCP协议改成UDP，基于QUIC协议</strong></p>
+<h4 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h4><p><strong>零RTT连接建立</strong>：允许在首次连接时进行零往返时间连接连接建立，减少连接延迟<br><strong>无队头阻塞</strong>：使用UDP协议传输护数据时，一个连接上的多个stream没有依赖，一个丢失并不会影响后续的处理<br><strong>连接迁移</strong>：允许在网络切换时，将连接迁移到新的IP，从而减少连接的中断时间<br><strong>向前纠错机制</strong>：每个数据包包含了部分其他数据包的内容，因此少量丢包时可以通过其他包重组数据；通过牺牲数据上限减少数据重穿</p>
+<h4 id="QUIC协议"><a href="#QUIC协议" class="headerlink" title="QUIC协议"></a>QUIC协议</h4><p>基于UDP在应用层实现了QUIC协议，有类似于TCP的连接管理、拥塞窗口、流量控制的网络特性，使UDP变得可靠<br>在协议内部包含了TLS1.3，自己的帧会携带TLS里面的记录，仅需一个RTT就可以同时完成建立连接和密钥协商；在第二次连接时，应用数据包可以和QUIC握手消息一起发送，达到0-RTT</p>
+<h2 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h2><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/Pasted%20image%2020240813205534.png"
+                      alt="Pasted image 20240813205534|500"
+                ></p>
+<h3 id="强制缓存"><a href="#强制缓存" class="headerlink" title="强制缓存"></a>强制缓存</h3><p>浏览器判读命中资源是否有效命中强缓存，如果命中则直接读取，不需要进行通讯<br><code>Expires强缓存</code>：使用原理是判读本地时间和时间戳，若本机时间不准则容易出问题，基本已废弃<br><code>Cache-Control强缓存</code>：http1.1中增加该字段，单位是秒</p>
+<h3 id="协商缓存"><a href="#协商缓存" class="headerlink" title="协商缓存"></a>协商缓存</h3><p>定义：通过服务端告知客户端是否可以使用缓存<br>当请求响应码是304时，代表可以使用本地缓存的资源</p>
+<h4 id="基于Last-Modified和If-Modified-Since的协商缓存"><a href="#基于Last-Modified和If-Modified-Since的协商缓存" class="headerlink" title="基于Last-Modified和If-Modified-Since的协商缓存"></a>基于<code>Last-Modified</code>和<code>If-Modified-Since</code>的协商缓存</h4><ol>
+<li>服务端读取文件修改时间，赋给相应头的<code>Last-Modified</code>字段</li>
+<li>设置<code>Cache-Control:no-cache</code></li>
+<li>客户端读取到<code>Last-Modified</code>时候，会在下次的请求标头中携带字段<code>If-Modified-Since</code>也就是服务器第一次修改给他的时间，之后的每次请求都会带上此字段进行对比，状态码200说明说明资源无新更改，304走缓存<br>缺点</li>
+<li>可能单纯的因为文件修改了又修改回来导致缓存失效</li>
+<li>因为记录单位为秒，所以当文件在几百毫米内完成修改，缓存不会改变</li>
+</ol>
+<h4 id="基于ETag的协商缓存"><a href="#基于ETag的协商缓存" class="headerlink" title="基于ETag的协商缓存"></a>基于<code>ETag</code>的协商缓存</h4><p>解决了上面缓存的缺陷，将比较时间戳的形式改成了比较文件指纹（根据文件内容算出唯一哈希值）<br>过程</p>
+<p>1.<br>缺点</p>
+<ol>
+<li>计算开销更大</li>
+<li>有强验证（准确到每一个字节）和弱验证（提取文件的部分属性），强缓存过于消耗性能，弱缓存准确率不高</li>
+</ol>
+<h2 id="HTTPS（Hyper-Text-Transfer-Protocol-Secure）"><a href="#HTTPS（Hyper-Text-Transfer-Protocol-Secure）" class="headerlink" title="HTTPS（Hyper Text Transfer Protocol Secure）"></a>HTTPS（Hyper Text Transfer Protocol Secure）</h2><h4 id="特点-1"><a href="#特点-1" class="headerlink" title="特点"></a>特点</h4><ul>
+<li>信息加密：实现信息机密性；对称加密+非对称加密混合，解决了窃听的风险</li>
+<li>校验机制：确保数据的完整性；用摘要算法为数据生成独一无二的指纹校验码</li>
+<li>身份证书：将服务端的公钥放入到CA证书，解决服务端被冒充的冒险</li>
+</ul>
+<h4 id="混合加密"><a href="#混合加密" class="headerlink" title="混合加密"></a>混合加密</h4><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240814122806.png"
+                      alt="image.png|500"
+                ><br>采用非对称加密的方式交换会话密钥，后续则不再使用<br>通信过程中，全部使用对称加密的会话密钥方式加密<br>使用原因：对称加密运算速度快，密钥必须保密；非对称加密解决密钥交换问题，但是速度慢</p>
+<h4 id="摘要算法-数字签名"><a href="#摘要算法-数字签名" class="headerlink" title="摘要算法+数字签名"></a>摘要算法+数字签名</h4><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240814163425.png"
+                      alt="image|500"
+                ><br>摘要算法只能保证内容不被修改，不能保证发送者身份；计算机采用非对称加密来解决<br>数字签名</p>
+<ol>
+<li>发送者使用私钥对消息的摘要（通常是哈希函数计算得到）进行加密，生成数字签名</li>
+<li>数字签名是消息的哈希值经过私钥加密的结果</li>
+<li>发送者将原始消息和生成的数字签名一起发送给接收者</li>
+<li>接收者使用发送者的公钥对数字签名进行解密得到摘要值，再次使用相同的哈希函数计算收到的消息摘要，进行对比</li>
+</ol>
+<h4 id="数字证书"><a href="#数字证书" class="headerlink" title="数字证书"></a>数字证书</h4><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240814175329.png"
+                      alt="zhengshu|500"
+                ><br>解决问题：缺少身份验证的过程，会存在中间人篡改公钥</p>
+<h5 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h5><ol>
+<li><strong>密钥生成</strong>：<ul>
+<li>实体生成一对密钥，包括公开的公钥和私密的私钥。</li>
+</ul>
+</li>
+<li><strong>证书请求（CSR）</strong>：<ul>
+<li>实体创建包含公钥和个人信息的CSR，并将其发送至数字证书颁发机构（CA）。</li>
+</ul>
+</li>
+<li><strong>证书颁发</strong>：<ul>
+<li>CA验证实体后，用私钥签名CSR，生成含签名的数字证书。</li>
+</ul>
+</li>
+<li><strong>证书验证</strong>：<ul>
+<li>实体用CA的公钥验证数字证书的签名，核实证书的合法性。</li>
+</ul>
+</li>
+<li><strong>数字证书使用</strong>：<ul>
+<li>接收者用证书中的公钥加密数据，发送给持有者，持有者再用私钥解密。</li>
+<li>持有者可用私钥创建数字签名，接收者用公钥验证以确保数据来源和完整性。</li>
+</ul>
+</li>
+</ol>
+<h4 id="证书信任链"><a href="#证书信任链" class="headerlink" title="证书信任链"></a>证书信任链</h4><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240814182942.png"
+                      alt="trust|500"
+                ><br>定义：是数字证书的验证过程的一部分，确保数字证书是由可信的证书颁发机构签发，并最终连接到根证书，形成一条链条<br>根证书：信任链的顶端，也称根CA证书，是数字证书体系中的根基，有操作系统或者浏览器内置<br>中间证书颁发机构：在信任链中，根证书下方可能有一个或多个CA，数字证书由中间CA签发<br>服务器证书：在最底层，由中间CA签发，包含了服务器公钥和相关信息，需在客户端验证的过程中被验证</p>
+<h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><ul>
+<li>传输过程中，使用密钥加密，安全性跟高</li>
+<li>可以认证用户和服务端，确保数据发送到正确的用户和服务器</li>
+</ul>
+<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><ul>
+<li>握手阶段延时较高，在会话前就要进行SSL握手</li>
+<li>部署成本高：需购买CA证书，占用CPU证书，需要服务器配置或者数目高</li>
+</ul>
+<h4 id="与HTTP对比"><a href="#与HTTP对比" class="headerlink" title="与HTTP对比"></a>与HTTP对比</h4><p>端口号：HTTP是80，HTTPS是443<br>HTTPS在进行完TCP三次握手之后，还需进行SSL&#x2F;TSL的握手过程，才可进入加密报文传输<br>HTTPS协议需要向CA中心申请数字证书，保证服务器身份可靠</p>
+<h4 id="HTTPS-建立连接的-SSL-TLS-协议流程概述"><a href="#HTTPS-建立连接的-SSL-TLS-协议流程概述" class="headerlink" title="HTTPS 建立连接的 SSL&#x2F;TLS 协议流程概述"></a>HTTPS 建立连接的 SSL&#x2F;TLS 协议流程概述</h4><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240814203851.png"
+                     
+                ></p>
+<ol>
+<li><strong>客户端请求</strong>：客户端发送加密通信请求（ClientHello），与服务器建立连接。</li>
+<li><strong>服务器响应</strong>：服务器生成一对公私钥，并将公钥提交给CA机构。CA使用自己的私钥对服务器的公钥进行加密，生成CA数字证书。</li>
+<li><strong>证书发送</strong>：服务器通过响应（ServerHello）将CA数字证书发送给客户端。</li>
+<li><strong>证书验证</strong>：客户端使用内置的CA公钥解密并验证数字证书是否合法，提取出服务器的公钥。如果验证失败，客户端会发出警告。</li>
+<li><strong>生成会话密钥</strong>：客户端使用服务器的公钥生成一个随机密钥（会话密钥），并将加密后的密钥发送给服务器。</li>
+<li><strong>服务器解密</strong>：服务器用私钥解密该随机密钥，获得会话密钥。</li>
+<li><strong>加密通信</strong>：双方使用会话密钥进行加密通信，确保数据的安全传输。</li>
+</ol>
+<h1 id="TCP-和-UDP"><a href="#TCP-和-UDP" class="headerlink" title="TCP 和 UDP"></a>TCP 和 UDP</h1><h2 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h2><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240817172208.png"
+                      alt="UDP-header|500"
+                ><br>目标端口和源端口：告诉UDP应该发送至哪个进程<br>包长度：UDP首部的长度跟数据的长度之和<br>校验和：提供可靠的UDP首部而设计</p>
+<h2 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h2><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240817172059.png"
+                      alt="TCP-header|500"
+                ><br>窗口大小：还有多少空间能接收数据<br>标志字段：<br>ACK：用于指示确认应答号值是否有效，置1表示包含一个对已成功接收报文段的确认；<br>RST：用于重置一个已经混乱的连接，或拒绝一个无效的数据段或者连接请求；<br>SYN：用于连接建立过程，请求建立一个连接；<br>FIN：用于断开连接，表示发送方没有数据要传输了<br>校验和：CRC算法检测报文段是否出错</p>
+<h3 id="TCP-三次握手"><a href="#TCP-三次握手" class="headerlink" title="TCP 三次握手"></a>TCP 三次握手</h3><p>⚠️upload failed, check dev console<br>![[image-20240817204352841.png]]<br>第一次握手： 携带客户端初始序列号的SYN报文<br>第二次握手： 携带服务端初始序列号的SYN+ACK报文，表示收到<br>第三次握手：携带服务器的ACK报文<br>为什么需要三次握手？<br>三次握手才能保证双方具有接收和发送的能力<br>总结： </p>
+<ol>
+<li>三次握手才可以阻止重复历史连接的初始化(主因) </li>
+<li>三次握手才可以同步双方的初始序列号 </li>
+<li>三次握手才可以避免资源浪费</li>
+</ol>
+<h3 id="半连接队列（SYN队列）"><a href="#半连接队列（SYN队列）" class="headerlink" title="半连接队列（SYN队列）"></a>半连接队列（SYN队列）</h3><p>用于存放已经发送了 SYN（同步）包，但还未完成三次握手的连接：服务器第一次收到客 户端的 SYN 之后，就会处于 SYN_RCVD 状态，此时双方还没有完全建立其连接，服务器会把此种状态下请求连接 放在一个队列里，我们把这种队列称之为半连接队列。 </p>
+<h3 id="全连接队列（Accept队列）"><a href="#全连接队列（Accept队列）" class="headerlink" title="全连接队列（Accept队列）"></a>全连接队列（Accept队列）</h3><p>用于存放已经完成三次握手，处于完全建立连接状态的连接。</p>
+<h3 id="TCP四次挥手"><a href="#TCP四次挥手" class="headerlink" title="TCP四次挥手"></a>TCP四次挥手</h3><p>在挥手之前，客户端和服务器都处于 ESTABLISHED 状态 </p>
+<ol>
+<li>第一次挥手：假设客户端打算关闭连接，发送一个TCP首部FIN被置1的 FIN 报文给服务端, 此时客户端处于 FIN_WAIT1 状态 </li>
+<li>第二次挥手：服务端收到以后，向客户端发送ACK应答报文，且把客户端的序列号值+1作为ACK报文的序列号 值，表明已经收到客户端的报文了，此时服务端处于 CLOSE_WAIT 状态 </li>
+<li>第三次挥手：等待服务端处理完数据后，向客户端发送FIN报文。此时服务端处于 LAST_ACK 的状态 </li>
+<li>第四次挥手：客户端接收到FIN报文后回一个ACK应答报文，之后客户端处于 TIME_WAIT 状态 </li>
+<li>服务器收到ACK报文后，进入 CLOSE 状态，服务器完成连接关闭。 </li>
+<li>客户端在经过 2MSL 一段时间后，自动进入 CLOSE 状态，客户端也完成连接的关闭。</li>
+</ol>
+<h4 id="为什么四次挥手"><a href="#为什么四次挥手" class="headerlink" title="为什么四次挥手"></a>为什么四次挥手</h4><p>客户端发送FIN报文表示不发送数据，但还可以接收数据<br>关闭连接时，服务端可能还要数据处理和发送，就可以先回一个ACK，等到不再发送数据，再发送FIN表示他同意关闭连接<br>所以：服务端通常需要等待完成数据的发送和处理，ACK和FIN一般都会分开发</p>
+<h4 id="为什么需要TIME-WAIT状态"><a href="#为什么需要TIME-WAIT状态" class="headerlink" title="为什么需要TIME_WAIT状态"></a>为什么需要TIME_WAIT状态</h4><p>主动发起关闭连接的一方需要TIME_WAIT状态<br>原因：</p>
+<ol>
+<li>防止历史连接中的数据，被后面相同的四元组的链接错误的接收。<br>网络可能出现拥塞或者延迟，导致滞留的数据包被传递给新连接，导致数据干扰</li>
+<li>保证最后的ACK能让被动关闭方接收，从而帮助正常关闭</li>
+</ol>
+<h4 id="TIME-WAIT的危害"><a href="#TIME-WAIT的危害" class="headerlink" title="TIME_WAIT的危害"></a>TIME_WAIT的危害</h4><ol>
+<li>内存资源占用</li>
+<li>对端口资源的占用，</li>
+</ol>
+<h4 id="为什么是2MSL"><a href="#为什么是2MSL" class="headerlink" title="为什么是2MSL"></a>为什么是2MSL</h4><p>MSL：Maximum Segment Lifetime 报文最大生存时间<br>2MSL 的时间是从客户端接收到 FIN 后发送 ACK 开始计时的。如果在 TIME-WAIT 时间内，因为客户端的 ACK 没有传输到服务端，客户端又接收到了服务端重发的 FIN 报文，那么 2MSL 时间将重新计时。</p>
+<ol>
+<li>等待MSL两倍：发送方数据包被接收处理后又向对方发送响应，一来一回需要两倍</li>
+<li>确保四次挥手主动关闭方最后的ACK能到达对端</li>
+</ol>
+<h3 id="重传机制"><a href="#重传机制" class="headerlink" title="重传机制"></a>重传机制</h3><p>实现可靠传输的方式：序列号和确认应答</p>
+<ol>
+<li>超时重传：计时器范围内没有收到对方的确认ACK，就会重发，每次重传时间都设为先前的两倍<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240818185222.png"
+                      alt="image.png|500"
+                ></li>
+<li>快速重传：以数据驱动重传；当收到三个相同的ACK报文。会重传丢失的报文段。<br>问题：重传多少报文段<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240818190424.png"
+                      alt="image.png|500"
+                ></li>
+<li>SACK 选择性确认：解决重传哪些报文；需要在TCP头部加SACK，将已收到的数据信息发送给发送方 </li>
+<li>D-SACK：主要使用另外SACK告诉发送方哪些数据被重复接收<br>使用D-SACK的好处：<br>（1）可以让【发送方】知道，是发出去的包丢了，还是接收方回应的ACK包丢了；<br>（2）可以知道是不是【发送方】的数据包被网络演示了；<br>（3）可以知道网络中是不是把【发送方】的数据包给复制了。</li>
+</ol>
+<h3 id="滑动窗口"><a href="#滑动窗口" class="headerlink" title="滑动窗口"></a>滑动窗口</h3><p>解决问题：TCP每发送一次数据都需要应答；数据往返时间越长，网络吞吐量越低<br>特点：即使在往返时间较长的情况下，也不会降低网络通信的效率<br>窗口大小：无需等待确认应答可以继续发送数据的最大值；由接收方窗口大小决定<br>实现：操作系统开辟的一个缓存空间，按期收到确认应答，则清楚缓存区<br>累计确认：ACK700表示700之前的所有数据都被接收，ACK600确认应答报文丢失<br>滑动窗口不是一成不变的，如果读取速度非常快的话，接收窗口会很快空缺，新的大小则是通过TCP报文的Windows字段告诉，这个传输过程存在时延</p>
+<h3 id="流量控制"><a href="#流量控制" class="headerlink" title="流量控制"></a>流量控制</h3><p>基本原理：使用滑动窗口机制，通过调整窗口大小告诉发送方其当前处理数据的能力</p>
+<h3 id="拥塞控制"><a href="#拥塞控制" class="headerlink" title="拥塞控制"></a>拥塞控制</h3><ul>
+<li><strong>慢启动（Slow Start）</strong>：TCP 连接初始阶段，发送方的拥塞窗口（Congestion Window, cwnd）从一个较小的值开始，逐步增大，以免过早引发网络拥塞。每次接收到一个确认（ACK），cwnd 值就会增大，这个增长是指数级的。</li>
+<li><strong>拥塞避免（Congestion Avoidance）</strong>：当 cwnd 增加到一个阈值（ssthresh）时，慢启动结束，进入拥塞避免阶段。此时，cwnd 的增长从指数变为线性增长，逐步提高发送速率以检测网络是否接近拥塞。</li>
+<li><strong>快速重传（Fast Retransmit）</strong>：当发送方收到连续三个重复的 ACK 时，它假设有一个数据包丢失，于是立即重传丢失的数据包，而不必等待重传计时器超时。</li>
+<li><strong>快速恢复（Fast Recovery）</strong>：在快速重传之后，TCP 不像慢启动那样将 cwnd 重置为 1，而是将其减半，然后继续线性增长。这种机制可以更快地恢复传输速率。</li>
+</ul>
+<h1 id="IP"><a href="#IP" class="headerlink" title="IP"></a>IP</h1><p>位于TCP&#x2F;IP参考模型的第三层，网络层<br>网络层作用：实现主机与主机之间的通信，也就是点对点通信<br>网络层IP与数据链路层MAC的关系：MAC实现直连的两个设备间的通信；IP负责在没有直连的两个网络之间进行通信传输<br>在网络数据包传输过程中，IP地址并不会发生改变，但是源和目标MAC会一直变化</p>
+<h2 id="IP地址分类"><a href="#IP地址分类" class="headerlink" title="IP地址分类"></a>IP地址分类</h2><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240820161441.png"
+                      alt="image.png|500"
+                ></p>
+<h3 id="A、B、C类地址"><a href="#A、B、C类地址" class="headerlink" title="A、B、C类地址"></a>A、B、C类地址</h3><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240820161843.png"
+                      alt="image.png|500"
+                ></p>
+<p>主机号全0指定某个网络<br>主机号为1，指定某个网络下的所有主机，用于广播<br>广播地址：用于在同一个链路相互连接的主机之间发送数据包，分为本地广播和直接广播<br>本地广播：在本网络内广播，广播地址的IP包会被路由器屏蔽<br>直接广播：在不同网络之间的广播</p>
+<h3 id="D、E类地址"><a href="#D、E类地址" class="headerlink" title="D、E类地址"></a>D、E类地址</h3><p>特点：没有主机号，所以不可用于主机IP，<br>D类：常被用于多播；用于将包发送给特定组内的所有主机；因为广播无法穿透路由，若想给其他网段发送同样的包，则可以使用可以穿透路由的多播；前四位表示多播地址<br>E类：预留的分类，暂时未使用</p>
+<h3 id="分类的优缺点"><a href="#分类的优缺点" class="headerlink" title="分类的优缺点"></a>分类的优缺点</h3><p>优点：可以根据IP地址的前四位来判断IP地址属于哪个类别<br>缺点：同一网络下没有地址层次；A、B、C类不能很好的与现实网络匹配<br>缺点解决：CIDR无分类地址</p>
+<h3 id="CIDR无分类地址"><a href="#CIDR无分类地址" class="headerlink" title="CIDR无分类地址"></a>CIDR无分类地址</h3><p>定义：不再分类地址，32bit的IP地址被划分为两部分，前面是网络号，后面是主机号<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240823155918.png"
+                      alt="image.png|500"
+                ></p>
+<h4 id="子网掩码"><a href="#子网掩码" class="headerlink" title="子网掩码"></a>子网掩码</h4><p>另一种划分网络号和主机的形式，掩码就是掩盖掉主机号，剩余的就是网络号<br>将子网掩码和IP地址按位计算AND，就可得到网络号<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240823160103.png"
+                      alt="image.png|500"
+                ></p>
+<h4 id="为什么要分离网络号和主机号"><a href="#为什么要分离网络号和主机号" class="headerlink" title="为什么要分离网络号和主机号"></a>为什么要分离网络号和主机号</h4><p>答：因为两台计算机要通讯，首先要判断是否处于同一个广播域（网络地址），网络地址相同，则可以把数据包直接发送到目标主机</p>
+<h4 id="如何进行子网划分"><a href="#如何进行子网划分" class="headerlink" title="如何进行子网划分"></a>如何进行子网划分</h4><p>子网掩码还有一个作用就是划分子网，将主机地址分为两块，子网网络地址和子网主机地址<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240824180704.png"
+                      alt="image.png|500"
+                ></p>
+<h3 id="路由控制"><a href="#路由控制" class="headerlink" title="路由控制"></a>路由控制</h3><p>IP的网络地址用于进行路由控制，路由控制表中记录着网络地址与下一步应该发送至路由器的地址；主机和路由器上都有各自的路由器控制表<br>发送IP包时，如果存在多种相同网络地址的记录，选择相同位数最多的网络地址，也就是最长匹配<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240826113001.png"
+                      alt="image.png|500"
+                ><br>环回地址：127.0.0.1</p>
+<h3 id="IP分片与重组"><a href="#IP分片与重组" class="headerlink" title="IP分片与重组"></a>IP分片与重组</h3><p>每种数据链路的最大传输单位MTU是不相同的，当IP数据包大于MTU时，IP数据包就会被分片；<br>经过分片之后的IP数据被重组的时候，只能由目标主机进行，路由器是不会进行重组<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240826112937.png"
+                      alt="image.png|500"
+                ><br>在分片传输的过程中，一个分片丢失就会造成整个IP数据报作废，TCP引入MSS，在TCP层进行分片</p>
+<h2 id="IPV6"><a href="#IPV6" class="headerlink" title="IPV6"></a>IPV6</h2><h3 id="亮点"><a href="#亮点" class="headerlink" title="亮点"></a>亮点</h3><ol>
+<li>可分配地址变多</li>
+<li>可自动配置，即使没有DHCP服务器也可以实现自动分配IP地址</li>
+<li>包头包首部长度采用固定的值40字节，去掉包头校验和，简化了首部结构，减轻了路由器负荷</li>
+<li>有应对伪造的IP地址的网络安全功能以及防止线路窃听的功能</li>
+</ol>
+<h3 id="地址"><a href="#地址" class="headerlink" title="地址"></a>地址</h3><p>IPV6地址长度128位，每16位为一组</p>
+<h3 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h3><p>通过IP地址的前几位标识IP地址的种类，只要分为以下3种类型：<br>单播地址：用于一对一的通信；<br>组播地址：用于一对多的通信；<br>任播地址：用于通信最近的节点，最近的节点是由路由协议决定；</p>
+<h3 id="与IPV4的区别"><a href="#与IPV4的区别" class="headerlink" title="与IPV4的区别"></a>与IPV4的区别</h3><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240826141430.png"
+                      alt="image.png|500"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240826141436.png"
+                      alt="image.png|500"
+                ></p>
+<ol>
+<li>取消了首部校验和字段：在数据链路层和传输层都会校验</li>
+<li>取消分片&#x2F;重新组装相关字段：不允许在中间路由器进行分片与重组，大大提高了路由器转发的速度</li>
+<li>取消选项字段：使IPV6首部成为固定长度的40字节</li>
+</ol>
+<h2 id="ARP与RARP协议"><a href="#ARP与RARP协议" class="headerlink" title="ARP与RARP协议"></a>ARP与RARP协议</h2><h3 id="1-ARP协议"><a href="#1-ARP协议" class="headerlink" title="1. ARP协议"></a>1. ARP协议</h3><p>ARP（地址解析协议）用于通过已知的IP地址获取对应的MAC地址。主机会通过广播发送ARP请求，包含目标IP地址。同一链路上的设备接收到请求后，如果目标IP地址与自己的IP一致，则返回包含自己MAC地址的ARP响应包。操作系统通常会缓存获取的MAC地址，但缓存有一定期限。</p>
+<h3 id="2-RARP协议"><a href="#2-RARP协议" class="headerlink" title="2. RARP协议"></a>2. RARP协议</h3><p>RARP（逆地址解析协议）用于通过已知的MAC地址获取IP地址。常用于嵌入式设备接入网络时，通过RARP服务器获取IP地址。</p>
+<h3 id="3-DHCP动态获取IP地址"><a href="#3-DHCP动态获取IP地址" class="headerlink" title="3. DHCP动态获取IP地址"></a>3. DHCP动态获取IP地址</h3><p>DHCP（动态主机配置协议）通过四个步骤自动获取IP地址：</p>
+<ul>
+<li><strong>DHCP发现（DHCP Discover）：</strong> 客户端通过广播发送一个DHCP发现消息，向网络中的DHCP服务器请求IP地址。</li>
+<li><strong>DHCP提供（DHCP Offer）：</strong> 网络中的DHCP服务器收到发现消息后，向客户端发送一个DHCP提供消息，其中包含一个可用的IP地址以及相关的配置信息（如子网掩码、网关地址、DNS服务器等）。</li>
+<li><strong>DHCP请求（DHCP Request）：</strong> 客户端收到提供消息后，向DHCP服务器发送一个请求消息，表明愿意接受所提供的IP地址和配置信息。</li>
+<li><strong>DHCP确认（DHCP Acknowledgment）：</strong> DHCP服务器收到请求消息后，向客户端发送确认消息，并正式分配IP地址给客户端，客户端即可使用该IP地址进行网络通信。<br>DHCP交互中使用的都是UDP广播通信</li>
+</ul>
+<h4 id="DHCP中继代理"><a href="#DHCP中继代理" class="headerlink" title="DHCP中继代理"></a>DHCP中继代理</h4><p>定义：对于不同网段的IP地址分配可以由一个DHCP服务器进行统一管理<br>DHCP 客户端会向 DHCP 中继代理发送 DHCP 请求包，而 DHCP 中继代理在收到这个广播包以后，再以单播的形式发给 DHCP 服务器。<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240826142322.png"
+                      alt="image.png|500"
+                ></p>
+<h2 id="NAT-Network-Address-Translation-网络地址转换"><a href="#NAT-Network-Address-Translation-网络地址转换" class="headerlink" title="NAT( Network Address Translation, 网络地址转换)"></a>NAT( Network Address Translation, 网络地址转换)</h2><p>定义：同个公司、家庭、教室内的主机对外部通信时，把私有IP地址转换成公有IP地址<br>作用：缓解了IPV4地址耗尽的问题<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240826144703.png"
+                      alt="image.png|500"
+                ><br>普通的 NAT 转换没什么意义。 由于绝大多数的网络应用都是使用传输层协议 TCP 或 UDP 来传输数据 的。 因此，可以把IP 地址 + 端口号一起进行转换。 这样，就用一个全球 IP地址就可以了，这种转换技术就叫网络地址与端口转换 NAPT。</p>
+<h3 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h3><p>NAT&#x2F;NAPT依赖于自己的转换表，因此：</p>
+<ul>
+<li>外部无法主动与NAT内部服务器建立连接，因为NAPT转换表没有转换记录</li>
+<li>转换表的生成与转换操作都会产生性能开销</li>
+<li>通信过程中，如果NAT路由器重启，所有TCP连接都将被重置</li>
+</ul>
+<h3 id="优化方案"><a href="#优化方案" class="headerlink" title="优化方案"></a>优化方案</h3><p><strong>改用IPV6</strong>：IPV6可用范围比较大<br><strong>NAT穿透技术</strong>：让网络应用程序主动发现自己位于NAT设备之后，并且主动获取NAT设备的公有IP，并为自己建立端口映射条目<br><strong>ICMP互联网控制报文协议</strong>：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240826152503.png"
+                      alt="image.png|300"
+                ></p>
+<h3 id="ICMP"><a href="#ICMP" class="headerlink" title="ICMP"></a>ICMP</h3><h4 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h4><p>确认 IP 包是否成功送达目标地址、报告发送过程中 IP 包被废弃的原因和改善网络设置等。 在 IP 通信中如果某个 IP 包因为某种原因未能达到目标地址，那么这个具体的原因将由 ICMP 负责通知。<br>ICMP的消息会使用IP进行发送</p>
+<h4 id="类别"><a href="#类别" class="headerlink" title="类别"></a>类别</h4><ol>
+<li>查询报文类型：用于诊断的查询信息</li>
+<li>差错报文类型：通知出错原因的错误类型</li>
+</ol>
+<h3 id="IGMP因特网组管理协议"><a href="#IGMP因特网组管理协议" class="headerlink" title="IGMP因特网组管理协议"></a>IGMP因特网组管理协议</h3><p>组播地址说明只有一组的主机能收到数据包，不在一组的主机不能收到数据包，IGMP用于管理是否在一组<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240826154223.png"
+                      alt="image.png|500"
+                ><br>IGMP 报文向路由器申请加入和退出组播组，默认情况下路由器是不会转发组播包到连接中的主机，除非主机通过 IGMP 加入到组播组，主机申请加入到组播组时，路由器就会记录 IGMP 路由器表，路由器后续就会转发组播包到对应的主机了。<br>IGMP 报文采用 IP 封装，IP 头部的协议号为 2，而且 TTL 字段值通常为 1，因为 IGMP 是工作在主机与连接的路由器之间。</p>
+<h4 id="工作机制"><a href="#工作机制" class="headerlink" title="工作机制"></a>工作机制</h4><h5 id="常规查询与响应"><a href="#常规查询与响应" class="headerlink" title="常规查询与响应"></a>常规查询与响应</h5><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240826160609.png"
+                      alt="image.png|500"
+                ></p>
+<h5 id="离开组播组"><a href="#离开组播组" class="headerlink" title="离开组播组"></a>离开组播组</h5><ol>
+<li>网播中仍有该组播组<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240826170053.png"
+                      alt="image.png|500"
+                ></li>
+<li>网段中没有该组播组<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://asdxz.oss-cn-beijing.aliyuncs.com/pic/20240826170053.png"
+                      alt="zubo.png|500"
+                ></li>
+</ol>
+
+        </div>
+
+        
+            <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> 计算机网络八股总结</li>
+        <li><strong>Author:</strong> RenXin</li>
+        <li><strong>Created at
+                :</strong> 2024-08-26 00:00:00</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2024-08-26 18:12:56
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://blog.renxin.space/八股/netwa/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
+            
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="../../tags/%E5%85%AB%E8%82%A1/">#八股</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+                
+                
+                    <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="next"
+                        rel="next"
+                        href="../redis2/"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">redis基础知识总结</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+            <div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+                <div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        Comments
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '../../js/libs/waline.mjs';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          lang: 'zh-CN',
+          dark: 'body[class~="dark-mode"]',
+          reaction: false,
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+          recaptchaV3Key: "wasd",
+          
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+            </div>
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">计算机网络八股总结</div>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%85%A5URL%E4%B9%8B%E5%90%8E%E7%9A%84%E5%85%A8%E8%BF%87%E7%A8%8B"><span class="nav-text">输入URL之后的全过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#URL-URI"><span class="nav-text">URL URI</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DNS-Domain-Name-System"><span class="nav-text">DNS (Domain Name System)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%88%86%E5%B8%83%E5%BC%8F"><span class="nav-text">为什么分布式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%9F%E5%90%8D%E7%9A%84%E5%B1%82%E7%BA%A7%E5%85%B3%E7%B3%BB"><span class="nav-text">域名的层级关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E6%9E%90%E8%BF%87%E7%A8%8B"><span class="nav-text">解析过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E6%9F%A5%E8%AF%A2%E5%92%8C%E8%BF%AD%E4%BB%A3%E6%9F%A5%E8%AF%A2"><span class="nav-text">递归查询和迭代查询</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP"><span class="nav-text">HTTP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E6%80%A7"><span class="nav-text">特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%88%E6%9C%AC%E6%BC%94%E5%8F%98"><span class="nav-text">版本演变</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#0-9"><span class="nav-text">0.9</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-0"><span class="nav-text">1.0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1"><span class="nav-text">1.1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2"><span class="nav-text">2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3"><span class="nav-text">3</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98"><span class="nav-text">缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%BA%E5%88%B6%E7%BC%93%E5%AD%98"><span class="nav-text">强制缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98"><span class="nav-text">协商缓存</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTPS%EF%BC%88Hyper-Text-Transfer-Protocol-Secure%EF%BC%89"><span class="nav-text">HTTPS（Hyper Text Transfer Protocol Secure）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP-%E5%92%8C-UDP"><span class="nav-text">TCP 和 UDP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#UDP"><span class="nav-text">UDP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP"><span class="nav-text">TCP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP-%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B"><span class="nav-text">TCP 三次握手</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%8A%E8%BF%9E%E6%8E%A5%E9%98%9F%E5%88%97%EF%BC%88SYN%E9%98%9F%E5%88%97%EF%BC%89"><span class="nav-text">半连接队列（SYN队列）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%A8%E8%BF%9E%E6%8E%A5%E9%98%9F%E5%88%97%EF%BC%88Accept%E9%98%9F%E5%88%97%EF%BC%89"><span class="nav-text">全连接队列（Accept队列）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B"><span class="nav-text">TCP四次挥手</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E4%BC%A0%E6%9C%BA%E5%88%B6"><span class="nav-text">重传机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3"><span class="nav-text">滑动窗口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6"><span class="nav-text">流量控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6"><span class="nav-text">拥塞控制</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IP"><span class="nav-text">IP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#IP%E5%9C%B0%E5%9D%80%E5%88%86%E7%B1%BB"><span class="nav-text">IP地址分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#A%E3%80%81B%E3%80%81C%E7%B1%BB%E5%9C%B0%E5%9D%80"><span class="nav-text">A、B、C类地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#D%E3%80%81E%E7%B1%BB%E5%9C%B0%E5%9D%80"><span class="nav-text">D、E类地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E7%B1%BB%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-text">分类的优缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CIDR%E6%97%A0%E5%88%86%E7%B1%BB%E5%9C%B0%E5%9D%80"><span class="nav-text">CIDR无分类地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E6%8E%A7%E5%88%B6"><span class="nav-text">路由控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IP%E5%88%86%E7%89%87%E4%B8%8E%E9%87%8D%E7%BB%84"><span class="nav-text">IP分片与重组</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IPV6"><span class="nav-text">IPV6</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%AE%E7%82%B9"><span class="nav-text">亮点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%B0%E5%9D%80"><span class="nav-text">地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%84"><span class="nav-text">结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8EIPV4%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">与IPV4的区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ARP%E4%B8%8ERARP%E5%8D%8F%E8%AE%AE"><span class="nav-text">ARP与RARP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-ARP%E5%8D%8F%E8%AE%AE"><span class="nav-text">1. ARP协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-RARP%E5%8D%8F%E8%AE%AE"><span class="nav-text">2. RARP协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-DHCP%E5%8A%A8%E6%80%81%E8%8E%B7%E5%8F%96IP%E5%9C%B0%E5%9D%80"><span class="nav-text">3. DHCP动态获取IP地址</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NAT-Network-Address-Translation-%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E8%BD%AC%E6%8D%A2"><span class="nav-text">NAT( Network Address Translation, 网络地址转换)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%BA%E7%82%B9-1"><span class="nav-text">缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E6%96%B9%E6%A1%88"><span class="nav-text">优化方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ICMP"><span class="nav-text">ICMP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IGMP%E5%9B%A0%E7%89%B9%E7%BD%91%E7%BB%84%E7%AE%A1%E7%90%86%E5%8D%8F%E8%AE%AE"><span class="nav-text">IGMP因特网组管理协议</span></a></li></ol>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
+
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2024&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">RenXin</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        24 posts in total
+                    </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">VISITOR COUNT</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">TOTAL PAGE VIEWS</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.6.4</a></span>
+        </div>
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+    
+<script src="js/libs/Swup.min.js"></script>
+
+<script src="js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="js/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="js/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+
+
+
+<script src="js/tools/imageViewer.js" type="module"></script>
+
+<script src="js/utils.js" type="module"></script>
+
+<script src="js/main.js" type="module"></script>
+
+<script src="js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="js/layouts/categoryList.js" type="module"></script>
+
+
+
+
+
+    
+<script src="js/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="js/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="js/tools/runtime.js"></script>
+
+    
+<script src="js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="js/libs/Typed.min.js"></script>
+
+  
+<script src="js/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+
+<div class="post-scripts" data-swup-reload-script>
+    
+        
+<script src="js/tools/tocToggle.js" type="module"></script>
+
+<script src="js/layouts/toc.js" type="module"></script>
+
+<script src="js/plugins/tabs.js" type="module"></script>
+
+    
+</div>
+
+
+</body>
+</html>
